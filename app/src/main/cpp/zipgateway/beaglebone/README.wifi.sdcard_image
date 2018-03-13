@@ -1,0 +1,16 @@
+1. Find your wireless interface name.
+By default all configuraiton file has "wlan0".
+But if its something else, use following command to change it in all configuration files necessary
+
+# change_wireless_interface.sh <new interface name>
+
+2. Edit /etc/network/interface and add your wifi credentials
+
+3. Reboot
+
+4. See /var/log/syslog for zipgateway logs
+
+ or restart gateway to see it on the console
+
+ # /etc/init.d/zipgateway stop
+ # /etc/init.d/zipgateway start 

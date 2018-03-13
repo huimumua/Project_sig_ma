@@ -1,0 +1,982 @@
+/**
+ * \author Sigma Designs
+ * \version 3.06
+ *
+ * \mainpage Z/IP Gateway User Guide
+ *
+ *
+ * \section intro Introduction
+ *
+ * The Z/IP Gateway is an application which allows internet Z/IP
+ * clients to contact and control nodes in a Z-Wave network.  Through
+ * the Z/IP Gateway each node on the Z-Wave network behaves as if it
+ * is an IP client on the network.
+ *
+ * This guide describes how to compile, install, and run the Z/IP
+ * Gateway on an Ubuntu Linux system.
+ *
+ * The guide covers Raspberry Pi, Beaglebone board, and Linux x64,
+ * including the Z/IP Gateway Virtual Machine.
+ *
+ * The guide also covers the Pyzip Z/IP Client as a sample client to
+ * demonstrate the use of the Z/IP Gateway.
+ *
+ *
+ * \subsection purpose Overview
+ *
+ * Section \ref build describes how to compile Z/IP Gateway directly
+ * and how to cross-compile for Raspberry Pi and Beaglebone from an
+ * x64.  The Z/IP Gateway Virtual Machine is already pre-configured
+ * for compilation and cross-compilation for Beaglebone.
+ *
+ * The \ref bb section describes how to set up a Beaglebone in
+ * preparation for Z/IP Gateway installation.
+ *
+ * The \ref install section describes how to install, remove,
+ * configure and run the Z/IP Gateway.
+ *
+ * The \ref trouble section gives some advice on well-known situations.
+ *
+ * Section \ref pyzip describes the Pyzip Z/IP Client.
+ * Section \ref convert_eeprom describes the conversion of eeprom file from 2.2X 
+ * version of gateway to newewwer (2.6X/2.8X) version of ZIP Gateway. 
+
+ * \subsection audience Audience and prerequisites
+ * 
+ * The intended audience is Z-Wave Customers and Partners.  The guide
+ * expects a general knowledge of Z-Wave and of embedded development.
+ *
+ * \section arch Overall Architecture of Z/IP Gateway
+ * Z/IP Gateway requires ethernet connectivity and access to the raw ethernet frames. On Linux the raw ethernet
+ * connectivity is achieved by using the Linux TAP/TUN driver.
+ * The Z-Wave network is reached through a Z-Wave serial API dongle connected to a host serial or USB port.
+ *
+ * Z/IP Gateway application works as a IPv6 gateway between a LAN network and a Z-Wave PAN(Personal Area Network).
+ * Conceptually, Z/IP Gateway and the Linux system can be seen as separate hosts connected to the same LAN,
+ * even though the Linux system is running Z/IP Gateway with its IPv6 network stack.
+ * \image html userguide.png
+ * In this figure the Z-Wave PAN has the prefix <b>fd00:bbbb::/64</b> and the LAN has the
+ * prefix <b> fd00:aaaa::/64 </b>
+ *
+
+ * \section build Compiling Z/IP Gateway
+ *
+ * This section describes the pre-requisites and build process to
+ * build a Z/IP Gateway.  These are slightly different depending on
+ * the host and target architectures, so there are separate
+ * subsections for each configuration.
+ *
+ * Host setup:
+ * - When using your own Ubuntu installation, please refer to section
+ *   \ref setupx64 for native target, section \ref setup_rpi for
+ *   Raspberry Pi target, or section \ref setup_bb for Beaglebone
+ *   target.
+ * - When using the Z/IP Gateway Virtual Machine, please refer to
+ *   section \ref setupvvm for pre-requisites.
+ *
+ * Target selection:
+ * - For native compilation for x64, please refer to section \ref
+ *   zipgw_native.
+ * - For cross compiling for Raspberry Pi please refer to \ref zipgw_rpi.
+ * - For cross compiling for Beaglebone please refer to \ref zipgw_bb.
+ *
+
+ * \subsection setupx64 Set Up Ubuntu x64 for Z/IP Gateway Compilation
+ *
+ * Install the build dependencies for Z/IP Gateway with following command:
+ *
+ * <b> For 32bit Ubuntu </b>
+\verbatim
+$ sudo apt-get install cmake gcc libssl-dev libusb-1.0-0-dev libc6-dev bison flex
+\endverbatim
+ * <b> For 64bit Ubuntu </b>
+\verbatim
+$ sudo apt-get install cmake gcc libssl-dev libssl-dev:i386 libusb-1.0-0-dev:i386 libusb-1.0-0-dev libc6-dev-i386 bison:i386 flex:i386
+\endverbatim
+
+ * \subsection setupvvm Set Up Z/IP Gateway Ubuntu 16.04 LTS Virtual Machine
+ *
+ * The Z/IP Gateway Virtual Machine is a VirtualBox formatted
+ * appliance with an Ubuntu 16.04 LTS 32-bit Linux installation.  It has
+ * been pre-configured for Z/IP Gateway compilation and for
+ * cross-compilation for Raspberry Pi and Beaglebone targets.
+ *
+ * To run the virtual machine:
+ * - Download and install VirtualBox from https://www.virtualbox.org/wiki/Downloads
+ * - Start VirtualBox and select <b>Import Appliance...</b> in the <b>File</b> menu
+ * - Select the <b>zipgateway-2.81-vm.ova</b> file and click <b>Next/Continue</b>
+ * - Check the box <b>Reinitialize the MAC address of all network cards</b> in the Appliance settings dialog and click <b>Import</b>
+ * - Select the appropriate network interface by clicking
+     <b>Setting>>Network>>Adapter 1>>Enable Network Adapter</b> and then
+     choosing the appropriate configuration type
+ * - Start the Virtual Machine
+ * - Virtual machine login: \b test
+ * - Virtual machine password: \b test123
+
+ * \subsection zipgw_native Native Build of Z/IP Gateway on Ubuntu
+ *
+ * This section describes compiling the Z/IP Gateway on and for Ubuntu
+ * 16.04 LTS (32 or 64 bit).<br> 
+ * It assumes that section \ref setupx64 has been completed or that
+ * the system is the Z/IP Gateway Virtual Machine.
+ *
+ * - Download the zipgateway-2.81.0-Source.tar.bz2 (compressed file) from the Z-Wave technical support website.
+ * - Uncompress the Z/IP Gateway sources compressed file
+ * \verbatim $ tar -xjvf zipgateway-2.81.0-Source.tar.bz2 \endverbatim
+ * - Change directory to where the Z/IP Gateway sources are uncompressed
+ * \verbatim $ cd zipgateway-2.81.0-Source/usr/local/\endverbatim
+ * - Create build directory
+ * \verbatim $ mkdir build \endverbatim
+ * \verbatim $ cd build \endverbatim
+ * - Run cmake and make
+ * \verbatim $ cmake ..\endverbatim
+ * \verbatim $ make\endverbatim
+ * \verbatim $ make package \endverbatim
+ * - Find the Debian .deb package
+\verbatim 
+$ ls zipgateway-2.81.0-Linux-i386.deb
+\endverbatim
+ * - Refer to \ref install_deb for installing Z/IP Gateway
+
+ * \subsection setup_rpi Cross-Compiling: Set Up Ubuntu x64 for Target Raspberry Pi (armhf, Linux)
+ * \note The Z/IP Gateway Virtual Machine is already set up.  To compile for Raspberry Pi, go directly to section \ref zipgw_rpi.
+ *
+ *  Download the Raspberry Pi Toolchain
+ *
+\verbatim
+$ git clone https://github.com/raspberrypi/tools.git
+\endverbatim
+
+ * \subsubsection openssl Build Openssl for Raspberry Pi
+    * 1. Download openssl (for e.g.i openssl-1.0.1j.tar.gz) sources from https://www.openssl.org/source/
+\verbatim
+$ tar -xzvf openssl-1.0.1j.tar.gz
+$ cd openssl-1.0.1j
+\endverbatim
+    * 2. Assuming toolchain is in /home/test/tools/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi/
+    * 3. set $PATH
+\verbatim
+$ export PATH=$PATH:/home/test/tools/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi/bin/
+\endverbatim
+    * 4. Configure with build/ as install directory
+\verbatim
+$ ./Configure linux-armv4 --prefix=$PWD/build/ shared
+\endverbatim
+    * 5. make
+\verbatim
+$ make CC="arm-bcm2708hardfp-linux-gnueabi-gcc" AR="arm-bcm2708hardfp-linux-gnueabi-ar r" RANLIB="arm-bcm2708hardfp-linux-gnueabi-ranlib"
+\endverbatim
+    * 6. make install
+\verbatim
+$ make CC="arm-bcm2708hardfp-linux-gnueabi-gcc" AR="arm-bcm2708hardfp-linux-gnueabi-ar r" RANLIB="arm-bcm2708hardfp-linux-gnueabi-ranlib" install
+\endverbatim
+  * \subsubsection libusb Build Libusb for Raspberry Pi
+   * 1. Download from libusb sources http://libusb.org/
+   * for e.g. libusb-1.0.19.tar.bz2
+\verbatim
+$ tar -xjvf libusb-1.0.19.tar.bz2
+$ cd libusb-1.0.19 
+\endverbatim
+   * 2. Assuming toolchain is in /home/test/tools/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi/
+   * Configure
+\verbatim
+$ ./configure CC=/home/test/tools/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi/bin/arm-bcm2708hardfp-linux-gnueabi-gcc --host=arm-linux --enable-udev=no
+\endverbatim
+   * 3. Make
+\verbatim
+$ make CC=/home/test/tools/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi/bin/arm-bcm2708hardfp-linux-gnueabi-gcc
+\endverbatim
+
+ * \subsection zipgw_rpi Cross-Compiling: Building Z/IP Gateway for Raspberry Pi
+ *
+ * This section describes how to build the Z/IP Gateway for a
+ * Raspberry Pi target.  It assumes that section \ref setup_rpi has
+ * been completed or that the host is the Z/IP Gateway Virtual
+ * Machine.
+ *
+ * \note It is  assumed that openssl and libusb were downloaded in /home/test
+ * \note It is assumed that the toolchain is in /home/test/tools/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi/
+ *
+    * - Download the zipgateway-2.81.0-Source.tar.bz2 compressed file from the Z-Wave technical support website.
+    * - Uncompress the Z/IP Gateway sources compressed file
+    * \verbatim $ tar -xjvf zipgateway-2.81.0-Source.tar.bz2 \endverbatim
+    * - Change directory to where the Z/IP Gateway sources are uncompressed
+    * \verbatim $ cd zipgateway-2.81.0-Source/usr/local/\endverbatim
+    * - Create build directory
+    * \verbatim $ mkdir build_rpi \endverbatim
+    * \verbatim $ cd build_rpi \endverbatim
+    * - Run cmake
+    * \note Rpi.cmake looks for build/ directory inside openssl sources for libssl.so
+    *
+    * \verbatim
+$ cmake -DOPENSSL_SRC=/home/test/openssl-1.0.1j -DLIBUSB_SRC=/home/test/libusb-1.0.19 -DCMAKE_TOOLCHAIN_FILE=../cmake/Rpi.cmake -DCMAKE_C_COMPILER=/home/test/tools/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi/bin/arm-bcm2708hardfp-linux-gnueabi-gcc  ..
+    \endverbatim
+    * 
+    * - Build the installer package 
+    * \verbatim $ make package  \endverbatim
+    * - Find the Debian .deb package for Raspberry Pi
+\verbatim 
+$ ls zipgateway-2.81.0-Linux-armhf.deb
+\endverbatim
+    
+ * \subsection setup_bb Cross-Compiling: Set Up Ubuntu x64 for Target Beaglebone (armhf, Linux)
+ *
+ * \note The Z/IP Gateway Virtual Machine is already set up.  To compile
+ * for Beaglebone, go directly to section \ref zipgw_bb.
+ *
+ * This section describes the pre-requisites for cross compiling Z/IP
+ * Gateway for Beaglebone on Ubuntu 16.04 LTS (32 or 64 bit)
+ *
+ * - Get the third-party Beaglebone SDK (AM335x SDK Essentials) from http://downloads.ti.com/sitara_linux/esd/AM335xSDK/latest/index_FDS.html <br>
+ * - Install build dependencies of Z/IP Gateway
+ * \verbatim $ sudo apt-get install cmake libssl-dev libusb-1.0-0-dev\endverbatim
+ * - Install dependencies of SDK
+ * \verbatim $ sudo apt-get install libstdc++6:i386 zlib1g:i386 \endverbatim
+ * - Find the following file downloaded
+ * \verbatim "ti-sdk-am335x-evm-08.00.00.00-Linux-x86-Install.bin" \endverbatim
+ * \verbatim $ chmod 755 ti-sdk-am335x-evm-08.00.00.00-Linux-x86-Install.bin \endverbatim
+ * - Install the SDK:
+ * \verbatim $ ./ti-sdk-am335x-evm-08.00.00.00-Linux-x86-Install.bin --mode text \endverbatim
+ * \note Steps ahead assume that the SDK is installed in <tt> /home/test/ti-sdk-am335x-evm-08.00.00.00 </tt>
+ * \note If you have any problems installing SDK on 64bit Ubuntu,
+ * please refer to
+ * http://processors.wiki.ti.com/index.php/Sitara_Linux_SDK_64_Bit_Ubuntu_Support
+ *
+
+ * \subsection zipgw_bb Cross-compiling:  Building Z/IP Gateway for Beaglebone
+ *
+ * This section describes how to build the Z/IP Gateway for a
+ * Beaglebone target.  It assumes that section \ref setup_bb has been
+ * completed or that the host is the Z/IP Gateway Virtual Machine.
+ *
+ * \note It is assumed that the working directory is
+ * <tt>/home/test/ </tt>and that the SDK is installed in
+ * <tt>/home/test/ti-sdk-am335x-evm-08.00.00.00</tt>.  This is the
+ * configuration provided on the Virtual Machine.
+ *
+ * - Download the
+ * zipgateway-2.81.0-Source.tar.bz2
+ * (compressed file) from the Z-Wave technical support website.
+ * - Uncompress the Z/IP Gateway sources compressed file
+ * \verbatim $ tar -xjvf zipgateway-2.81.0-Source.tar.bz2 \endverbatim
+ * - Change directory to where the Z/IP Gateway sources are uncompressed
+ * \verbatim $ cd zipgateway-2.81.0-Source/usr/local/\endverbatim
+ * - Create build directory
+ * \verbatim $ mkdir build_beaglebone \endverbatim
+ * \verbatim $ cd build_beaglebone \endverbatim
+ * - Run cmake and make in the SDK environment
+ * \verbatim $ source /home/test/ti-sdk-am335x-evm-08.00.00.00/linux-devkit/environment-setup \endverbatim
+ * \verbatim $ cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/BeagleBoneToolchain.cmake ..\endverbatim
+ * \verbatim $ make\endverbatim
+ * - Build the installer package 
+ * \verbatim $ make package \endverbatim
+ * - Find the Debian .deb package for Beaglebone (Debian ARMHF) 
+ * \verbatim 
+$ ls zipgateway-2.81.0-Linux-armhf.deb
+ * \endverbatim
+ * - Refer to \ref bb for setting up Beaglebone
+
+ * \section bb Setting up Beaglebone
+ * This section describes how to setup Beaglebone and how to copy Z/IP Gateway .deb package to Beaglebone for installation
+ * \warning If you are not installing the Z/IP Gateway on Beaglebone, you can skip this section
+ *
+ * \warning Only Beaglebone with Debian version 8.3 is supported
+
+ * \subsection beagle_conn Connecting
+ * When you connect the Beaglebone to Linux/Widows PC with the mini-USB cable, it creates network interface with IP \c \b 192.168.7.1 for your
+ * Linux/Windows PC and Beaglebone itself has IP \b \c 192.168.7.2 <br>
+  * \note Linux/Windows PC: 192.168.7.1 <br>
+  * \note Beaglebone: 192.168.7.2 <br>
+  * \warning When the Linux/Windows PC is a Virtual Machine, you have to plug the Beaglebone device to the Virtual Machine for above setup.
+ *
+ * - On your Linux PC run following command to connect(ssh) to Beaglebone
+\verbatim $ ssh -l root 192.168.7.2 \endverbatim
+\note On Windows PC use tools like Putty to do ssh remote login
+ *
+
+ * \subsection beagle_copy Copying Z/IP Gateway .deb package to Beaglebone
+ *
+ * - On your Linux PC run following command to copy the Z/IP Gateway .deb (zipgateway-2.81.0-Linux-armhf.deb) to Beaglebone
+\verbatim $ scp zipgateway-2.81.0-Linux-armhf.deb root@192.168.7.2: \endverbatim
+ * - On your Windows PC use tools like WinSCP to copy the Z/IP Gateway .deb package(zipgateway-2.81.0-Linux-armhf.deb) to Beaglebone
+ * \note This Z/IP Gateway .deb package
+ * (zipgateway-2.81.0-Linux-armhf.deb)
+ * can be downloaded from the Z-Wave technical support website or can
+ * be built as described in <br>\ref zipgw_bb <br>.
+ *
+ * \subsection Wifi_config Enable Wireless Cape On Beaglebone
+\warning Beaglebone must be booted from sdcard to have the WiFi cape working. And needs to have a 5 volt power supply connected.
+ *
+ * Following step help enabling wifi cape on Beaglebone <br>
+  * Enable wifi cape by uncommenting (removing # from the beginning) the following line in <b>/boot/uEnv.txt </b> 
+\verbatim
+dtb=am335x-boneblack-wl1835mod.dtb
+\endverbatim
+  * It can be done by following command
+\verbatim
+# sed -i "s/#dtb=am335x-boneblack-wl1835mod\.dtb/dtb=am335x-boneblack-wl1835mod\.dtb/" /boot/uEnv.txt
+\endverbatim
+
+ * There are two ways in which you can configure WiFi on Beaglebone.
+ * \subsubsection wifi_interfaces Configure WiFi with Interfaces File
+  * 1. Disable connman
+\verbatim
+# systemctl disable connman 
+\endverbatim
+  * 2. Edit the <b>/etc/network/interfaces.d/wifi</b> as follows
+\warning Your network interface name might be something other than wlan0
+  *
+\verbatim
+# WiFi Example
+auto wlan0
+iface wlan0 inet dhcp
+    wpa-ssid "SSID"
+    wpa-psk  "PassPhrase"
+\endverbatim
+  * 3. Make sure following line is present in <b> /etc/network/interfaces </b> file
+\verbatim
+source-directory /etc/network/interfaces.d
+\endverbatim
+  * 4. Reboot the Beaglebone 
+\verbatim
+# reboot 
+\endverbatim
+  * 5. Connect to Beaglebone. Refer \ref beagle_conn for more information.
+\verbatim $ ssh -l root 192.168.7.2 \endverbatim
+ 
+ * \subsubsection wifi_connman Configure WiFi with Connman
+ *
+ * 1. Edit <b> /var/lib/connman/wifi.config</b> file with your WiFi credentials as shown below,
+ *\verbatim
+[service_home]
+Type = wifi
+Name = SSID
+Security = WPA-PSK
+Passphrase = PassPhrase
+\endverbatim
+ * 2. Enable connman
+\verbatim
+ # systemctl enable connman 
+\endverbatim
+ * 3. Reboot the Beaglebone 
+\verbatim
+ # reboot 
+\endverbatim
+ * 4. Connect to Beaglebone. Refer \ref beagle_conn for more information.
+\verbatim $ ssh -l root 192.168.7.2 \endverbatim
+ * 5. Enable WiFi in connman
+\verbatim
+# connmanctl enable wifi
+\endverbatim
+
+ * \section install Installing and Launching the Z/IP Gateway.
+ *
+ * This section describes how to install, (re-)configure, start, stop,
+ * and un-install the Z/IP Gateway.
+ *
+ * \subsection install_deb Installing Z/IP Gateway .deb package
+ *
+ * 1. Install dependencies of Z/IP Gateway Debian package. <br>
+ *
+  * a. Update
+  \verbatim
+  $ sudo apt-get update 
+  \endverbatim
+  * b. Install<br>
+  *
+  * For x86_64 architecture Debian/Ubuntu
+  \verbatim
+  $ sudo apt-get install libusb-1.0-0:i386 libssl1.0.0:i386 radvd:i386 parprouted:i386 bridge-utils:i386
+  \endverbatim
+  * for other architecutres of Debian/Ubuntu (Beaglebone and Raspberry Pi)
+  \verbatim
+  $ sudo apt-get install libusb-1.0-0 libssl1.0.0 radvd parprouted bridge-utils
+  \endverbatim
+  *
+ * 2. Install the Z/IP Gateway debian package
+ * \warning Because of various network configuration changes, its strongly recommended that the system is rebooted
+ * after Z/IP Gateway installation. <br>
+ *
+ * - For ARM (Beaglebone and Raspberry Pi) Debian
+ \verbatim
+ $ sudo dpkg -i zipgateway-2.81.0-Linux-armhf.deb
+ \endverbatim 
+ * - For 32bit or 64bit Ubuntu
+ \verbatim
+ $ sudo dpkg -i zipgateway-2.81.0-Linux-i386.deb
+ \endverbatim 
+ *
+  * <b>Installation wizard asks following questions to configure Z/IP Gateway</b><br> 
+  *a. Serial port (ZipSerialAPIPortName), 
+  * \note Check the system log after plugging the z-wave controller to find out the Serial port. Use command <b><tt> dmesg </tt></b> to see the system log
+  *
+  *b. IPV6 address of Z/IP Gateway(ZipLanIp6) <br>
+  *c. IPV6 prefix of Z-wave Network(ZipPanIp6) <br>
+  *d. The type of network interface, if its wireless or wired.  The network interface in question here 
+  * is the interface where Z/IP Gateway will listen for Z/IP Client connection requests and/or through which Z/IP client will request for DHCP leases in case of IPV4 communication
+  * Z/IP Client <-wired-> Z/IP Gateway 
+  * \note Installation might fail if any of the Z/IP Gateway dependencies are not installed because of any reason. 
+  Steps below can this issue by installing the dependencies automatically.
+\verbatim
+$ sudo apt-get update
+$ sudo apt-get -f install
+\endverbatim
+
+ * \subsection config Configuring Z/IP Gateway
+ * \subsubsection manual Manual of Z/IP Gateway configuration variables
+ * <a href="zip.html">Manual page of zipgateway </a><br>
+ * <b> See the link above and "CONFIGURATION FILE" section of for more configuration options </b>
+ * These options can also be configured manually inside <b> /usr/local/etc/zipgateway.cfg</b> <br>
+ *
+
+ * \subsubsection debian_config Configuration UI
+ * Reconfiguration asks the same questions as while installing.
+\verbatim
+$ sudo dpkg-reconfigure zipgateway
+\endverbatim
+ *
+ * \subsection run Starting or Stopping Z/IP Gateway
+\verbatim
+$ sudo /etc/init.d/zipgateway start
+\endverbatim
+ *
+\verbatim
+$ sudo /etc/init.d/zipgateway stop
+\endverbatim
+\note Run following command to see Z/IP Gateway periodic log in another terminal
+\verbatim
+$ sudo tail -f /tmp/zipgateway.log
+\endverbatim
+ * \subsection verifyzipgwrun Verifying Z/IP Gateway Execution
+ * - Z/IP Gateway log
+  * - If everything goes well you should see some periodic output in \c /tmp/zipgateway.log <br>
+ * - See status of Z/IP Gateway
+\verbatim
+$ ps ax|grep zipgateway
+\endverbatim
+ * Or  
+\verbatim $ sudo /etc/init.d/zipgateway status \endverbatim
+For e.g.
+\code
+test@zipgw255vm:/usr/local/etc$ sudo /etc/init.d/zipgateway status
+● zipgateway.service - LSB: start Z/IP Gateway (zipgateway)
+   Loaded: loaded (/etc/init.d/zipgateway)
+   Active: active (running) since Wed 2016-02-24 09:03:15 CET; 2min 7s ago
+     Docs: man:systemd-sysv-generator(8)
+  Process: 14908 ExecStop=/etc/init.d/zipgateway stop (code=exited, status=0/SUCCESS)
+  Process: 14979 ExecStart=/etc/init.d/zipgateway start (code=exited, status=0/SUCCESS)
+   CGroup: /system.slice/zipgateway.service
+           └─14985 /usr/local/sbin/zipgateway --
+
+Feb 24 09:03:15 zipgw255vm systemd[1]: Starting LSB: start Z/IP Gateway (zipgateway)...
+Feb 24 09:03:15 zipgw255vm zipgateway[14979]: * Starting Z/IP Gateway zipgateway
+Feb 24 09:03:15 zipgw255vm systemd[1]: Started LSB: start Z/IP Gateway (zipgateway).
+Feb 24 09:03:15 zipgw255vm zipgateway[14979]: ...done.
+\endcode
+
+ * - Verify that the Linux tap interface(tap0/tap1) has been created by typing
+\code
+$ ifconfig tap0
+tap0      Link encap:Ethernet  HWaddr 3E:A6:A5:2F:1C:60
+          inet6 addr: fe80::3ca6:a5ff:fe2f:1c60/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:103 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:2265 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:500
+          RX bytes:7658 (7.4 KiB)  TX bytes:265843 (259.6 KiB)
+\endcode
+ *
+ * - To check in network setup try to ping the Z/IP Gateway ZipLanIp6 address:
+ * \note \c ZipLanIp6 configuration can be found in \c /usr/local/etc/zipgateway.cfg file
+ *
+ \code
+$ ping6 fd00:aaaa::3
+PING fd00:aaaa::3(fd00:aaaa::3) 56 data bytes
+64 bytes from fd00:aaaa::3: icmp_seq=1 ttl=64 time=3.53 ms
+64 bytes from fd00:aaaa::3: icmp_seq=2 ttl=64 time=4.69 ms
+64 bytes from fd00:aaaa::3: icmp_seq=3 ttl=64 time=0.958 ms
+\endcode
+ *
+ * - If the Z/IP Gateway does not reply there is a network problem. If it does everything is ready.
+ * - Refer to \ref trouble incase
+ *
+
+ * \subsection uninstall Uninstalling Z/IP Gateway
+\verbatim $ sudo dpkg -r zipgateway \endverbatim
+
+ * \section trouble Troubleshooting
+ * \subsection no_log No log in /tmp/zipgateway.log
+ * - Stop Z/IP Gateway init script
+\verbatim $ sudo /etc/init.d/zipgateway stop \endverbatim
+ * - Make sure that the zipgateway process is not running
+\verbatim $ sudo ps ax|grep zipgateway \endverbatim
+ * - Kill the process if its running
+\verbatim $ sudo kill -9 <pid> \endverbatim
+ * - Run zipgateway as standalone process and not init script to see output on console
+\verbatim $ sudo zipgateway \endverbatim
+ * \subsection pem Permission files
+ * \b Error:
+\code
+1573020734 Error loading certificate, please check the file.
+1573020734 Error loading key, please check the file.
+\endcode
+ * \b Solution: check the \c zipgateway.cfg file and the check the path for <tt> ZipCaCert, ZipCert, ZipPrivKey </tt> and make sure that these files are present
+ * \subsection tun zipgateway.tun Permission denied
+ * \b Error:
+\code
+sh: 1: /usr/local/etc/zipgateway.tun: Permission denied
+1573022431 Error executing: LANIP=fd00:aaaa::0003 HANPREFIX=fd00:bbbb::0001/64 TUNDEV=tap0 /usr/local/etc/zipgateway.tun up
+\endcode
+ * \b Solution: check the permissions of \c zipgateway.tun file with command <tt> <b>ls -l /usr/local/etc/zipgateway.tun</b></tt>.<br>
+ It should be <tt><b> -rwxr-xr-x </b></tt>. If not do <tt> "sudo chmod 755 /usr/local/etc/zipgateway.tun" </tt>
+
+ * \subsection kconfig Kernel configurations
+ * Following support is needed to be configured in Linux Kernel for Z/IP Gateway
+\code
+ * CONFIG_TUN=y (TUN/TAP interface Support)
+ * CONFIG_BRIDGE/basic=y (Bridge Support)
+\endcode
+ * \subsection Wireless
+ * Wireless configuration of Z/IP Gateway needs various processes and daemons running in background.
+ * Make sure that following processes are running.
+ * \subsubsection radvd radvd 
+ * The router advertisement daemon (radvd) is run by Linux or BSD systems acting as IPv6 routers. It sends Router Advertisement messages, specified by RFC 2461, to a local Ethernet LAN periodically and when requested by a node sending a Router Solicitation message. These messages are required for IPv6 stateless autoconfiguration.
+ * In Z/IP Gateway setup, radvd sends advertisements on wireless interface. All the ends connected to that interface then will be able to talk to Z/IP Gateway and the PAN network of Z-wave nodes.
+\verbatim
+pi@raspberrypi:~ $ /etc/init.d/radvd status
+● radvd.service - LSB: Router Advertising Daemon
+   Loaded: loaded (/etc/init.d/radvd)
+   Active: active (running) since Wed 2017-01-04 10:02:25 UTC; 18min ago
+  Process: 732 ExecStart=/etc/init.d/radvd start (code=exited, status=0/SUCCESS)
+   CGroup: /system.slice/radvd.service
+           ├─762 /usr/sbin/radvd -u radvd -p /var/run/radvd/radvd.pid
+           └─764 /usr/sbin/radvd -u radvd -p /var/run/radvd/radvd.pid
+\endverbatim
+ * or
+\verbatim
+pi@raspberrypi:~ $ ps ax|grep radvd
+  762 ?        S      0:00 /usr/sbin/radvd -u radvd -p /var/run/radvd/radvd.pid
+\endverbatim
+ * \subsubsection parprouted parprouted
+ * The daemon listens for incoming ARP requests, and in case the location of the requested IP address is unknown, forwards them to other interfaces, as well as updates kernel ARP table with the received replies. When necessary, the daemon generates an ARP reply itself, which causes the stations to send traffic to the host daemon is running on. By automatically adding appropriate /32 routes to Linux kernel IP routing table for the hosts learned via ARP , daemon ensures that the Linux kernel will be able to route the packets to the destination host when it receives them without any need routing/subnetting manually
+\verbatim
+pi@raspberrypi:~ $ ps ax|grep parprouted 
+  965 ?        Ssl    0:05 /usr/sbin/parprouted wlan0 tap0
+\endverbatim
+ * \subsubsection udprelay udprelay 
+ * udprelay is daemon which listens for udp packets to port(IPv4 or/and IPV6) on one interface and forwards the udp packets to port(IPv4 or/and IPV6) to another or same interface's port(IPv4 or/and IPV6)
+\verbatim
+pi@raspberrypi:~ $ ps ax|grep udprelay 
+ 1560 ?        S      0:00 udprelay -i tap0 -b wlan0 -4 4123 -6 4123 -4 5353 -6 5353
+ 1561 ?        S      0:00 udprelay -i wlan0 -b tap0 -4 5353 -6 5353
+\endverbatim
+ *
+ * \section pyzip Pyzip (Z/IP Client)
+Pyzip is a GUI application written in python. You may use Pyzip to manage and test your Z-Wave network.
+ * \subsection pyzipinstallwin Installing on Windows
+ * - Get and install python 2.7 : http://python.org/download/
+ * http://python.org/ftp/python/2.7.3/python-2.7.3.amd64.msi
+ * - For wxPython: http://wxpython.org/download.php#stable
+ * \note Remember to choose a version of wxPython which matches your python version.
+ *
+ * - Download DTLS with openssl for Windows. Choose one of these: <br>
+ *   - <a href="https://pypi.python.org/packages/source/D/Dtls/Dtls-0.1.0.sdist_with_openssl.win32.zip#md5=03d3ce4f2d2d570eff8ea8ebd7555300">Dtls-0.1.0.sdist_with_openssl.win32.zip</a> (32-bit python installed, recommended) OR<br>
+ *   - <a href="https://pypi.python.org/packages/source/D/Dtls/Dtls-0.1.0.sdist_with_openssl.win-amd64.zip#md5=7a0c0deed2a7f5ec8bf0c68a7a8ae0ab">Dtls-0.1.0.sdist_with_openssl.win-amd64.zip</a> (64-bit python installed)<br>
+ * - Once downloaded, unpack the zip file to a temporary folder.
+ * - Open a command prompt in the temporary folder
+ * - Set path to include location where Python is installed. <br>
+    Assuming Python is installed in <tt>C:\\Python27</tt>, run the following command:
+    \verbatim set PATH=%PATH%;C:\Python27\endverbatim
+ * - Run this command inside the command prompt to install DTLS
+  \verbatim python setup.py install \endverbatim
+ * - Download the Pyzip sources from the Z-Wave technical support website.
+ * - Uncompress the Pyzip sources
+ * - Change directory to where Pyzip sources are uncompressed
+ * - set PYTHONPATH to include current folder so pyzip sources can be located.<br>
+    \verbatim set PYTHONPATH=. \endverbatim
+ * - run gui.py as follows
+    \verbatim python pyzip/gui.py \endverbatim<br>
+    \note gui.py must always be started from the PARENT folder. Otherwise the PYTHONPATH will be wrong and pyzip will fail to start.
+
+
+ * \subsection pyzipinstall Installing on Ubuntu Linux
+\note If you are planning to run Pyzip from the Z/IP Gateway Virtual Machine, you need to do following steps inside that Virtual Machine.
+ *
+ * - Download the Pyzip sources from the Z-Wave technical support website.
+ * - Uncompress the Pyzip sources
+\verbatim $ unzip pyzip_ver1_11b.zip \endverbatim
+ * - Change directory to uncompressed sources
+ \verbatim $ cd pyzip \endverbatim
+ * - Set the PYTHONPATH to <b> where the Pyzip sources are uncompressed </b>
+ * \verbatim $ export PYTHONPATH=$PWD\endverbatim
+ * - Install dependencies <b> Note: You can skip this step if you are using Z/IP Gateway Virtual Machine (using steps in \ref setupvvm)</b>
+\verbatim $ sudo apt-get install python-wxgtk3.0
+\endverbatim
+ * - Run gui.py
+ * \verbatim $ cd pyzip \endverbatim
+ * \verbatim $ python2 gui.py \endverbatim
+
+ * \subsection pyzipusing Using
+ * \subsubsection discconn Discovering and Connecting
+ * <b> - Discovering at startup </b> <br>
+ * At startup Pyzip will discover all Z/IP Gateways on the network.
+ * \image html pyzip-first.jpg
+ * <b> - Manually discovering </b> <br>
+ * To rediscover the gateways click the rediscover button as show in the image below
+ * \image html pyzip-manual-rediscover.jpg
+ * <b> - Connecting </b> <br>
+ * The discovered gateways(IP addresses) will be shown in the combo box. Select a gateway from the list and press the connect button(two horizontal arrows) as shown in the image
+ * Note that the gateway will present both an IPv6 and an IPv4 address. IP addresses show in the figures in this document will differ from the addresses in your setup.
+ * \image html pyzip-conect.jpg
+ * <b> - Connected  </b> <br>
+ * When connected a list of nodes will appear. After this step, using Pyzip, normal network management commands may be issued. Such as adding-, removing nodes and resetting the gateway.
+ * Pyzip window looks like below when its connected to Z/IP Gateway
+ * \image html pyzip-connected.jpg
+ *
+ * \subsubsection toolbar Pyzip Toolbar
+ * \image html pyzip-toolbar.jpg
+ * In the top of the GUI windows there is a tool bar with quick access to certain network management functionality.
+ * \note If you hover the mouse pointer over the button it should display description of its functionality.
+ *
+ * -  <b>  Update Node List. </b> This will refresh the node list. The node list might be outdated if other controllers are working with the Z-Wave network
+ * -  <b>  Add Node.  </b>Add a node to the new work. After pressing this button the Z/IP Gateway will attempt to include a node new node into the network for the next 15 sec. To include a node press the Z-Wave button on the node within the 15 sec.
+ * -  <b>  Remove Node.  </b>Make the Z/IP Gateway exclude a node from the network. Press the Z-Wave button on the node within 15sec after pressing this button.
+ * -  <b>  Learn Mode.  </b>After pressing this button the Z/IP Gateway will enter Learn mode, which means it can be included in an existing network.
+ * -  <b>  Controller Change.  </b>Perform controller change on a primary controller
+ * -  <b>  Request Network Update.  </b>Get latest network topology from the SUC/SIS. If this Z/IP Gateway is the SUC/SIS then this button does nothing.
+ * -  <b>  Set Default.  </b>This button resets the Z/IP Gateway and makes it the SIS of a new network empty.
+ * -  <b>  Firmware Upload.  </b>Opens a new firmware update dialog for ZIPR- and Z-Wave node firmware update.
+ * -  <b>  Rediscover.  </b>Search for local Z/IP Gateways and update IP address combo box
+ * -  <b>  use DTLS. </b>
+ * -  <b>  PSK. </b>
+ * -  <b>  Connect.  </b> Connect to the Z/IP Gateway on the IPv6/IPv4 address shown in the combo box
+
+ * \subsubsection pyzipadd  Adding a node
+When adding a node, press the “Add Node”  button in the GUI, and then press the button on the physical device to confirm the request.  The status field will confirm whether the node was added or not. A status code of 0x6 means that the inclusion went well. In some cases it necessary to press the node list button to get an updated node list. <br>
+ * \subsubsection pyzipadds2  Adding a Security 2 node
+ * - Press add button on Pyzip. Following window will pop up.
+ * \image html pyzip_add.png
+ * - Grant the request security keys as shown in following window
+ * \image html pyzip_grant_keys.png
+ * - Verify the device by filling the first missing digits of the device key as shown in following window
+ * \image html pyzip_verify_device.png
+ * - Check the device inclusion status. It must be "Status:06" as shown in the window below
+ * \image html pyzip_device_inclusion_status.png
+
+ * \subsubsection pyziprem Removing a node
+When removing a node, press the “Remove Node”  button. Afterwards, press the button on the physical device <br>
+ * \subsubsection nodespecific Node specific Network Management
+ * A right click of a node in the node list will bring up a menu of network management commands which has a specific node as target. <br>
+ * \image html pyzip-node-specific.jpg
+  * <b>- Get Cached Node Info </b> <br>
+  * This function returns the contents of the Z/IP Gateways node cache for the selected node.  This function will tell you which kind of node this is.<br>
+  * <b>- Remove failed  </b> <br>
+  * This removes a node from the network, which has become unresponsive.<br>
+  * <b>- Replace failed </b> <br>
+  * This replaces a failed node. The selected node must be unresponsive for this to work. Make sure that the failed node does not reenter, i.e. if the power to the node is restored.<br>
+  * <b>- Node Neighbor Update </b> <br>
+  * Ask the specified node to get an updated network topology map.<br>
+  * <b>- Send Node Info </b> <br>
+  * Ask the Z/IP Gateway send a node info frame to the given node.<br>
+  * <b>- Assign return route </b> <br>
+  * Select two nodes (CTRL+click on the node list) from the list to assign a return route from the first selected to the second.<br>
+  * <b>- Delete return route </b> <br>
+  * Delete all static return routes from a Routing Slave, Enhanced Slave or Enhanced 232 Slave node.<br>
+
+ * \subsubsection sendcmd Sending commands to nodes
+Pyzip can construct and send Z-Wave commands to the nodes in the PAN. On Pyzip window you can find the <b> Send button </b> and a field called <b> Endpoint </b>. Above these fields, it is possible to select a C <b> Command Class and Command </b>.
+When the Send button is pressed an UDP encapsulated Z/IP message is sent to the IP address selected in the node list. If an endpoint different than 0 is selected the frame is sent with the given endpoint as target. <br>
+The “Send to host” checkbox is used to send commands to the IP address shown in the combo box, not to the selected item in the node list. The address in the combo box will also be represented in the node list, but “Send to host” is just a shortcut.
+ * \image html pyzip-send-cmd.jpg
+ * <b> Value </b> options for the command appear under the command field as the command is selected. As shown below <br>
+ * \image html pyzip-send-cmd-val.jpg
+
+ * \subsubsection fw Firmware Update
+Pyzip is able to update the firmware of Z-Wave nodes and ZIPRs. The firmware upload dialog is opened by pressing the firmware upload (cloud button with an upwards arrow) button on PyZ/IP toolbar <br>
+The firmware upload dialog (Figure 5) has 3 fields. The first filed is the \b Address  field. The dialog will auto-detect ZIPRs but the IP address of ordinary Z/IP nodes must be entered manually. Once an IP address it entered a number of targets will be shown in the \b Targets drop down box. To perform the firmware update select the appropriate target and then select a \b Firmware \b Image file. The system will accept either Intel Hex files or binary files. When an image has been chosen the \b Upload button must be pressed to initiate the firmware upload.
+ * \image html pyzip-fw.jpg
+
+
+* \subsection cert_gen Certificate Generation
+ * \subsubsection cert_gen_start Starting Certificate Generator
+ *
+ * - Make sure you have downloaded Pyzip and also have set it up as per \ref pyzipinstall
+ * - Change directory to cert_gen inside Pyzip
+ \verbatim $ cd cert_gen \endverbatim
+ * - Start the Certificate Generator
+ \verbatim $ python cert_gen.py \endverbatim
+
+ * \subsubsection cert_gen_use Using Certificate Generator
+
+ * Enter the EUi/64, the S/NO and the PIN as received with the Z-Wave hardware.
+ * - EUI-64 is of the format XX:XX:XX:XX:XX:XX where X can be between 0-9 or A-F/a-f
+ * for e.g. 00:1e:32:ff:ff:20:04:e3
+ * - S/NO is 8 digit hex number
+ * for e.g. 0x01000477
+ * - PIN is 8 number of alphanumeric characters
+ * for e.g. X234VUJX
+ *
+ \warning The default ZIPR_CA certificate shipped with the PyZIP is is not the same as the ZIP_CA certificate shipped with the Z-Ware Portal bundle.
+ This also means that certificates signed with this CA will not be able to connect to z-ware.sdesigns.com.
+ To make local Z-Ware Portal bundle accept certificates generated by the default PyZIP CA certificate the ZIPR.ca_x509.pem file should be copied to the
+ \<portal_install_root>/install/zwportald/etc folder.
+ \verbatim
+ cp ZIPR.ca_x509.pem <portal_install_root>/install/zwportald/etc
+ openssl x509 -in ZIPR.ca_x509.pem -outform DER -out <portal_install_root>/install/zwportald/etc/ZIPR.ca_x509.cer
+ \endverbatim
+ Please note that the certificate shipped with PyZIP is a demo certificate. It MUST not be used in a production setup.
+
+ \note If you wish to use another CA to sign your certificate with please select the path for these. Please refer to the Z-Ware Portal Installation Guide for
+ details on generating CA certificates.
+
+ *
+ * Copy following files <tt> /usr/local/etc/ </tt>
+\note These files are configured as <b>ZipPrivKey, ZipCert, ZipCaCert </b> variables respectively in <tt> /usr/local/etc/zipgateway.cfg </tt> file.
+ *
+ * - New generated ZIPR.key_1024.pem
+ * - New generated ZIPR.x509_1024.pem
+ * - existing Portal.ca_x509.pem file in cert_gen/CA/ directory.
+ * \image html cert_gen.png
+
+\subsection mdns MDNS browser
+MDNS Browser is a sample application showing the z-wave nodes and the data in the resource database of Z/IP Gateway. <br>
+In this version of MDNS browser, it's not able to interact with z-wave network, it's just for displaying the z-wave nodes.
+\subsubsection mdnsdepwin Installing dependencies on Windows
+ * - Install Bonjour
+ *  - Download and install iTunes. <br>
+ * iTunes installs bonjour as its dependency on Windows. <br>
+ *  - You can also install from third party downloads like http://download.cnet.com/Bonjour-for-Windows/3000-18507_4-93550.html <br>
+ *  - Or install the bonjour SDK for Windows from https://developer.apple.com/bonjour/index.html
+ * - Install pybonjour
+ *  - Download the pybonjour sources(pybonjour-1.1.1.zip) from https://code.google.com/p/pybonjour/downloads/list
+ *  - Uncompress the pybonjour sources zip file
+ *  - Set path to include location where Python is installed. Refer \ref pyzipinstallwin to install python <br>
+ *  Assuming Python is installed in <tt> C:\\Python27 </tt>, run the following command:
+\verbatim set PATH=%PATH%;C:\Python27\endverbatim
+ *  - Change directory to pybonjour uncompressed sources in command prompt
+ *  - run install in command prompt
+\verbatim
+python setup.py install
+\endverbatim
+
+\subsubsection mdnsrunwin Starting MDNS browser on Windows
+ * - Set path to include location where Python is installed. Refer \ref pyzipinstallwin to install python <br>
+ *  Assuming Python is installed in <tt> C:\\Python27</tt>, run the following command:
+\verbatim set PATH=%PATH%;C:\Python27\endverbatim
+ * - Change directory to Pyzip code and then MDNS code inside it
+\verbatim cd pyzip\zwmdns_browse \endverbatim
+ * - Set PYTHONPATH
+\verbatim set PYTHONPATH=.. \endverbatim
+ * - start MDNS browser
+\verbatim  python mdns_browse.py \endverbatim
+
+\subsubsection mdnsdeplin Installing dependencies on Ubuntu Linux
+\note <b> Note: You can jump to \ref mdnsrunlin if you are using Z/IP Gateway Virtual Machine (For setting up the VM \ref setupvvm)</b>
+
+* - Install libavahi-compat-libdnssd1
+\verbatim
+$ sudo apt-get install libavahi-compat-libdnssd1
+\endverbatim
+* - Download the pybonjour sources(pybonjour-1.1.1.tar.gz) from https://code.google.com/p/pybonjour/downloads/list
+* - Uncompress the source tarball (compressed file)
+\verbatim
+$ tar -xzvf pybonjour-1.1.1.tar.gz
+\endverbatim
+* - Change directory to pybonjour sources
+\verbatim
+$ cd pybonjour-1.1.1
+\endverbatim
+* - run install
+\verbatim
+$ sudo python setup.py install
+\endverbatim
+\subsubsection mdnsrunlin Starting MDNS browser on Linux
+- Make sure you have downloaded Pyzip and also have set it up as per \ref pyzipinstall
+- Set PYTHONPATH
+\verbatim
+$ cd pyzip/
+$ set PYTHONPATH=$PWD
+\endverbatim
+
+- Change directory to <tt> zwmdns_browse</tt> inside Pyzip
+\verbatim cd zwmdns_browse \endverbatim
+- Run pyzip2.py
+\verbatim python mdns_browse.py \endverbatim
+
+\subsubsection mdns_win MDNS browswr
+- Following window will be opened showing the Z-Wave nodes
+ * \image html mdns_first.png
+
+* \subsection tshoot Pyzip Troubleshooting
+
+ * - <b>Pyzip Error: <tt>socket.error: [Errno 101] Network is unreachable</tt> </b><br>
+ * This means pyzip is not able to reach the Z-Wave PAN. We need setup routes to tell pyzip machine
+ * that the path to Z-Wave nodes is through Z/IP Gateway. Follow steps below<br>
+ * \b Solution:
+ *  1. Enable automatic Ipv6 routes on Ubuntu. There are two ways to do it. <br>
+     * <b> Effective immidiately but Non-persistent after reboot </b>
+     \verbatim $ sudo sysctl -w net.ipv6.conf.all.accept_ra_rt_info_max_plen=64  \endverbatim
+     * <br><b> ---------- or --------- </b> <br>
+     * <b> Effective after reboot but persisten after further reboots </b> <br>
+ * Edit <tt>/etc/sysctl.conf</tt> add the line
+ * <tt>"net.ipv6.conf.all.accept_ra_rt_info_max_plen=64"</tt>
+ * <br>
+ *  2. Add route as follows <br>
+ * <b> Note: Find "ZipPanIp6" prefix and "ZipLanIp6" /usr/local/etc/zipgateway.cfg file. </b>
+ \verbatim
+    $ sudo ip -6 route add <ZipPanIp6 prefix>/64 via <ZipLanIp6>
+ \endverbatim
+ * <b> for e.g. if your ZipPanIp6 is "fd00:bbbb::1" then ZipPanIP6 prefix is "fd00:bbbb::" and if your ZipLanIp6 is "fd00:aaaa::3" then the route command will be as follows </b>
+ \verbatim
+    $ sudo ip -6 route add fd00:bbbb::/64 via fd00:aaaa::3
+ \endverbatim
+
+\section convert_eeprom Conversion of eeprom file from 2.2X version to newer (2.6X and 2.8X) versions of ZIP Gateway.
+The one disk format of eeprom file is different between 2.2X version and newer (2.6X and 2.8X) 
+version of ZIP Gateway. To use eeprom file created/modified by 2.2X ZIP Gateway in newwer version (2.6X/2.8X)
+the file has to be converted with the tool called <b>zgw_convert_eeprom</b> from ZIP Gateway package.
+It can be done with following command.
+\verbatim $ ./zgw_convert_eeprom <eeprom-file-name>\endverbatim
+\note The eeprom file conversion happens inline in the file and the converted file can not be used again
+in 2.2X ZIP Gateway
+
+\section misc Miscellanous
+\subsection miscun Unsolicited destination configuration on Windows.
+ To set IPV6 address of one of the interface of Windows machine as unsolicited destination for Z/IP
+Gateway can be confusing when the interface is configured to have Temporary IPV6 adddress for all
+communications as per RFC 4941 IPv6 Privacy Extensions. As Z/IP Gateway configuration file needs
+an IPV6 address and Windows temporary IPV6 address changes on each reset of the interface. A
+workaround would be to disable the RFC 4941 IPv6 Privacy Extensions on Windows and use the
+Permanent IPV6 address. Following are the ways to disable it.
+
+To disable privacy extensions entirely, Run cmd.exe as administrator on windows and issue the following commands.
+\verbatim
+netsh interface ipv6 set privacy state=disabled store=active
+netsh interface ipv6 set privacy state=disabled store=persistent
+\endverbatim
+
+For more info, read http://andatche.com/blog/2012/02/disabling-rfc4941-ipv6-privacy-extensions-in-windows/
+
+
+\subsection miscnw Method to move static IP configuration from eth0 to br-lan along with the routes
+  * Assuming the interface eth0 was the active network connection.
+   * 1. Get the ip of eth0
+  \code
+  $ ifconfig eth0|grep "inet addr"
+  inet addr:192.168.10.93  Bcast:192.168.10.255  Mask:255.255.255.0
+  \endcode
+   * Here eth0 IP address is \c 192.168.10.93
+
+   * 2. get the old route
+   \code
+   $ route -n
+   Kernel IP routing table
+   Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+   0.0.0.0         192.168.10.254  0.0.0.0         UG    0      0        0 eth0
+   192.168.10.0    0.0.0.0         255.255.255.0   U     0      0        0 eth0
+   \endcode
+   * Here the gateway to internet is \c 192.168.10.254
+
+   * 3. Remove the IP from eth0
+   \code
+   $ sudo ifconfig eth0 0.0.0.0
+   \endcode
+   * 4. Assign the old IP address of eth0 (got in step 1) to br-lan
+   \code
+   $ sudo ifconfig br-lan up 192.168.10.93
+   \endcode
+   *
+   * 5. set the new route via \c br-lan with gateway address found in step 2
+   \code
+   $ sudo route add default gw 192.168.10.254 dev br-lan
+   \endcode
+
+   * 6. see if the routes are set properly now and see if "Use Iface" says br-lan
+   \code
+   $ route -n
+   Kernel IP routing table
+   Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+   0.0.0.0         192.168.10.254  0.0.0.0         UG    0      0        0 br-lan
+   192.168.10.0    0.0.0.0         255.255.255.0   U     0      0        0 br-lan
+   \endcode
+
+\section fwupd_encap Firmware Update encapsulation
+This section describes how a Z/IP Client can go about updating the flash firmware on the ZW050x module 
+physically connected to the Z/IP Gateway. The Firmware Update command class defines a format for
+ transferring the flash image. But it does not specify the format used to encode the image. From the 
+ point of view of the command class, the flash image is simply raw binary data being transferred. 
+ The reference Z/IP gateway implementation requires the format defined in this section. The Z/IP Gateway 
+ will reject the firmware update if this format is not used.
+ 
+In order to firmware update a UZB stick directly connected to the gateway, a special encapsulation
+must be added to the raw firmware image. The raw firmware image must be obtained from an embedded SDK.
+An example of a suitable hex file for an EU-frequency UZB device is
+serialapi_controller_bridge_OTW_SD3503_USBVCP_EU_WITH_BOOTLOADER.hex from SDK 6.7x.
+
+Once the raw firmware image has been encapsulated properly, the resulting data structure must be transmitted
+from a Z/IP Client to the gateway using COMMAND_CLASS_FIRMWARE_UPDATE. Once the transmission is 
+complete, the Z/IP Gateway will proceed to update the physically connected UZB stick. 
+
+The reference Z/IP Gateway has several different firmware targets supported via Firmware Update Command 
+Class: ZW_FW_ID, ZW_EEPROM_ID and CERT_FW_ID. The encapulation described here is only applicable for the 
+ZW_FW_ID firmware target.
+
+The encapsulation format has the following structure:
+
+\code
+struct flash_encap {
+  uint8_t zwfw[4] = {'Z', 'W', 'F' ,'W'};
+  uint32_t size;                                   /* size of everything except md5 digest */
+  uint8_t hex_file[128*1024 - 4];        /* hex file in binary form, excluding last 4 bytes */
+  uint32_t crc32_with reversed_bits;
+  uint8_t md5_digest[16];                  /* Covers all the preceeding fields in struct flash_encap */
+}
+\endcode
+
+The ManufacturerID and ProductID must match what the gateway has been configured for (see the 
+CONFIGURATION FILE section of the <a href="zip.html">manual page</a> for details). 
+By default, the manufacturerID is 0 (Sigma Designs) and the ProductID should be either
+0x01 (ZIP Gateway) or 0x21B4 (ZIPR) .
+
+
+The following python code snippet will convert an Intel Hex file as supplied on the Embedded SDK into
+the format needed by the Z/IP Gateway. The resulting data should then be transferred with 
+COMMAND_CLASS_FIRMWARE_UPDATE from a Z/IP Client to the gateway.
+
+\code
+def buildZIPR_ZWaveFirmware(self, src_file, dst_file):
+    '''
+    Convert a normal Z-Wave hex formatted firmware image into the bin format accepted by the ZIPR
+    '''
+    def reverseBit(s):
+        r = ""
+        for c in s:
+            x = ord(c)
+            x = ((x << 4) & 0xF0) | ((x >> 4) & 0x0F);
+            x = ((x << 2) & 0xCC) | ((x >> 2) & 0x33);
+            x = ((x << 1) & 0xAA) | ((x >> 1) & 0x55);
+            r = r + chr(x)
+        return r;
+    # Convert Z-wave hex file to binary file  with fixed length 128KB-4 bytes.
+    h = IntelHex(src_file)
+    b = h.tobinstr(0, None, 0xff, 128 * 1024 - 4)
+    # Do a CRC32 reversing the bit order and negating the output
+    crc = (~binascii.crc32(reverseBit(b)) & 0xffffffff)
+    # Unreverse the bit order and output the result little endian
+    b = b + reverseBit(struct.pack("<I", crc));
+    b = "ZWFW" + struct.pack("!I", 128 * 1024 + 8) + b
+    m = hashlib.md5()
+    m.update(b)
+    b = b + m.digest()
+    f = open(dst_file, "wb")
+    f.write(b)
+    f.close()
+\endcode
+
+<b>Note</b> that the encapulation is a special case for updating the firmware physically attached to the 
+Gateway. It should not be used when updating PAN nodes.
+<br>
+Also note that COMMAND_CLASS_FIRMWARE_UPDATE does not require this particular encapsulation format. It
+specifically allows any payload format to be used. The specification given here is specific to the
+implementation of the the Z/IP Gateway and not a part of the certification requirements. 
+ */

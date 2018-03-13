@@ -1,0 +1,18 @@
+How to see documentation:
+----------------------------
+
+1. Install dependencies: Doxygen, Roffit
+$ sudo apt-get install doxygen roffit
+
+2. Run configure
+$ ./configure
+Note: If you configure script is not present in top directory run autoconf and then configure again
+
+3. Build documentation
+$ make doc 
+
+NOTE: For detailed description on compiling zipgateway please refer to documentation
+----  created after step 4.
+
+4. Open src/doc/html/index.hml in browser
+$ xdg-open src/doc/html/index.html

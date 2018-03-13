@@ -1,0 +1,3337 @@
+{
+  "global_settings":
+  [
+	{
+	"wakeup_interval":0
+	},
+	{
+	"wakeup_no_more_info_delay":60	 
+	}
+  ],
+  "device_records":
+  [
+      {
+      "_comment": "Everspring SP814 Motion Detector",
+      "vid":96,
+      "ptype": 1,
+      "pid":2,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+                "create_interface":113,
+				"create_interface_version":4,
+				"interface":[
+                               {
+                               "if_type": 1,
+                               "grp_id": [1]
+                               },
+                               {
+                               "if_type": 3,
+							   "hidden":1,
+                               "bin_sensor":[
+												{
+												"match":[
+															{
+																"state":255,
+																"result_if_type":6
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type": 7,
+																"alarm_type_name": "Home Security",
+																"zw_alarm_event":8,
+																"alarm_level_name": "Motion Detection, Unknown Location"
+															}
+														]
+												},
+												{
+												"match":[
+															{
+																"state":0,
+																"result_if_type":6
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type":7,
+																"alarm_type_name": "Home Security",
+																"zw_alarm_event":0,
+																"alarm_level_name": "Event inactive",
+																"zw_alarm_param_type":4,
+																"zw_alarm_param":[8]
+															}
+														]
+												}
+							   				]
+                               }
+                            ]
+                }
+            ]
+      },
+      {
+      "_comment": "Everspring HSP02 Motion Detector",
+      "vid":278,
+      "ptype": 1,
+      "pid":1,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+                               {
+                               "if_type": 1,
+                               "grp_id": [1]
+                               },
+                               {
+                               "if_type": 3,
+                               "hidden":1,
+							   "bin_sensor":[
+													{
+													"match":[
+																{
+																	"state":255,
+																	"result_if_type":6
+																}
+															],
+													"result":[
+																{
+																	"zw_alarm_type": 7,
+																	"alarm_type_name": "Home Security",
+																	"zw_alarm_event":8,
+																	"alarm_level_name": "Motion Detection, Unknown Location"
+																}
+															]
+													},
+													{
+													"match":[
+																{
+																	"state":0,
+																	"result_if_type":6
+																}
+															],
+													"result":[
+																{
+																	"zw_alarm_type":7,
+																	"alarm_type_name": "Home Security",
+																	"zw_alarm_event":0,
+																	"alarm_level_name": "Event inactive",
+																	"zw_alarm_param_type":5,
+																	"zw_alarm_param":[8]
+																}
+															]
+													}
+							   					]
+                               },
+                               {
+                               "if_type": 6,
+							   "user_def_version": 4,
+							   "no_event_clear": 1,
+							   "alarm":[
+                                       	{ 
+											"match":[
+															{
+																"alarm_type": 1,
+																"alarm_level": 2
+															}
+													],
+											"result":[
+															{
+																"zw_alarm_type": 8,
+																"alarm_type_name": "Power Management",
+																"zw_alarm_event": 1,
+																"zw_alarm_name": "Power has been applied"
+															}
+														]
+										},
+										{
+											"match":[
+															{
+																"alarm_type": 1,
+																"alarm_level": 255
+															}
+													],
+											"result":[
+															{
+																"zw_alarm_type": 8,
+																"alarm_type_name": "Power Management",
+																"zw_alarm_event": 11,
+																"zw_alarm_name": "Replace battery now!"
+															}
+													]
+										},
+										{
+											"match":[
+															{
+																"alarm_type": 1,
+                                                                "alarm_level": 17
+															}
+													],
+											"result":[
+															{
+																"zw_alarm_type": 7,
+                                                                "alarm_type_name": "Home Security",
+                                                                "zw_alarm_event": 3,
+                                                                "alarm_level_name": "Tampering,Product covering removed",
+                                                                "zw_alarm_param_type":4,
+																"zw_alarm_param": [3] 
+                                                            }
+													]
+										}
+                                       ]
+
+                               }
+
+                            ]
+                }
+            ]
+      },
+     {
+      "_comment": "Everspring SM103 Door/Window Sensor",
+      "vid":96,
+      "ptype": 2,
+      "pid":1,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"create_interface":113,
+				"create_interface_version":6,
+				"interface":[
+                               {
+                               "if_type": 1,
+                               "grp_id": [1]
+                               },
+                               {
+                               "if_type": 3,
+                               "hidden":1,
+                               "bin_sensor":[
+												{
+												"match":[
+															{
+																"state":255,
+																"result_if_type":6
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type": 6,
+																"alarm_type_name": "Access Control",
+																"zw_alarm_event":22,
+																"alarm_level_name": "Window/Door is opened"
+															}
+														]
+												},
+												{
+												"match":[
+															{
+																"state":0,
+																"result_if_type":6
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type":6,
+																"alarm_type_name": "Access Control",
+																"zw_alarm_event":23,
+																"alarm_level_name": "Window/Door is closed"
+															}
+														]
+												}
+							   				]	
+                               },
+							   {
+							   "if_type": 6,
+							   "no_event_clear": 1,
+							   "alarm":[
+										{
+										"match":[
+													{
+														"alarm_type": 1,
+                                                        "alarm_level": 17
+													}
+												],
+										"result":[
+													{
+														"zw_alarm_type": 7,
+                                                        "alarm_type_name": "Home Security",
+                                                        "zw_alarm_event": 9,
+                                                        "alarm_level_name": "Tampering,Product Moved",
+														"zw_alarm_param_type":4,
+                                                        "zw_alarm_param": [9]
+													}
+												]
+										}
+										]
+								}
+							]
+				}
+			]
+      },
+      {
+      "_comment": "Everspring ST814 Temperature/Humidity Detector",
+      "vid":96,
+      "ptype": 6,
+      "pid":1,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+                               {
+                               "if_type": 1,
+                               "grp_id": [1]
+                               },
+                               {
+                               "if_type": 4,
+                               "sensor_type": 1,
+                               "sensor_unit": 1
+                               }
+                            ]
+                },
+                {
+                "epid":1,
+                "interface":[
+                               {
+                               "if_type": 4,
+                               "sensor_type": 1,
+                               "sensor_unit": 1
+                               }
+                            ]
+                },
+                {
+                "epid":2,
+                "interface":[
+                               {
+                               "if_type": 4,
+                               "sensor_type": 5,
+                               "sensor_unit": 0
+                               }
+                            ]
+                }
+
+            ]
+
+      },
+      {
+      "_comment": "Vision ZD3102 Motion and Temperature Sensor",
+      "vid":265,
+      "ptype": 8194,
+      "pid":515,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+								{
+								"if_type": 3,
+								"bin_sensor_type": 12,
+								"hidden":1
+								},
+								{
+								"if_type": 4,
+								"sensor_type": 1,
+								"sensor_unit": 0
+								},
+                                {
+                                "if_type": 6,
+                                "user_def_version": 4,
+                                "alarm":[
+                                            {
+                                                "match": [
+                                                                {
+                                                                    "alarm_type": 7,
+                                                                    "alarm_level": 255,
+                                                                    "zw_alarm_type": 7,
+                                                                    "zw_alarm_event": 2
+                                                                }
+                                                        ],
+                                                "result": [
+                                                                {
+                                                                    "zw_alarm_type": 7,
+                                                                    "alarm_type_name": "Burglar",
+                                                                    "zw_alarm_event": 2,
+                                                                    "alarm_level_name": "Intrusion detection",
+                                                                    "zw_alarm_param_type":4,
+                                                                    "zw_alarm_param": [2]
+                                                                }
+                                                            ]
+                                            },
+                                            {
+                                                "match": [
+                                                                {
+                                                                    "alarm_type": 7,
+                                                                    "alarm_level": 255,
+                                                                    "zw_alarm_type": 7,
+                                                                    "zw_alarm_event": 3
+                                                                }
+                                                        ],
+                                                "result": [
+                                                                {
+                                                                    "zw_alarm_type": 7,
+                                                                    "alarm_type_name": "Burglar",
+                                                                    "zw_alarm_event": 3,
+                                                                    "alarm_level_name": "Tamper detection",
+                                                                    "zw_alarm_param_type":4,
+                                                                    "zw_alarm_param": [3]
+                                                                }
+                                                            ]
+                                            },
+                                            {
+                                                "match": [
+                                                                {
+                                                                    "alarm_type":7,
+                                                                    "alarm_level": 0
+                                                                }
+                                                        ],
+                                                "result":[
+                                                                {
+                                                                    "zw_alarm_type": 7,
+                                                                    "alarm_type_name": "Burglar",
+                                                                    "zw_alarm_event": 0,
+                                                                    "alarm_level_name": "Intrusion clear",
+                                                                    "zw_alarm_param_type":4,
+                                                                    "zw_alarm_param": [2]
+                                                                }		
+                                                            ]
+                                            }
+                                        ]
+                                }
+                            ]
+                }
+
+            ]
+
+      },
+	  {
+      "_comment": "Vision ZS 2102 Door/Window Sensor",
+      "vid":265,
+      "ptype": 8193,
+      "pid":258,
+      "category":11,
+	  "ep": [
+                {
+                "epid":0,
+                "interface":[
+                               {
+								"if_type": 3,
+								"bin_sensor_type": 10,
+								"hidden":1
+								},
+								{
+                                "if_type": 6,
+                                "user_def_version": 4,
+                                "alarm":[
+                                            {
+                                                "match": [
+                                                                {
+                                                                    "alarm_type": 7,
+                                                                    "alarm_level": 255,
+                                                                    "zw_alarm_type": 7,
+                                                                    "zw_alarm_event": 2
+                                                                }
+                                                        ],
+                                                "result": [
+                                                                {
+                                                                    "zw_alarm_type": 6,
+                                                                    "alarm_type_name": "Access Control",
+                                                                    "zw_alarm_event": 22,
+                                                                    "alarm_level_name": "Window/Door is opened",
+                                                                    "zw_alarm_param_type":4,
+                                                                    "zw_alarm_param": [22]
+                                                                }
+                                                            ]
+                                            },
+											{
+                                                "match": [
+                                                                {
+                                                                    "alarm_type":7,
+                                                                    "alarm_level": 0
+                                                                }
+                                                        ],
+                                                "result":[
+                                                                {
+                                                                    "zw_alarm_type": 6,
+                                                                    "alarm_type_name": "Access Control",
+                                                                    "zw_alarm_event": 23,
+                                                                    "alarm_level_name": "Window/Door is closed",
+                                                                    "zw_alarm_param_type":4,
+                                                                    "zw_alarm_param": [23]
+                                                                }		
+                                                            ]
+                                            },
+											{
+                                                "match": [
+                                                                {
+                                                                    "alarm_type": 7,
+                                                                    "alarm_level": 255,
+                                                                    "zw_alarm_type": 7,
+                                                                    "zw_alarm_event": 3
+                                                                }
+                                                        ],
+                                                "result": [
+                                                                {
+                                                                    "zw_alarm_type": 7,
+                                                                    "alarm_type_name": "Burglar",
+                                                                    "zw_alarm_event": 3,
+                                                                    "alarm_level_name": "Tamper detection",
+                                                                    "zw_alarm_param_type":4,
+                                                                    "zw_alarm_param": [3]
+                                                                }
+                                                            ]
+                                            }
+										]		
+								}
+							]
+				}
+			]
+      },
+      {
+      "_comment": "Vision ZS 5101 Shock Sensor",
+      "vid":265,
+      "ptype": 8195,
+      "pid":770,
+      "category":11
+      },
+	  {
+      "_comment": "Devolo Home Control Rauchmelder [Smoke Detector] (MT:2651)",
+      "vid":373,
+      "ptype": 8196,
+      "pid":1188,
+      "category":11,
+	  "ep": [
+                {
+                "epid":0,
+                "interface":[
+                               {
+                               "if_type": 1,
+                               "grp_id": [1]
+                               }
+							]
+				}
+			]
+      },
+      {
+      "_comment": "Vision ZS 6101 Smoke Detector",
+      "vid":265,
+      "ptype": 8196,
+      "pid":1027,
+      "category":1,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+                               {
+                               "if_type": 1,
+                               "grp_id": [1]
+                               },
+                               {
+                               "if_type": 3,
+                               "bin_sensor_type": 2,
+							   "hidden": 1
+                               },
+							   {
+                               "if_type": 6,
+							   "user_def_version": 4,
+                               "alarm":[
+											{
+											"match":[ 
+														{
+															"alarm_type": 1, 	
+															"alarm_level": 255,
+															"zw_alarm_type": 1,
+															"zw_alarm_event": 254
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 7,
+															"alarm_type_name": "Home Security",
+															"zw_alarm_event": 3,
+															"alarm_level_name":"Tampering, Product covering removed"
+														}
+													]
+											},
+											{
+											"match":[ 
+														{
+															"alarm_type": 1, 	
+															"alarm_level": 255,
+															"zw_alarm_type": 1,
+															"zw_alarm_event": 2
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 1,
+															"alarm_type_name": "Smoke Alarm",
+															"zw_alarm_event": 2,
+															"alarm_level_name":"Smoke detected, Unknown Location"
+														}
+													]
+											},
+											{
+											"match":[ 
+														{
+															"alarm_type": 1, 	
+															"alarm_level": 0,
+															"zw_alarm_type": 1,
+															"zw_alarm_event": 2
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 1,
+															"alarm_type_name": "Smoke Alarm",
+															"zw_alarm_event": 0,
+															"alarm_level_name":"Event inactive",
+															"zw_alarm_param_type":4,
+															"zw_alarm_param":[2]
+														}
+													]
+											}
+                                       ]
+			                    }
+
+                            ]
+                }
+
+            ]
+
+      },
+      {
+      "_comment": "Vision ZS 1601 Siren and Strobe Alarm",
+      "vid":265,
+      "ptype": 8197,
+      "pid":1283,
+      "category":4
+      },
+      {
+      "_comment": "RCS TBZ48 Thermostat",
+      "vid":16,
+      "ptype": 21570,
+      "pid":21554,
+      "category":26,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+                               {
+                               "if_type": 4,
+                               "sensor_type": 1,
+                               "sensor_unit": 1
+                               }
+                            ]
+                }
+
+            ]
+
+      },
+      {
+      "_comment": "Fibaro Flood Sensor FGFS-101",
+      "vid":271,
+      "ptype": 2816,
+      "pid":4097,
+      "category":1,
+      "ep": [
+                {
+                "epid":0,
+				"create_interface":113,
+				"create_interface_version":6,
+				"interface":[
+								{
+								"if_type": 1,
+								"grp_id": [2]
+								},
+								{
+                                "if_type": 2, 
+								"config":[ 
+                                          {
+                                          "param_num": 5,
+                                          "param_size":1, 
+                                          "param_val":0 
+                                          }
+										 ]
+								},
+								{
+								"if_type": 3,
+								"bin_sensor_type": 12,
+								"hidden": 1
+								},
+								{
+                                "if_type": 8,
+								"no_event_clear": 1,
+								"hidden": 1,
+								"alrm_snsr":[ 
+											{
+											"match":[ 
+														{
+															"type": 0,
+															"state":255,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 7,
+															"alarm_type_name": "Home Security",
+															"zw_alarm_event":9,
+															"alarm_level_name":"Tampering, Product Moved"
+														}
+													]
+											},
+											{
+											"match":[ 
+														{
+															"type": 5,
+															"state":0,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 5,
+															"alarm_type_name": "Water Alarm",
+															"zw_alarm_event":0,
+															"alarm_level_name":"Event inactive",
+															"zw_alarm_param_type":4,
+															"zw_alarm_param":[2]
+														}
+													]
+											},
+											{
+											"match":[ 
+														{
+															"type": 5,
+															"state_range":[1,255],
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 5,
+															"alarm_type_name": "Water Alarm",
+															"zw_alarm_event":2,
+															"alarm_level_name":"Water Leak detected, Unknown Location"
+														}
+													]
+											}
+											]
+								},
+								{
+                                "if_type": 7,
+								"basic":[ 
+											{
+											"match":[ 
+														{
+															"command": 1,
+															"value":0,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 5,
+															"alarm_type_name": "Water Alarm",
+															"zw_alarm_event":0,
+															"alarm_level_name":"Event inactive",
+															"zw_alarm_param_type":4,
+															"zw_alarm_param":[2]
+														}
+													]
+											},
+											{
+											"match":[ 
+														{
+															"command": 1,
+															"value": 255,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 5,
+															"alarm_type_name": "Water Alarm",
+															"zw_alarm_event":2,
+															"alarm_level_name":"Water Leak detected, Unknown Location"
+														}
+													]
+											}
+										]
+								}
+							]
+				},
+				{
+				"epid":1,
+				"redirect":	[
+								{
+								"interface": 156,
+								"command": -1,
+								"target_ep": 0
+								},
+								{
+								"interface": 32,
+								"command": 1,
+								"target_ep": 0
+								}
+							],
+				"interface":[
+								{
+								"if_type": 3,
+								"bin_sensor_type": 12,
+								"hidden": 1
+								}
+							]
+				},
+				{
+				"epid":2,
+				"redirect":	[
+								{
+								"interface": 156,
+								"command": -1,
+								"target_ep": 0
+								},
+								{
+								"interface": 32,
+								"command": 1,
+								"target_ep": 0
+								}
+							]
+				}
+			]
+      },
+      {
+      "_comment": "Fibaro Smoke Sensor FGSS-001",
+      "vid":271,
+      "ptype": 3072,
+      "pid":4096,
+      "category":1,
+      "ep": [
+                {
+                "epid":0,
+				"create_interface":113,
+				"create_interface_version":4,
+				"interface":[
+								{
+								"if_type": 1,
+								"grp_id": [2]
+								},
+								{
+								"if_type": 2,
+								"config":[
+										   {
+											"param_num": 5,
+											"param_size":1,
+											"param_val":0 
+											}	
+										]
+								},
+								{
+								"if_type": 8,
+								"hidden": 1,
+								"no_event_clear":1,
+								"alrm_snsr":[ 
+											{
+											"match":[ 
+														{
+															"type": 0,
+															"state":255,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 7,
+															"alarm_type_name": "Home Security",
+															"zw_alarm_event": 3,
+															"alarm_level_name":"Tampering, Product covering removed"
+														}
+													]
+											},
+											{
+											"match":[ 
+														{
+															"type": 0,
+															"state":0,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 7,
+															"alarm_type_name": "Home Security",
+															"zw_alarm_event": 0,
+															"alarm_level_name":"Event inactive",
+															"zw_alarm_param_type":4,
+															"zw_alarm_param":[3]
+														}
+													]
+											},
+											{
+											"match":[ 
+														{
+															"type": 1,
+															"state": 0,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 1,
+															"alarm_type_name": "Smoke Alarm",
+															"zw_alarm_event": 0,
+															"alarm_level_name":"Event inactive",
+															"zw_alarm_param_type":4,
+															"zw_alarm_param":[2]
+														}
+													]
+											},
+											{
+											"match":[ 
+														{
+															"type": 1,
+															"state":255,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 1,
+															"alarm_type_name": "Smoke Alarm",
+															"zw_alarm_event": 2,
+															"alarm_level_name":"Smoke detected, Unknown Location"
+														}
+													]
+											},
+											{
+											"match":[ 
+														{
+															"type": 4,
+															"state": 0,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 4,
+															"alarm_type_name": "Heat Alarm",
+															"zw_alarm_event":0,
+															"alarm_level_name":"Event inactive",	
+															"zw_alarm_param_type":4,
+															"zw_alarm_param":[4]											
+														}
+													]
+											},
+											{
+											"match":[ 
+														{
+															"type": 4,
+															"state": 255,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 4,
+															"alarm_type_name": "Heat Alarm",
+															"zw_alarm_event": 4,
+															"alarm_level_name":"Rapid Temperature Rise,Unknown Location"
+														}
+													]
+											}
+											]	
+								}					
+							]			
+				},
+				{
+				"epid":1,
+				"redirect":	[
+							{
+							"interface": 156,
+							"command": -1,
+							"target_ep": 0
+							}
+							]
+				},
+				{
+				"epid":2,
+				"redirect":	[
+							{
+							"interface": 156,
+							"command": -1,
+							"target_ep": 0
+							}
+							]
+				}
+			]			
+      },
+      {
+      "_comment": "Fibaro Door/Window Sensor FGK-101",
+      "vid":271,
+      "ptype": 1792,
+      "pid":4096,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"create_interface":113,
+				"create_interface_version":4,
+                "interface":[
+								{
+								"if_type": 1,
+								"grp_id": [1,2]
+								},
+								{
+								"if_type": 3,
+								"bin_sensor_type": 10,
+								"hidden": 1
+								},
+								{
+								"if_type": 8,
+								"hidden": 1,
+								"no_event_clear": 1,
+								"alrm_snsr":[ 
+											{
+											"match":[ 
+														{
+															"type": 0,
+															"state":255,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 7,
+															"alarm_type_name": "Home Security",
+															"zw_alarm_event": 3,
+															"alarm_level_name":"Tampering, Product covering removed"
+														}
+													]
+											},
+											{
+											"match":[ 
+														{
+															"type": 0,
+															"state":0,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 7,
+															"alarm_type_name": "Home Security",
+															"zw_alarm_event": 0,
+															"alarm_level_name":"Event inactive",
+															"zw_alarm_param_type":4,
+															"zw_alarm_param":[3]
+														}
+													]
+											}
+											]
+								},
+								{
+								"if_type": 7,
+								"basic":[ 
+										{
+											"match":[ 
+														{
+															"command": 1,
+															"value":0,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":23,
+															"alarm_level_name":"Door/Window closed"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"command": 1,
+															"value":255,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":22,
+															"alarm_level_name":"Door/Window open"
+														}
+													]
+										}
+										]
+                               }
+                            ]
+                }
+            ]
+      },
+       {
+      "_comment": "Wintop iDoorSensor",
+      "vid":151,
+      "ptype":4482,
+      "pid":17665,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+							{
+								"if_type": 1,
+								"grp_id": [2]
+							},
+							{
+								"if_type": 3,
+								"bin_sensor_type": 10,
+								"hidden":1
+							},
+							{
+								"if_type": 6,
+								"user_def_version": 4,
+								"no_event_clear": 1,
+								"alarm":[
+										{
+										"match":[
+												{
+													"alarm_type": 2,
+													"alarm_level": 0
+												}
+												],
+										"result":[
+												{
+													"zw_alarm_type": 6,
+													"alarm_type_name": "Access Control",
+													"zw_alarm_event": 23,
+													"alarm_level_name": "Window-Door is closed"
+												}
+												 ]
+										},
+										{
+										"match": [
+												{
+													"alarm_type":2,
+													"alarm_level": 255
+												}
+												],
+										"result":[
+												{
+													"zw_alarm_type": 6,
+													"alarm_type_name": "Access Control",
+													"zw_alarm_event": 22,
+													"alarm_level_name": "Window-Door is opened"
+												}		
+												]
+										},
+										{
+										"match":[
+												{
+													"alarm_type": 3,
+													"alarm_level": 0
+												}
+												],
+										"result":[
+												{
+													"zw_alarm_type": 7,
+													"alarm_type_name": "Home Security",
+													"zw_alarm_event": 0,
+													"alarm_level_name": "Event inactive",
+													"zw_alarm_param_type":4,
+													"zw_alarm_param":[3]
+												}
+												 ]
+										},
+										{
+										"match": [
+												{
+													"alarm_type":3,
+													"alarm_level": 255
+												}
+												],
+										"result":[
+												{
+													"zw_alarm_type": 7,
+													"alarm_type_name": "Home Security",
+													"zw_alarm_event": 3,
+													"alarm_level_name": "Tampering, Product covering removed"
+												}		
+												]
+										}
+										]
+							},
+							{
+                               "if_type": 7,
+                               "basic":[ 
+										{
+											"match":[ 
+														{
+															"command": 1,
+															"value":0,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":23,
+															"alarm_level_name":"Door/Window closed"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"command": 1,
+															"value":255,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":22,
+															"alarm_level_name":"Door/Window open"
+														}
+													]
+										}
+										]
+                               }
+							]
+				}	
+      	   ]
+      },
+      {
+      "_comment": "Diehl AKO Binary Switch",
+      "vid":259,
+      "ptype":1,
+      "pid":2,
+      "category":2
+      },
+      {
+      "_comment": "GreenWave N210-F Binary Switch",
+      "vid":153,
+      "ptype":2,
+      "pid":2,
+      "category":2,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+                               {
+                               "if_type": 5,
+                               "meter_type": 1,
+                               "meter_supported_units": 1
+                               }
+                            ]
+                }
+            ]
+      },
+      {
+      "_comment": "Wintop Binary Switch",
+      "vid":151,
+      "ptype":26945,
+      "pid":17665,
+      "category":2,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+                               {
+                               "if_type": 4,
+                               "sensor_type": 1,
+                               "sensor_unit": 0
+                               }
+                            ]
+                }
+            ]
+      },
+      {
+      "_comment": "Fibaro Wall Plug FGWPE-101",
+      "vid":271,
+      "ptype":1536,
+      "pid":4096,
+      "category":2,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+                               {
+                               "if_type": 4,
+                               "sensor_type": 4,
+                               "sensor_unit": 0
+                               }
+                            ]
+                }
+            ]
+      },
+      {
+      "_comment": "Aeon Labs Smart Switch DSC24-ZWUS",
+      "vid":134,
+      "ptype":3,
+      "pid":24,
+      "category":2,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+                               {
+                               "if_type": 4,
+                               "sensor_type": 1,
+                               "sensor_unit": 0
+                               }
+                            ]
+                }
+            ]
+      },
+      {
+      "_comment": "Aeon Labs Smart Dimmer DSC25-ZWUS",
+      "vid":134,
+      "ptype":3,
+      "pid":25,
+      "category":12,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+                               {
+                               "if_type": 4,
+                               "sensor_type": 1,
+                               "sensor_unit": 0
+                               }
+                            ]
+                }
+            ]
+      },
+      {
+      "_comment": "LinearLinc LB60Z-1 Dimmable LED Light Bulb",
+      "vid":526,
+      "ptype":18260,
+      "pid":12344,
+      "category":12
+      },
+      {
+      "_comment": "Zipato RGBW Light Bulb",
+      "vid":305,
+      "ptype":2,
+      "pid":2,
+      "category":12
+      },
+      {
+      "_comment": "Fibaro Motion Sensor FGMS-001",
+      "vid":271,
+      "ptype":2048,
+      "pid":4097,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"create_interface":113,
+				"create_interface_version":6,
+				"interface":[     
+							{
+							"if_type": 1,
+							"grp_id": [1, 2, 3]
+							},
+							{
+							"if_type": 2,
+							"config":[
+										{
+										"param_num": 24,
+										"param_size": 1,
+										"param_val": 1
+										}
+									]
+							},
+							{
+							"if_type": 3,
+							"bin_sensor_type": 12,
+							"hidden":1
+							},
+							{
+							"if_type": 8,
+							"no_event_clear": 1,
+							"hidden": 1,
+							"alrm_snsr":[ 
+											{
+											"match":[ 
+														{
+															"type": 0,
+															"state":255,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 7,
+															"alarm_type_name": "Home Security",
+															"zw_alarm_event": 9,
+															"alarm_level_name":"Tampering, Product Moved"
+														}
+													]
+											},
+											{
+											"match":[ 
+														{
+															"type": 0,
+															"state":0,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 7,
+															"alarm_type_name": "Home Security",
+															"zw_alarm_event": 0,
+															"alarm_level_name":"Event inactive",
+															"zw_alarm_param_type":4,
+															"zw_alarm_param":[9]
+														}
+													]
+											}
+											]
+								},
+							{
+                            "if_type": 7,
+                            "basic":[ 
+										{
+											"match":[ 
+														{
+															"command": 1,
+															"value":255,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 7,
+															"alarm_type_name": "Home Security",
+															"zw_alarm_event":8,
+															"alarm_level_name":"Motion Detection, Unknown Location"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"command": 1,
+															"value":0,
+															"result_if_type": 6
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 7,
+															"alarm_type_name": "Home Security",
+															"zw_alarm_event":0,
+															"alarm_level_name":"Event Inactive",
+															"zw_alarm_param_type": 4,
+															"zw_alarm_param": [8]
+														}
+													]
+										}
+									]
+                            }
+							]
+				},
+				{
+				"epid":1,
+				"redirect":	[
+							{
+							"interface": 32,
+							"command": -1,
+							"target_ep": 0
+							}
+							]
+				},
+				{
+				"epid":2,
+				"redirect":	[
+							{
+							"interface": 156,
+							"command": -1,
+							"target_ep": 0
+							}
+							]
+				}
+			]
+      },
+      {
+      "_comment": "Trane Thermostat",
+      "vid":139,
+      "ptype":21586,
+      "pid":21553,
+      "category":26
+      },
+      {
+      "_comment": "Secure Thermostat",
+      "vid":89,
+      "ptype":1,
+      "pid":3,
+      "category":26,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+      				{
+				"if_type": 1,
+				"grp_id": [1, 3, 4, 5]
+				}
+			    ]
+                }
+            ]
+      },
+      {
+      "_comment": "Danfoss RS Room Sensor",
+      "vid":2,
+      "ptype": 3,
+      "pid":32784,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+                               {
+                               "if_type": 4,
+                               "sensor_type": 1,
+                               "sensor_unit": 0
+                               }
+                            ]
+                }
+            ]
+      },
+      {
+      "_comment": "Danfoss Living Connect",
+      "vid":2,
+      "ptype": 5,
+      "pid":380,
+      "category":26,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+                               {
+                               "if_type": 4,
+                               "sensor_type": 1,
+                               "sensor_unit": 0
+                               }
+                            ]
+                }
+            ]
+      },
+      {
+      "_comment": "Nodon Octan Remote",
+      "vid":357,
+      "ptype":2,
+      "pid":1,
+      "category":17
+      },
+      {
+      "_comment": "Vision Doorlock",
+      "vid":265,
+      "ptype":8198,
+      "pid":1569,
+      "category":7
+      },
+      {
+      "_comment": "Schlage FE599 Wireless Lock",
+      "vid":59,
+      "ptype": 25419,
+      "pid":20556,
+      "category":7,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+                               {
+                               "if_type": 1,
+                               "grp_id": [2]
+                               },
+                               {
+                               "if_type": 6,
+                               "alarm":[
+                                         	{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 1
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 1"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 2
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 2"
+															}
+														]
+											},
+											{
+												"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 3
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 3"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 4
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 4"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 5
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 5"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 6
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 6"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 7
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 7"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 8
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 8"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 9
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 9"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 10
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 10"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 11
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 11"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 12
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 12"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 13
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 13"
+															}
+														]
+														},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 14
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 14"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 15
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 15"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 16
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 16"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 17
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 17"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 18
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 18"
+															}
+														]
+											},
+											{
+                                         		"match":[
+															{
+																"alarm_type": 16,
+																"alarm_level" : 19
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "User access alarm",
+																"alarm_level_name": "User id 19"
+															}
+														]
+											},
+											{
+												"match":[
+															{
+																"alarm_type": 32,
+																"alarm_level" : 255
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type": 6,
+																"alarm_type_name": "Lock access control alarm",
+																"zw_alarm_event": 12,
+																"alarm_level_name": "All users were deleted"
+															}
+														]
+											},
+											{
+												"match":[
+															{
+																"alarm_type": 48,
+																"alarm_level" : 255
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "Lock access control alarm",
+																"alarm_level_name": "Lock is reset to factory default"
+															}
+														]
+											},
+											{
+												"match":[
+															{
+																"alarm_type": 96,
+																"alarm_level" : 255
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type": 6,
+																"alarm_type_name": "Lock access control alarm",
+																"zw_alarm_event": 16,
+																"alarm_level_name": "Keypad temporary disabled"
+															}
+														]
+											},
+											{
+												"match":[
+															{
+																"alarm_type": 112,
+																"alarm_level" : 255
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type": 6,
+																"alarm_type_name": "Lock access control alarm",
+																"zw_alarm_event": 18,
+																"alarm_level_name": "New program code entered"
+															}
+														]
+											},
+											{
+												"match":[
+															{
+																"alarm_type": 128,
+																"alarm_level" : 255
+															}
+														],
+												"result":[
+															{
+																"alarm_type_name": "Lock access control alarm",
+																"alarm_level_name": "New keypad battery (lock was reset)"
+															}
+														]
+											},
+                                         	{
+												"match":[
+															{
+																"alarm_type": 112,
+																"alarm_level" : 255
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type": 6,
+																"alarm_type_name": "Lock access control alarm",
+																"zw_alarm_event": 17,
+																"alarm_level_name": "Keypad busy"
+															}
+														]
+											}
+                                        ]
+								}
+							]
+                }
+			]
+
+      },
+      {
+      "_comment": "Yale Vision Door lockAll alarms manufactured by Y company. pid= -1 means don't care; i.e. it matches anything",
+      "vid":265, 
+      "ptype": 2, 
+      "pid":0, 
+      "category":7, 
+      "ep": [ 
+                {
+                "epid":0, 
+                "interface":[
+                               {
+                               "if_type": 6, 
+                               "alarm":[ 
+										{
+											"match":[
+														{
+															"alarm_type": 9,                 	
+															"alarm_level_range":[0,1] 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":11,    	
+															"alarm_level_name":"Lock is Jammed"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"alarm_type": 18,                 	
+															"alarm_level_range":[0,255] 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":5,    	
+															"alarm_level_name":"Keypad Lock"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"alarm_type": 19,                 	
+															"alarm_level_range":[0,250] 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":6,    	
+															"alarm_level_name":"Keypad Unlock"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"alarm_type": 21,                 	
+															"alarm_level": 1 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":1,    	
+															"alarm_level_name":"Lock From Inside"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"alarm_type": 21,                 	
+															"alarm_level": 2 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":5,    	
+															"alarm_level_name":"Keypad Lock",
+															"zw_alarm_param_type":4,
+															"zw_alarm_param":[1]
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"alarm_type": 22,                 	
+															"alarm_level": 1 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":2,    	
+															"alarm_level_name":"Unlock From Inside",
+															"zw_alarm_param":[0,1]
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"alarm_type": 24,                 	
+															"alarm_level": 1 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":3,    	
+															"alarm_level_name":"Lock By Z-Wave"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"alarm_type": 25,                 	
+															"alarm_level": 1 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":4,    	
+															"alarm_level_name":"Unlock By Z-Wave"
+														}
+													]
+										}          
+                                       ]                                      
+                               }
+                            ]
+                }
+
+            ]
+
+      },
+	  {
+      "_comment": "Yale Yale Door lockAll alarms manufactured by Y company. pid= -1 means don't care; i.e. it matches anything",
+      "vid":297, 
+      "ptype": 2, 
+      "pid":0, 
+      "category":7, 
+      "ep": [ 
+                {
+                "epid":0, 
+                "interface":[
+                               {
+                               "if_type": 6, 
+                               "alarm":[ 
+										{
+											"match":[
+														{
+															"alarm_type": 9,                 	
+															"alarm_level_range":[0,1] 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":11,    	
+															"alarm_level_name":"Lock is Jammed"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"alarm_type": 18,                 	
+															"alarm_level_range":[0,255] 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":5,    	
+															"alarm_level_name":"Keypad Lock"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"alarm_type": 19,                 	
+															"alarm_level_range":[0,250] 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":6,    	
+															"alarm_level_name":"Keypad Unlock"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"alarm_type": 21,                 	
+															"alarm_level": 1 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":1,    	
+															"alarm_level_name":"Lock From Inside"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"alarm_type": 21,                 	
+															"alarm_level": 2 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":5,    	
+															"alarm_level_name":"Keypad Lock"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"alarm_type": 22,                 	
+															"alarm_level": 1 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":2,    	
+															"alarm_level_name":"Unlock From Inside"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"alarm_type": 24,                 	
+															"alarm_level": 1 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":3,    	
+															"alarm_level_name":"Lock By Z-Wave"
+														}
+													]
+										},
+										{
+											"match":[
+														{
+															"alarm_type": 25,                 	
+															"alarm_level": 1 									
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 6,
+															"alarm_type_name": "Access Control",
+															"zw_alarm_event":4,    	
+															"alarm_level_name":"Unlock By Z-Wave"
+														}
+													]
+										}          
+                                       ]                           
+                               }
+                            ]
+                }
+			]
+      },
+      {
+      "_comment": "Wintop iSensor 1180r",
+      "vid":151,
+      "ptype": 4480,
+      "pid":17664,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+                               {
+                               "if_type": 1,
+                               "grp_id": [1]
+                               },
+                               {
+                               "if_type": 3,
+                               "bin_sensor_type": 12,
+							   "hidden": 1
+                               },
+                               {
+                               "if_type": 6,
+							   "no_event_clear": 1,
+                               "alarm":[
+                                         	{
+												"match":[
+															{
+																"alarm_type": 3,
+																"alarm_level": 255
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type": 7,
+																"alarm_type_name": "Burglar",
+																"zw_alarm_event": 3,
+																"alarm_level_name": "Tamper detected"
+															}
+														]
+											}
+                                      ]
+                               }
+                            ]
+                }
+            ]
+      },
+      {
+      "_comment": "Linear WAPIRZ-1 Motion and Temperature Sensor",
+      "vid":335,
+      "ptype": 8194,
+      "pid":515,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+								{
+								"if_type": 3,
+								"bin_sensor_type": 12,
+								"hidden":1
+								},
+								{
+								"if_type": 4,
+								"sensor_type": 1,
+								"sensor_unit": 0
+								},
+                                {
+                                "if_type": 6,
+                                "user_def_version": 4,
+                                "alarm":[
+                                            {
+                                                "match": [
+                                                                {
+                                                                    "alarm_type": 7,
+                                                                    "alarm_level": 255,
+                                                                    "zw_alarm_type": 7,
+                                                                    "zw_alarm_event": 2
+                                                                }
+                                                        ],
+                                                "result": [
+                                                                {
+                                                                    "zw_alarm_type": 7,
+                                                                    "alarm_type_name": "Burglar",
+                                                                    "zw_alarm_event": 2,
+                                                                    "alarm_level_name": "Intrusion detection",
+                                                                    "zw_alarm_param_type":4,
+                                                                    "zw_alarm_param": [2]
+                                                                }
+                                                            ]
+                                            },
+                                            {
+                                                "match": [
+                                                                {
+                                                                    "alarm_type": 7,
+                                                                    "alarm_level": 255,
+                                                                    "zw_alarm_type": 7,
+                                                                    "zw_alarm_event": 3
+                                                                }
+                                                        ],
+                                                "result": [
+                                                                {
+                                                                    "zw_alarm_type": 7,
+                                                                    "alarm_type_name": "Burglar",
+                                                                    "zw_alarm_event": 3,
+                                                                    "alarm_level_name": "Tamper detection",
+                                                                    "zw_alarm_param_type":4,
+                                                                    "zw_alarm_param": [3]
+                                                                }
+                                                            ]
+                                            },
+                                            {
+                                                "match": [
+                                                                {
+                                                                    "alarm_type":7,
+                                                                    "alarm_level": 0
+                                                                }
+                                                        ],
+                                                "result":[
+                                                                {
+                                                                    "zw_alarm_type": 7,
+                                                                    "alarm_type_name": "Burglar",
+                                                                    "zw_alarm_event": 0,
+                                                                    "alarm_level_name": "Intrusion clear",
+                                                                    "zw_alarm_param_type":4,
+                                                                    "zw_alarm_param": [2]
+                                                                }		
+                                                            ]
+                                            }
+                                        ]
+                                }
+                            ]
+                }
+
+            ]
+
+      },
+         {
+      "_comment": "Linear WADWAZ-1 Contact Sensor",
+      "vid":335,
+      "ptype": 8193,
+      "pid":258,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+                "interface":[
+                                {
+								"if_type": 3,
+								"bin_sensor_type": 10,
+								"hidden":1
+								},
+								{
+                                "if_type": 6,
+                                "user_def_version": 4,
+                                "alarm":[
+                                            {
+                                                "match": [
+                                                                {
+                                                                    "alarm_type": 7,
+                                                                    "alarm_level": 255,
+                                                                    "zw_alarm_type": 7,
+                                                                    "zw_alarm_event": 2
+                                                                }
+                                                        ],
+                                                "result": [
+                                                                {
+                                                                    "zw_alarm_type": 6,
+                                                                    "alarm_type_name": "Home Security",
+                                                                    "zw_alarm_event": 22,
+                                                                    "alarm_level_name": "Window/Door is opened",
+                                                                    "zw_alarm_param_type":4,
+                                                                    "zw_alarm_param": [22]
+                                                                }
+                                                            ]
+                                            },
+                                            {
+                                                "match": [
+                                                                {
+                                                                    "alarm_type": 7,
+                                                                    "alarm_level": 255,
+                                                                    "zw_alarm_type": 7,
+                                                                    "zw_alarm_event": 3
+                                                                }
+                                                        ],
+                                                "result": [
+                                                                {
+                                                                    "zw_alarm_type": 7,
+                                                                    "alarm_type_name": "Home Security",
+                                                                    "zw_alarm_event": 3,
+                                                                    "alarm_level_name": "Tamper detection",
+                                                                    "zw_alarm_param_type":4,
+                                                                    "zw_alarm_param": [3]
+                                                                }
+                                                            ]
+                                            },
+                                            {
+                                                "match": [
+                                                                {
+                                                                    "alarm_type":7,
+                                                                    "alarm_level": 0,
+																	"zw_alarm_type": 7,
+                                                                    "zw_alarm_event": 2
+                                                                }
+                                                        ],
+                                                "result":[
+                                                                {
+                                                                    "zw_alarm_type": 6,
+                                                                    "alarm_type_name": "Home Security",
+                                                                    "zw_alarm_event": 23,
+                                                                    "alarm_level_name": "Window/Door is closed",
+                                                                    "zw_alarm_param_type":4,
+                                                                    "zw_alarm_param": [23]
+                                                                }		
+                                                            ]
+                                            }
+                                        ]
+                                }
+                            ]
+                }
+
+            ]
+
+      },
+	  {
+      "_comment": "Aeotec (Aeon Labs) Water Sensor DSB45-ZWEU",
+      "vid":134,
+      "ptype":2,
+      "pid":45,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+							   {
+                               "if_type": 1,
+                               "grp_id": [1]
+                               },
+							   {
+                                "if_type": 2, 
+								"config":[ 
+                                          {
+                                          "param_num": 121,
+                                          "param_size":4, 
+                                          "param_val":4096 
+                                          }
+										 ]
+								},
+								{
+								"if_type": 3,
+								"bin_sensor_type": 6,
+								"hidden": 1
+								},
+								{
+								"if_type": 6,
+                                "user_def_version": 4,
+                                "alarm":[
+                                           {
+											"match":[ 
+														{
+															"zw_alarm_type": 5,               	
+															"zw_alarm_event": 4
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 5,
+															"alarm_type_name": "Water Alarm",
+															"zw_alarm_event":0,
+															"alarm_level_name":"Event inactive",
+															"zw_alarm_param_type":4,
+															"zw_alarm_param":[2]
+														}
+													]
+											},
+                                            {
+											"match":[ 
+														{
+															"zw_alarm_type": 5,               	
+															"zw_alarm_event": 2
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 5,
+															"alarm_type_name": "Water Alarm",
+															"zw_alarm_event":2,
+															"alarm_level_name":"Event water leak"
+														}
+													]
+											}
+										]
+								}
+							]	
+				}
+			]
+
+      },
+	   {
+      "_comment": "Aeotec (Aeon Labs) Multisensor6 ZW100-C",
+      "vid":134,
+      "ptype":2,
+      "pid":100,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+							    {
+                                "if_type": 2, 
+								"config":[ 
+                                          {
+                                          "param_num": 4,
+                                          "param_size":1, 
+                                          "param_val":5 
+                                          },
+										  {
+										  "param_num": 5,
+										  "param_size": 1,
+										  "param_val": 2
+										  }
+										  ]
+								},
+								{
+								"if_type": 3,
+								"bin_sensor_type": 12,
+								"hidden": 1
+								},
+								{
+								"if_type": 6,
+								"user_def_version": 4,
+								"alarm":[
+										{
+										"match": [
+													{
+														"zw_alarm_type": 7,
+														"zw_alarm_event": 0
+													}
+												],
+										"result":[
+													{
+														"zw_alarm_type":7,
+														"alarm_type_name": "Home Security",
+														"zw_alarm_event": 0,
+														"alarm_level_name": "Event Inactive"
+													}
+												]
+										}
+										]
+								}
+							]	
+				}
+			]
+
+      },
+	  {
+      "_comment": "Aeotec Recessed Door sensor Gen5",
+      "vid":134,
+      "ptype":258,
+      "pid":89,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+								{
+								"if_type":1,
+								"grp_id": [2]
+								},
+								{
+								"if_type": 2,
+								"config": [	
+												{
+												"param_num": 101,
+												"param_size": 1,
+												"param_val": 1
+												}
+										]
+								},
+								{
+								"if_type": 3,
+								"bin_sensor_type": 10,
+								"hidden":1
+								},
+								{
+								"if_type": 7,
+								"basic":[ 
+										{
+										"match":[ 
+													{
+														"command": 1,
+														"value":0,
+														"result_if_type": 6
+													}
+												],
+										"result":[
+													{
+													    "zw_alarm_type": 6,
+														"alarm_type_name": "Access Control",
+														"zw_alarm_event":23,
+														"alarm_level_name":"Door/Window is closed"
+													}
+												]
+										},
+										{
+										"match":[
+													{
+														"command": 1,
+														"value":255,
+														"result_if_type": 6
+													}
+												],
+										"result":[
+													{
+													    "zw_alarm_type": 6,
+														"alarm_type_name": "Access Control",
+														"zw_alarm_event":22,
+														"alarm_level_name":"Door/Window is open"
+													}
+												]
+										}
+										]
+								}	
+							]	
+				}
+			]
+      },
+	   {
+      "_comment": "Aeotec (Aeon Labs) Multisensor6 ZW100-A",
+      "vid":134,
+      "ptype":258,
+      "pid":100,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+							    {
+                                "if_type": 2, 
+								"config":[ 
+                                          {
+                                          "param_num": 4,
+                                          "param_size":1, 
+                                          "param_val":5 
+                                          },
+										  {
+										  "param_num": 5,
+										  "param_size": 1,
+										  "param_val": 2
+										  }
+										  ]
+								},
+								{
+								"if_type": 3,
+								"bin_sensor_type": 12,
+								"hidden": 1
+								},
+								{
+								"if_type": 6,
+								"user_def_version": 4,
+								"alarm":[
+										{
+										"match": [
+													{
+														"zw_alarm_type": 7,
+														"zw_alarm_event": 0
+													}
+												],
+										"result":[
+													{
+														"zw_alarm_type":7,
+														"alarm_type_name": "Home Security",
+														"zw_alarm_event": 0,
+														"alarm_level_name": "Event Inactive"
+													}
+												]
+										}
+										]
+								}
+							]	
+				}
+			]
+
+      },
+	  {
+      "_comment": "GE In-Wall Smart Fan Control 12730 ZW4002",
+      "vid":99,
+      "ptype": 18756,
+      "pid":12340,
+      "category":16
+      },
+	  {
+      "_comment": "First Alert Smoke Alarm",
+      "vid": 312,
+      "ptype": 1,
+      "pid": 1,
+      "category":1,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+								{
+								"if_type": 6,
+								"user_def_version":8,
+								"alarm":[ 
+											{
+											"match":[ 
+														{
+															"alarm_type": 1,
+															"alarm_level": 0
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 1,
+															"alarm_type_name": "Smoke Alarm",
+															"zw_alarm_event": 0,
+															"alarm_level_name":"Event inactive",
+															"zw_alarm_param_type":4,
+															"zw_alarm_param":[2]
+														}
+													]
+											},
+											{
+											"match":[ 
+														{
+															"alarm_type": 1,
+															"alarm_level": 255
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 1,
+															"alarm_type_name": "Smoke Alarm",
+															"zw_alarm_event": 2,
+															"alarm_level_name":"Smoke detected, Unknown Location"
+														}
+													]
+											},
+{
+											"match":[ 
+														{
+															"alarm_type": 12,
+															"alarm_level": 0
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 1,
+															"alarm_type_name": "Smoke Alarm",
+															"zw_alarm_event": 6,
+															"alarm_level_name":"Alarm Silenced"
+														}
+													]
+											},
+											{
+											"match":[ 
+														{
+															"alarm_type": 12,
+															"alarm_level": 255
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 1,
+															"alarm_type_name": "Smoke Alarm",
+															"zw_alarm_event": 3,
+															"alarm_level_name":"Smoke Alarm Test"
+														}
+													]
+											},
+{
+											"match":[ 
+														{
+															"alarm_type": 13,
+															"alarm_level": 255
+														}
+													],
+											"result":[
+														{
+														    "zw_alarm_type": 8,
+															"alarm_type_name": "Power Management",
+															"zw_alarm_event": 1,
+															"alarm_level_name":"Power has been applied"
+														}
+													]
+											}
+										]			
+								}
+						]			
+					}
+			]
+		},
+		{
+      "_comment": "Aeotec Smart Dimmer 6 (US)",
+      "vid":134,
+      "ptype":259,
+      "pid":99,
+      "category":12,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+							   {
+                                "if_type": 2, 
+								"config":[ 
+                                          {
+                                          "param_num": 81,
+                                          "param_size":1, 
+                                          "param_val":2
+                                          }
+										 ]
+								}
+							]
+					}
+				]
+		},
+	{
+      "_comment": "Aeotec Smart Switch 6 (US)",
+      "vid":134,
+      "ptype":259,
+      "pid":96,
+      "category":2,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+							   {
+                                "if_type": 2, 
+								"config":[ 
+                                          {
+                                          "param_num": 81,
+                                          "param_size":1, 
+                                          "param_val":2
+                                          }
+										 ]
+								}
+							]
+					}
+				]
+		},
+	  {
+      "_comment": "Aeotec Door/Window Sensor Gen 5 (ZW120-A)",
+      "vid":134,
+      "ptype":258,
+      "pid":120,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+							    {
+								"if_type": 3,
+								"bin_sensor_type": 10,
+								"hidden": 1
+								}
+							]	
+				}
+			]
+
+      },
+	  {
+      "_comment": "Zipato Quad Multisensor PH-PSM02-US",
+      "vid":316,
+      "ptype":2,
+      "pid":2,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"create_interface":113,
+				"create_interface_version":6,
+				"interface":[
+							    {
+								"if_type": 3,
+								"hidden": 1,
+								"no_event_clear": 1,
+								"bin_sensor":[
+												{
+												"match":[
+															{
+																"type": 8,
+																"state": 255,
+																"result_if_type": 6
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type": 7,
+																"alarm_type_name": "Home Security",
+																"zw_alarm_event": 9,
+																"alarm_level_name": "Tampering, Product Moved"
+															}
+														]
+												},
+												{
+												"match":[
+															{
+																"type": 10,
+																"state": 255,
+																"result_if_type": 6
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type": 6,
+																"alarm_type_name": "Access Control",
+																"zw_alarm_event": 22,
+																"alarm_level_name": "Window/Door is opened"
+															}
+														]
+												},
+												{
+												"match":[
+															{
+																"type": 10,
+																"state": 0,
+																"result_if_type": 6
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type": 6,
+																"alarm_type_name": "Access Control",
+																"zw_alarm_event": 23,
+																"alarm_level_name": "Window/Door is closed"
+															}
+														]
+												},
+												{
+												"match":[
+															{
+																"type": 12,
+																"state": 255,
+																"result_if_type": 6
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type": 7,
+																"alarm_type_name": "Home Security",
+																"zw_alarm_event": 8,
+																"alarm_level_name": "Motion Detection, Unknown Location"
+															}
+														]
+												},
+												{
+												"match":[
+															{
+																"type": 8,
+																"state": 0,
+																"result_if_type": 6
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type": 7,
+																"alarm_type_name": "Home Security",
+																"zw_alarm_event": 0,
+																"alarm_level_name": "Event Inactive",
+																"zw_alarm_param_type": 4,
+																"zw_alarm_param": [3]
+															}
+														]
+												},
+												{
+												"match":[
+															{
+																"type": 12,
+																"state": 0,
+																"result_if_type": 6
+															}
+														],
+												"result":[
+															{
+																"zw_alarm_type": 7,
+																"alarm_type_name": "Home Security",
+																"zw_alarm_event": 0,
+																"alarm_level_name": "Event Inactive",
+																"zw_alarm_param_type": 4,
+																"zw_alarm_param": [8]
+															}
+														]
+												}
+											]
+								}
+							]	
+				}
+			]
+
+      },
+	  {
+      "_comment": "Philio Technology Corp Sensor PST02-1A",
+      "vid":316,
+      "ptype":2,
+      "pid":12,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+							    {
+								"if_type": 3,
+								"bin_sensor_type": 10,
+								"hidden": 1
+								},
+								{
+								"if_type": 6,
+								"no_event_clear": 1,
+								"alarm":[
+										{
+										"match": [
+													{
+														"zw_alarm_type": 7,
+														"zw_alarm_event": 0
+													}
+												],
+										"result":[
+													{
+														"zw_alarm_type":7,
+														"alarm_type_name": "Home Security",
+														"zw_alarm_event": 0,
+														"alarm_level_name": "Event Inactive"
+													}
+												]
+										}
+										]
+								}
+							]	
+				}
+			]
+     },
+	 {
+      "_comment": "Philio Technology Corp Sensor PAT02-1C",
+      "vid":316,
+      "ptype":2,
+      "pid":33,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+							    {
+								"if_type": 3,
+								"bin_sensor_type": 6,
+								"hidden": 1
+								},
+								{
+								"if_type": 6,
+								"no_event_clear": 1,
+								"alarm":[
+										{
+										"match": [
+													{
+														"zw_alarm_type": 7,
+														"zw_alarm_event": 0
+													}
+												],
+										"result":[
+													{
+														"zw_alarm_type":7,
+														"alarm_type_name": "Home Security",
+														"zw_alarm_event": 0,
+														"alarm_level_name": "Event Inactive"
+													}
+												]
+										}
+										]
+								}
+							]	
+				}
+			]
+     },
+	 {
+      "_comment": "Devolo Home Control MT02647",
+      "vid":373,
+      "ptype":2,
+      "pid":13,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+							    {
+                                "if_type": 2, 
+								"config":[ 
+                                          {
+                                          "param_num": 7,
+                                          "param_size":1, 
+                                          "param_val":4
+                                          }
+										 ]
+								},
+								{
+								"if_type": 3,
+								"bin_sensor_type": 12,
+								"hidden": 1
+								},
+								{
+								"if_type": 6,
+								"no_event_clear": 1,
+								"alarm":[
+										{
+										"match": [
+													{
+														"zw_alarm_type": 7,
+														"zw_alarm_event": 0
+													}
+												],
+										"result":[
+													{
+														"zw_alarm_type":7,
+														"alarm_type_name": "Home Security",
+														"zw_alarm_event": 0,
+														"alarm_level_name": "Event Inactive"
+													}
+												]
+										}
+										]
+								}
+							]	
+				}
+			]
+     },
+	 {
+      "_comment": "Aeotec Smart Dimmer 6 (EU)",
+      "vid":134,
+      "ptype":3,
+      "pid":99,
+      "category":12,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+							   {
+                                "if_type": 2, 
+								"config":[ 
+                                          {
+                                          "param_num": 81,
+                                          "param_size":1, 
+                                          "param_val":2
+                                          }
+										 ]
+								}
+							]
+					}
+				]
+	 },
+	  {
+      "_comment": "Aeotec Smart Switch 6 (EU)",
+      "vid":134,
+      "ptype":3,
+      "pid":96,
+      "category":2,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+							   {
+                                "if_type": 2, 
+								"config":[ 
+                                          {
+                                          "param_num": 81,
+                                          "param_size":1, 
+                                          "param_val":2
+                                          }
+										 ]
+								}
+							]
+					}
+				]
+		},
+	   {
+		"_comment": "Neo Coolcam PRI Motion Sensor",
+		"vid":600,
+        "ptype":3,
+        "pid":4227,
+        "category":11,
+        "ep": [
+                {
+                "epid":0,
+				"interface":[
+							    {
+								"if_type": 3,
+								"bin_sensor_type": 12,
+								"hidden": 1
+								}
+							]
+				}
+			]
+     },
+	 {
+		"_comment": "Neo Coolcam Water Sensor",
+		"vid":600,
+        "ptype":3,
+        "pid":4229,
+        "category":11,
+        "ep": [
+                {
+                "epid":0,
+				"interface":[
+							    {
+								"if_type": 3,
+								"bin_sensor_type": 6,
+								"hidden": 1
+								}
+							]
+				}
+			]
+     },
+	 {
+      "_comment": "Neo Coolcam Door/Window Sensor",
+      "vid":600,
+      "ptype":3,
+      "pid":4226,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+							    {
+								"if_type": 3,
+								"bin_sensor_type": 10,
+								"hidden": 1
+								}
+							]
+				}
+			]
+     },
+	 {
+      "_comment": "Heiman HS1DS-Z Door/Window Sensor",
+      "vid":608,
+      "ptype":360,
+      "pid":360,
+      "category":11,
+      "ep": [
+                {
+                "epid":0,
+				"interface":[
+							    {
+								"if_type": 3,
+								"bin_sensor_type": 10,
+								"hidden": 1
+								},
+								{
+								"if_type": 3,
+								"bin_sensor_type": 8,
+								"hidden": 1
+								},
+								{
+								"if_type": 6,
+								"no_event_clear": 1,
+								"alarm":[
+										{
+										"match": [
+													{
+														"zw_alarm_type": 7,
+														"zw_alarm_event": 0
+													}
+												],
+										"result":[
+													{
+														"zw_alarm_type":7,
+														"alarm_type_name": "Home Security",
+														"zw_alarm_event": 0,
+														"alarm_level_name": "Event Inactive"
+													}
+												]
+										}
+										]
+								}			
+							]
+				}				
+			]
+     },
+	 {
+	  "_comment": "Heiman HS1SA-Z Smart Smoke Sensor",
+	  "vid":608,
+	  "ptype":32770,
+	  "pid":4096,
+	  "category":11,
+	  "ep": [
+				{
+				"epid":0,
+				"interface":[
+								{
+								"if_type": 3,
+								"bin_sensor_type": 2,
+								"hidden": 1
+								}
+							]
+				}
+			]
+	 },
+	 {
+	  "_comment": "Heiman HS1CA-Z Smart CO Sensor",
+	  "vid":608,
+	  "ptype":32772,
+	  "pid":4096,
+	  "category":11,
+	  "ep": [
+				{
+				"epid":0,
+				"interface":[
+								{
+								"if_type": 3,
+								"bin_sensor_type": 3,
+								"hidden": 1
+								}
+							]
+				}
+			]
+	 }
+		
+  ]
+}

@@ -1,0 +1,144 @@
+diff -rupN openssl-1.0.2l/crypto/bio/bio.h openssl-1.0.2l_new/crypto/bio/bio.h
+--- openssl-1.0.2l/crypto/bio/bio.h	2017-05-25 20:54:34.000000000 +0800
++++ openssl-1.0.2l_new/crypto/bio/bio.h	2017-10-24 17:10:56.000000000 +0800
+@@ -327,6 +327,10 @@ struct bio_st {
+     /* bio, mode, argp, argi, argl, ret */
+     long (*callback) (struct bio_st *, int, const char *, int, long, long);
+     char *cb_arg;               /* first argument for the callback */
++//#define   SSL_SET_FD_RCV_MSG
++    unsigned char *rcv_msg;
++    unsigned rcv_msg_len;
++//#endif
+     int init;
+     int shutdown;
+     int flags;                  /* extra storage */
+diff -rupN openssl-1.0.2l/crypto/bio/bio_lib.c openssl-1.0.2l_new/crypto/bio/bio_lib.c
+--- openssl-1.0.2l/crypto/bio/bio_lib.c	2017-05-25 20:54:34.000000000 +0800
++++ openssl-1.0.2l_new/crypto/bio/bio_lib.c	2017-10-24 17:11:22.000000000 +0800
+@@ -89,6 +89,10 @@ int BIO_set(BIO *bio, BIO_METHOD *method
+     bio->flags = 0;
+     bio->retry_reason = 0;
+     bio->num = 0;
++//#define   SSL_SET_FD_RCV_MSG
++    bio->rcv_msg = NULL;
++    bio->rcv_msg_len = 0;
++//#endif
+     bio->ptr = NULL;
+     bio->prev_bio = NULL;
+     bio->next_bio = NULL;
+diff -rupN openssl-1.0.2l/crypto/bio/bss_sock.c openssl-1.0.2l_new/crypto/bio/bss_sock.c
+--- openssl-1.0.2l/crypto/bio/bss_sock.c	2017-05-25 20:54:34.000000000 +0800
++++ openssl-1.0.2l_new/crypto/bio/bss_sock.c	2017-10-24 17:11:54.000000000 +0800
+@@ -128,6 +128,14 @@ static int sock_free(BIO *a)
+         a->init = 0;
+         a->flags = 0;
+     }
++//#define   SSL_SET_FD_RCV_MSG
++    if (a->rcv_msg) {
++        //Clean up
++        free(a->rcv_msg);
++        a->rcv_msg = NULL;
++        a->rcv_msg_len = 0;
++    }
++//#endif
+     return (1);
+ }
+ 
+@@ -135,6 +143,20 @@ static int sock_read(BIO *b, char *out,
+ {
+     int ret = 0;
+ 
++//#define   SSL_SET_FD_RCV_MSG
++    //Check if there is any unread message
++    if (b->rcv_msg && b->rcv_msg_len) {
++        //Use the unread message instead of reading from socket
++        ret = b->rcv_msg_len;
++        memcpy(out, b->rcv_msg, b->rcv_msg_len);
++        //Clean up
++        free(b->rcv_msg);
++        b->rcv_msg = NULL;
++        b->rcv_msg_len = 0;
++        return (ret);
++    }
++//#endif
++
+     if (out != NULL) {
+         clear_socket_error();
+         ret = readsocket(b->num, out, outl);
+diff -rupN openssl-1.0.2l/ssl/ssl.h openssl-1.0.2l_new/ssl/ssl.h
+--- openssl-1.0.2l/ssl/ssl.h	2017-05-25 20:54:34.000000000 +0800
++++ openssl-1.0.2l_new/ssl/ssl.h	2017-10-24 17:13:00.000000000 +0800
+@@ -2154,6 +2154,9 @@ int SSL_get_read_ahead(const SSL *s);
+ int SSL_pending(const SSL *s);
+ # ifndef OPENSSL_NO_SOCK
+ int SSL_set_fd(SSL *s, int fd);
++//#define   SSL_SET_FD_RCV_MSG
++int SSL_set_fd_rcv_msg(SSL *s, int fd, unsigned char *rcv_msg, unsigned rcv_msg_len);
++//#endif
+ int SSL_set_rfd(SSL *s, int fd);
+ int SSL_set_wfd(SSL *s, int fd);
+ # endif
+@@ -2436,6 +2439,9 @@ int SSL_CTX_get_quiet_shutdown(const SSL
+ void SSL_set_quiet_shutdown(SSL *ssl, int mode);
+ int SSL_get_quiet_shutdown(const SSL *ssl);
+ void SSL_set_shutdown(SSL *ssl, int mode);
++//#define SSL_UNSET_SHUTDOWN
++void SSL_unset_shutdown(SSL *s, int mode);
++//#endif
+ int SSL_get_shutdown(const SSL *ssl);
+ int SSL_version(const SSL *ssl);
+ int SSL_CTX_set_default_verify_paths(SSL_CTX *ctx);
+diff -rupN openssl-1.0.2l/ssl/ssl_lib.c openssl-1.0.2l_new/ssl/ssl_lib.c
+--- openssl-1.0.2l/ssl/ssl_lib.c	2017-05-25 20:54:38.000000000 +0800
++++ openssl-1.0.2l_new/ssl/ssl_lib.c	2017-10-24 17:14:32.000000000 +0800
+@@ -747,6 +747,36 @@ int SSL_set_fd(SSL *s, int fd)
+     return (ret);
+ }
+ 
++//#define   SSL_SET_FD_RCV_MSG
++// Set socket file descriptor to a SSL context with received message to be used when the socket is
++// first read
++int SSL_set_fd_rcv_msg(SSL *s, int fd, unsigned char *rcv_msg, unsigned rcv_msg_len)
++{
++    int ret = 0;
++    BIO *bio = NULL;
++
++    bio = BIO_new(BIO_s_socket());
++
++    if (bio == NULL) {
++        SSLerr(SSL_F_SSL_SET_FD, ERR_R_BUF_LIB);
++        goto err;
++    }
++    BIO_set_fd(bio, fd, BIO_NOCLOSE);
++    SSL_set_bio(s, bio, bio);
++
++    if (rcv_msg && rcv_msg_len) {
++        bio->rcv_msg = (unsigned char *)OPENSSL_malloc(rcv_msg_len);
++        if (bio->rcv_msg) {
++            memcpy(bio->rcv_msg, rcv_msg, rcv_msg_len);
++            bio->rcv_msg_len = rcv_msg_len;
++        }
++    }
++    ret = 1;
++ err:
++    return (ret);
++}
++//#endif
++
+ int SSL_set_wfd(SSL *s, int fd)
+ {
+     int ret = 0;
+@@ -3154,6 +3184,13 @@ void SSL_set_shutdown(SSL *s, int mode)
+     s->shutdown = mode;
+ }
+ 
++//#define SSL_UNSET_SHUTDOWN
++void SSL_unset_shutdown(SSL *s, int mode)
++{
++    s->shutdown &= ~mode;
++}
++//#endif
++
+ int SSL_get_shutdown(const SSL *s)
+ {
+     return (s->shutdown);

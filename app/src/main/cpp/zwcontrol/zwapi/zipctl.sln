@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zip_api", "lib\zip_api.vcxproj", "{32EAAB3A-703F-4F79-9977-01575D940D8A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zip_ctl", "src\zip_ctl.vcxproj", "{EC4F969D-7320-46B0-A26D-728D849B4E74}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Portal Debug|Win32 = Portal Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{32EAAB3A-703F-4F79-9977-01575D940D8A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{32EAAB3A-703F-4F79-9977-01575D940D8A}.Debug|Win32.Build.0 = Debug|Win32
+		{32EAAB3A-703F-4F79-9977-01575D940D8A}.Portal Debug|Win32.ActiveCfg = Portal Debug|Win32
+		{32EAAB3A-703F-4F79-9977-01575D940D8A}.Portal Debug|Win32.Build.0 = Portal Debug|Win32
+		{32EAAB3A-703F-4F79-9977-01575D940D8A}.Release|Win32.ActiveCfg = Release|Win32
+		{32EAAB3A-703F-4F79-9977-01575D940D8A}.Release|Win32.Build.0 = Release|Win32
+		{EC4F969D-7320-46B0-A26D-728D849B4E74}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EC4F969D-7320-46B0-A26D-728D849B4E74}.Debug|Win32.Build.0 = Debug|Win32
+		{EC4F969D-7320-46B0-A26D-728D849B4E74}.Portal Debug|Win32.ActiveCfg = Portal Debug|Win32
+		{EC4F969D-7320-46B0-A26D-728D849B4E74}.Portal Debug|Win32.Build.0 = Portal Debug|Win32
+		{EC4F969D-7320-46B0-A26D-728D849B4E74}.Release|Win32.ActiveCfg = Release|Win32
+		{EC4F969D-7320-46B0-A26D-728D849B4E74}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

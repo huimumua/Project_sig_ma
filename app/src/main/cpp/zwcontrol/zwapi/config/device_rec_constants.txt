@@ -1,0 +1,639 @@
+/** Device Categories definition */
+#define DEV_CATEGORY_UNKNOWN        0	   /**< Unknown or unassigned category */
+#define DEV_SENSOR_ALARM            1	   /**< Sensor alarm */
+#define DEV_ON_OFF_SWITCH           2	   /**< On/off switch */
+#define DEV_POWER_STRIP             3	   /**< Power strip */
+#define DEV_SIREN                   4	   /**< Siren */
+#define DEV_VALVE                   5	   /**< Valve */
+#define DEV_SIMPLE_DISPLAY          6	   /**< Simple display */
+#define DEV_DOORLOCK_KEYPAD         7	   /**< Door lock with keypad */
+#define DEV_SUB_ENERGY_METER        8	   /**< Sub energy meter */
+#define DEV_ADV_WHL_HOME_ENER_METER 9	   /**< Advanced whole home energy meter */
+#define DEV_SIM_WHL_HOME_ENER_METER 10	   /**< Simple whole home energy meter */
+#define DEV_SENSOR                  11	   /**< Sensor */
+#define DEV_LIGHT_DIMMER            12	   /**< Light dimmer switch */
+#define DEV_WIN_COVERING_NO_POS     13	   /**< Window covering no position/endpoint */
+#define DEV_WIN_COVERING_EP         14	   /**< Window covering end point aware */
+#define DEV_WIN_COVERING_POS_EP     15	   /**< Window covering position/end point aware */
+#define DEV_FAN_SWITCH              16	   /**< Fan switch */
+#define DEV_RMT_CTL_MULTIPURPOSE    17	   /**< Remote control - multipurpose */
+#define DEV_RMT_CTL_AV              18	   /**< Remote control - AV */
+#define DEV_RMT_CTL_SIMPLE          19	   /**< Remote control - simple */
+#define DEV_UNRECOG_GATEWAY         20	   /**< Gateway (unrecognized by client) */
+#define DEV_CENTRAL_CTLR            21	   /**< Central controller */
+#define DEV_SET_TOP_BOX             22	   /**< Set top box */
+#define DEV_TV                      23	   /**< TV */
+#define DEV_SUB_SYS_CTLR            24	   /**< Sub system controller */
+#define DEV_GATEWAY                 25	   /**< Gateway */
+#define DEV_THERMOSTAT_HVAC         26	   /**< Thermostat - HVAC */
+#define DEV_THERMOSTAT_SETBACK      27	   /**< Thermostat - setback */
+#define DEV_WALL_CTLR               28	   /**< Wall controller */
+
+----------------------------------------------------------------------------------------------------------------
+
+/** Interface record type */
+#define IF_REC_TYPE_GROUP       1   /**< Group */
+#define IF_REC_TYPE_CONFIG      2   /**< Configuration */
+#define IF_REC_TYPE_BIN_SENSOR  3   /**< Binary Sensor */
+#define IF_REC_TYPE_SENSOR      4   /**< Sensor */
+#define IF_REC_TYPE_METER       5   /**< Meter */
+#define IF_REC_TYPE_ALARM       6   /**< Alarm */
+#define IF_REC_TYPE_BASIC       7   /**< Basic */
+#define IF_REC_TYPE_ALRM_SNSR   8   /**< Alarm Sensor */
+#define IF_REC_TYPE_THRMO_SETP  9   /**< Thermostat setpoint */
+
+----------------------------------------------------------------------------------------------------------------
+
+/** Binary sensor Type definition */
+#define ZW_BSENSOR_TYPE_GP       0x01    /**< General purpose sensor*/
+#define ZW_BSENSOR_TYPE_SMOKE    0x02    /**< Smoke sensor*/
+#define ZW_BSENSOR_TYPE_CO       0x03    /**< CO sensor*/
+#define ZW_BSENSOR_TYPE_CO2      0x04    /**< CO2 sensor*/
+#define ZW_BSENSOR_TYPE_HEAT     0x05    /**< Heat sensor*/
+#define ZW_BSENSOR_TYPE_WATER    0x06    /**< Water sensor*/
+#define ZW_BSENSOR_TYPE_FREEZE   0x07    /**< Freeze sensor*/
+#define ZW_BSENSOR_TYPE_TAMPER   0x08    /**< Tamper sensor*/
+#define ZW_BSENSOR_TYPE_AUX      0x09    /**< Aux sensor*/
+#define ZW_BSENSOR_TYPE_DR_WIN   0x0A    /**< Door/Window sensor*/
+#define ZW_BSENSOR_TYPE_TILT     0x0B    /**< Tilt sensor*/
+#define ZW_BSENSOR_TYPE_MOTION   0x0C    /**< Motion sensor*/
+#define ZW_BSENSOR_TYPE_GLASS_BRK 0x0D    /**< Glass break sensor*/
+
+----------------------------------------------------------------------------------------------------------------
+
+/** Sensor Type definition */
+#define ZW_SENSOR_TYPE_TEMP      0x01    /**< Temperature sensor*/
+#define ZW_SENSOR_TYPE_GP        0x02    /**< General purpose sensor*/
+#define ZW_SENSOR_TYPE_LUM       0x03    /**< Luminance sensor*/
+#define ZW_SENSOR_TYPE_POW       0x04    /**< Power sensor*/
+#define ZW_SENSOR_TYPE_HUMD      0x05    /**< Relative humidity sensor*/
+#define ZW_SENSOR_TYPE_VELO      0x06    /**< Velocity sensor*/
+#define ZW_SENSOR_TYPE_DIR       0x07    /**< Direction sensor*/
+#define ZW_SENSOR_TYPE_ATM       0x08    /**< Atmospheric pressure sensor*/
+#define ZW_SENSOR_TYPE_BARO      0x09    /**< Barometric pressure sensor*/
+#define ZW_SENSOR_TYPE_SLR       0x0A    /**< Solar radiation sensor*/
+#define ZW_SENSOR_TYPE_DEW       0x0B    /**< Dew point sensor*/
+#define ZW_SENSOR_TYPE_RAIN      0x0C    /**< Rain rate sensor*/
+#define ZW_SENSOR_TYPE_TIDE      0x0D    /**< Tide level sensor*/
+#define ZW_SENSOR_TYPE_WGT       0x0E    /**< Weight sensor*/
+#define ZW_SENSOR_TYPE_VOLT      0x0F    /**< Voltage sensor*/
+#define ZW_SENSOR_TYPE_CUR       0x10    /**< Current sensor*/
+#define ZW_SENSOR_TYPE_CO2       0x11    /**< CO2-level sensor*/
+#define ZW_SENSOR_TYPE_AIR       0x12    /**< Air flow sensor*/
+#define ZW_SENSOR_TYPE_TANK      0x13    /**< Tank capacity sensor*/
+#define ZW_SENSOR_TYPE_DIST      0x14    /**< Distance sensor*/
+#define ZW_SENSOR_TYPE_AGL       0x15    /**< Angle Position sensor*/
+#define ZW_SENSOR_TYPE_ROT       0x16    /**< Rotation sensor*/
+#define ZW_SENSOR_TYPE_WTR_TEMP  0x17    /**< Water temperature sensor*/
+#define ZW_SENSOR_TYPE_SOIL_TEMP 0x18    /**< Soil temperature sensor*/
+#define ZW_SENSOR_TYPE_SEIS_INT  0x19    /**< Seismic intensity sensor*/
+#define ZW_SENSOR_TYPE_SEIS_MAG  0x1A    /**< Seismic magnitude sensor*/
+#define ZW_SENSOR_TYPE_UV        0x1B    /**< Ultraviolet sensor*/
+#define ZW_SENSOR_TYPE_ELEC_RES  0x1C    /**< Electrical resistivity sensor*/
+#define ZW_SENSOR_TYPE_ELEC_COND 0x1D    /**< Electrical conductivity sensor*/
+#define ZW_SENSOR_TYPE_LOUDNESS  0x1E    /**< Loudness sensor*/
+#define ZW_SENSOR_TYPE_MOIST     0x1F    /**< Moisture sensor*/
+#define ZW_SENSOR_TYPE_FREQ      0x20    /**< Frequency sensor*/
+#define ZW_SENSOR_TYPE_TIME      0x21    /**< Time sensor*/
+#define ZW_SENSOR_TYPE_TGT_TEMP  0x22    /**< Target temperature sensor*/
+#define ZW_SENSOR_TYPE_PM_2_5    0x23    /**< Particulate matter 2.5 sensor*/
+#define ZW_SENSOR_TYPE_F_CH2O    0x24    /**< Formaldehyde CH2O-level sensor*/
+#define ZW_SENSOR_TYPE_RAD_CONT  0x25    /**< Radon Concentration sensor*/
+#define ZW_SENSOR_TYPE_METH_DENS 0x26    /**< Methane Density CH4 sensor*/
+#define ZW_SENSOR_TYPE_VOC       0x27    /**< Volatile Organic Compound sensor*/
+#define ZW_SENSOR_TYPE_CO_LVL    0x28    /**< Carbon Monoxide CO-level sensor*/
+#define ZW_SENSOR_TYPE_SOIL_HUMD 0x29    /**< Soil Humidity sensor*/
+#define ZW_SENSOR_TYPE_SOIL_REAC 0x2A    /**< Soil Reactivity sensor*/
+#define ZW_SENSOR_TYPE_SOIL_SAL  0x2B    /**< Soil Salinity sensor*/
+#define ZW_SENSOR_TYPE_HEART_RT  0x2C    /**< Heart Rate sensor*/
+#define ZW_SENSOR_TYPE_BLOOD_PRS 0x2D    /**< Blood Pressure sensor*/
+#define ZW_SENSOR_TYPE_MUSCLE_MS 0x2E    /**< Muscle Mass sensor*/
+#define ZW_SENSOR_TYPE_FAT_MS    0x2F    /**< Fat Mass sensor*/
+#define ZW_SENSOR_TYPE_BONE_MS   0x30    /**< Bone Mass sensor*/
+#define ZW_SENSOR_TYPE_TBW       0x31    /**< Total Body Water sensor*/
+#define ZW_SENSOR_TYPE_BMR       0x32    /**< Basic Metabolic Rate sensor*/
+#define ZW_SENSOR_TYPE_BMI       0x33    /**< Body Mass Index sensor*/
+#define ZW_SENSOR_TYPE_ACCEL_X   0x34    /**< Acceleration, X-axis sensor*/
+#define ZW_SENSOR_TYPE_ACCEL_Y   0x35    /**< Acceleration, Y-axis sensor*/
+#define ZW_SENSOR_TYPE_ACCEL_Z   0x36    /**< Acceleration, Z-axis sensor*/
+#define ZW_SENSOR_TYPE_SMOKE_DEN 0x37    /**< Smoke Density sensor*/
+#define ZW_SENSOR_TYPE_WATER_FLW 0x38    /**< Water Flow sensor*/
+#define ZW_SENSOR_TYPE_WATER_PRS 0x39    /**< Water Pressure sensor*/
+#define ZW_SENSOR_TYPE_RF_SGN    0x3A    /**< RF Signal Strength sensor*/
+#define ZW_SENSOR_TYPE_PM_10     0x3B    /**< Particulate Matter 10 sensor*/
+#define ZW_SENSOR_TYPE_RESPI_RATE       0x3C    /**< Respiratory rate sensor*/
+#define ZW_SENSOR_TYPE_REL_MOD          0x3D    /**< Relative Modulation level sensor*/
+#define ZW_SENSOR_TYPE_BOILER_WTR_TEMP  0x3E    /**< Boiler water temperature sensor*/
+#define ZW_SENSOR_TYPE_DHW_TEMP         0x3F    /**< Domestic Hot Water (DHW) temperature sensor*/
+#define ZW_SENSOR_TYPE_OUTSIDE_TEMP     0x40    /**< Outside temperature sensor*/
+#define ZW_SENSOR_TYPE_EXHAUST_TEMP     0x41    /**< Exhaust temperature sensor*/
+#define ZW_SENSOR_TYPE_WATER_CHLOR_LVL  0x42    /**< Water Chlorine level sensor*/
+#define ZW_SENSOR_TYPE_WATER_ACID       0x43    /**< Water acidity sensor*/
+#define ZW_SENSOR_TYPE_WATER_OXI_RED    0x44    /**< Water Oxidation reduction potential sensor*/
+
+----------------------------------------------------------------------------------------------------------------
+
+/** Sensor Unit definition */
+#define ZW_SENSOR_UNIT_TEMP_CEL       0x00    /**< Air temperature unit: Celsius (C)*/
+#define ZW_SENSOR_UNIT_TEMP_FAHR      0x01    /**< Air temperature unit: Fahrenheit (F)*/
+
+#define ZW_SENSOR_UNIT_GP_PERC        0x00    /**< General purpose unit: Percentage value*/
+#define ZW_SENSOR_UNIT_GP_NODIM       0x01    /**< General purpose unit: Dimensionless value*/
+
+#define ZW_SENSOR_UNIT_LUM_PERC       0x00    /**< Luminance unit: Percentage value*/
+#define ZW_SENSOR_UNIT_LUM_LUX        0x01    /**< Luminance unit: Lux*/
+
+#define ZW_SENSOR_UNIT_POW_W          0x00    /**< Power unit: W*/
+#define ZW_SENSOR_UNIT_POW_BTU        0x01    /**< Power unit: Btu/h*/
+
+#define ZW_SENSOR_UNIT_HUMD_PERC      0x00    /**< Relative humidity unit: Percentage value*/
+#define ZW_SENSOR_UNIT_HUMD_ABS       0x01    /**< Absolute humidity unit: (g/m3) */
+
+#define ZW_SENSOR_UNIT_VELO_MS        0x00    /**< Velocity unit: m/s*/
+#define ZW_SENSOR_UNIT_VELO_MPH       0x01    /**< Velocity unit: mph*/
+
+#define ZW_SENSOR_UNIT_DIR_DEG        0x00    /**< Direction unit: 0 to 360 degrees. 0 = no wind, 90 = east,
+                                                   180 = south, 270 = west, and 360 = north*/
+
+#define ZW_SENSOR_UNIT_ATM_KPA        0x00    /**< Atmospheric pressure unit: kPa*/
+#define ZW_SENSOR_UNIT_ATM_HG         0x01    /**< Atmospheric pressure unit: inches of Mercury*/
+
+#define ZW_SENSOR_UNIT_BARO_KPA       0x00    /**< Barometric pressure unit: kPa*/
+#define ZW_SENSOR_UNIT_BARO_HG        0x01    /**< Barometric pressure unit: inches of Mercury*/
+
+#define ZW_SENSOR_UNIT_SLR_WM2        0x00    /**< Solar radiation unit: W/m2*/
+
+#define ZW_SENSOR_UNIT_DEW_CEL        0x00    /**< Dew point unit: Celsius (C)*/
+#define ZW_SENSOR_UNIT_DEW_FAHR       0x01    /**< Dew point unit: Fahrenheit (F)*/
+
+#define ZW_SENSOR_UNIT_RAIN_MMH       0x00    /**< Rain rate unit: mm/h*/
+#define ZW_SENSOR_UNIT_RAIN_INH       0x01    /**< Rain rate unit: in/h*/
+
+#define ZW_SENSOR_UNIT_TIDE_M         0x00    /**< Tide level unit: m*/
+#define ZW_SENSOR_UNIT_TIDE_FT        0x01    /**< Tide level unit: feet*/
+
+#define ZW_SENSOR_UNIT_WGT_KG         0x00    /**< Weight unit: kg*/
+#define ZW_SENSOR_UNIT_WGT_LBS        0x01    /**< Weight unit: pounds*/
+
+#define ZW_SENSOR_UNIT_VOLT_V         0x00    /**< Voltage unit: V*/
+#define ZW_SENSOR_UNIT_VOLT_MV        0x01    /**< Voltage unit: mV*/
+
+#define ZW_SENSOR_UNIT_CUR_A          0x00    /**< Current unit: A*/
+#define ZW_SENSOR_UNIT_CUR_MA         0x01    /**< Current unit: mA*/
+
+#define ZW_SENSOR_UNIT_CO2_PPM        0x00    /**< CO2-level unit: ppm*/
+
+#define ZW_SENSOR_UNIT_AIR_M3H        0x00    /**< Air flow unit: m3/h*/
+#define ZW_SENSOR_UNIT_AIR_CFM        0x01    /**< Air flow unit: cfm (cubic feet per minute)*/
+
+#define ZW_SENSOR_UNIT_TANK_L         0x00    /**< Tank capacity unit: l*/
+#define ZW_SENSOR_UNIT_TANK_CBM       0x01    /**< Tank capacity unit: cbm*/
+#define ZW_SENSOR_UNIT_TANK_GAL       0x02    /**< Tank capacity unit: US gallons*/
+
+#define ZW_SENSOR_UNIT_DIST_M         0x00    /**< Distance unit: m*/
+#define ZW_SENSOR_UNIT_DIST_CM        0x01    /**< Distance unit: cm*/
+#define ZW_SENSOR_UNIT_DIST_FT        0x02    /**< Distance unit: feet*/
+
+#define ZW_SENSOR_UNIT_AGL_PERC       0x00    /**< Angle Position unit: Percentage value*/
+#define ZW_SENSOR_UNIT_AGL_DEGN       0x01    /**< Angle Position unit: Degrees relative to
+                                                   north pole of standing eye view*/
+#define ZW_SENSOR_UNIT_AGL_DEGS       0x02    /**< Angle Position unit: Degrees relative to
+                                                   south pole of standing eye view*/
+#define ZW_SENSOR_UNIT_ROT_RPM        0x00    /**< Rotation unit: rpm (revolutions per minute)*/
+#define ZW_SENSOR_UNIT_ROT_HZ         0x01    /**< Rotation unit: Hz (Hertz)*/
+
+#define ZW_SENSOR_UNIT_WTR_TEMP_CEL   0x00    /**< Water temperature unit: Celsius (C)*/
+#define ZW_SENSOR_UNIT_WTR_TEMP_FAHR  0x01    /**< Water temperature unit: Fahrenheit (F)*/
+
+#define ZW_SENSOR_UNIT_SOIL_TEMP_CEL  0x00    /**< Soil temperature unit: Celsius (C)*/
+#define ZW_SENSOR_UNIT_SOIL_TEMP_FAHR 0x01    /**< Soil temperature unit: Fahrenheit (F)*/
+
+#define ZW_SENSOR_UNIT_SEIS_INT_MERC  0x00    /**< Seismic intensity unit: Mercalli*/
+#define ZW_SENSOR_UNIT_SEIS_INT_EMCRO 0x01    /**< Seismic intensity unit: European Macroseismic*/
+#define ZW_SENSOR_UNIT_SEIS_INT_LIEDU 0x02    /**< Seismic intensity unit: Liedu*/
+#define ZW_SENSOR_UNIT_SEIS_INT_SHNDO 0x03    /**< Seismic intensity unit: Shindo*/
+
+#define ZW_SENSOR_UNIT_SEIS_MAG_LOCAL 0x00    /**< Seismic magnitude unit: Local (ML)*/
+#define ZW_SENSOR_UNIT_SEIS_MAG_MOM   0x01    /**< Seismic magnitude unit: Moment (MW)*/
+#define ZW_SENSOR_UNIT_SEIS_MAG_SWAVE 0x02    /**< Seismic magnitude unit: Surface wave (MS)*/
+#define ZW_SENSOR_UNIT_SEIS_MAG_BWAVE 0x03    /**< Seismic magnitude unit: Body wave (MB)*/
+
+#define ZW_SENSOR_UNIT_UV_INDEX       0x00    /**< Ultraviolet unit: UV index*/
+
+#define ZW_SENSOR_UNIT_ELEC_RES_OHMM  0x00    /**< Electrical resistivity unit: ohm metre*/
+
+#define ZW_SENSOR_UNIT_ELEC_COND_SIEM 0x00    /**< Electrical conductivity unit: siemens per metre (S/m)*/
+
+#define ZW_SENSOR_UNIT_LOUDNESS_ABS   0x00    /**< Loudness unit: Absolute loudness (dB)*/
+#define ZW_SENSOR_UNIT_LOUDNESS_A_WT  0x01    /**< Loudness unit: A-weighted decibels (dBA)*/
+
+#define ZW_SENSOR_UNIT_MOIST_PERC     0x00    /**< Moisture unit: Percentage value*/
+#define ZW_SENSOR_UNIT_MOIST_VOL_WTR  0x01    /**< Moisture unit: Volume water content (m3/m3)*/
+#define ZW_SENSOR_UNIT_MOIST_IMPD     0x02    /**< Moisture unit: Impedance (k ohm)*/
+#define ZW_SENSOR_UNIT_MOIST_WTR_ACT  0x03    /**< Moisture unit: Water activity (aw)*/
+
+#define ZW_SENSOR_UNIT_FREQ_HZ        0x00    /**< Frequency unit: Hz - Must be used until 4.294967295 GHz*/
+#define ZW_SENSOR_UNIT_FREQ_KHZ       0x01    /**< Frequency unit: kHz- Must be used after 4.294967295 GHz*/
+
+#define ZW_SENSOR_UNIT_TIME_SEC       0x00    /**< Time unit: seconds*/
+
+#define ZW_SENSOR_UNIT_TGT_TEMP_CEL   0x00    /**< Target temperature unit: Celsius (C)*/
+#define ZW_SENSOR_UNIT_TGT_TEMP_FAHR  0x01    /**< Target temperature unit: Fahrenheit (F)*/
+
+#define ZW_SENSOR_UNIT_PM_2_5_MM3     0x00    /**< Particulate matter 2.5 unit: mole per cubic meter (mol/m3) */
+#define ZW_SENSOR_UNIT_PM_2_5_UGM3    0x01    /**< Particulate matter 2.5 unit: Absolute microgram/cubic meter (ug/m3)*/
+
+#define ZW_SENSOR_UNIT_F_CH2O_MM3     0x00    /**< Formaldehyde CH2O-level unit: mole per cubic meter (mol/m3) */
+
+#define ZW_SENSOR_UNIT_RAD_CONT_BQM3  0x00    /**< Radon Concentration unit: Becquerel/cubic meter (bq/m3)*/
+#define ZW_SENSOR_UNIT_RAD_CONT_PCIL  0x01    /**< Radon Concentration unit: picocuries/liter (pCi/L)*/
+
+#define ZW_SENSOR_UNIT_METH_DENS_MM3  0x00    /**< Methane Density CH4 unit: mole per cubic meter (mol/m3) */
+
+#define ZW_SENSOR_UNIT_VOC_MM3        0x00    /**< Volatile Organic unit: mole per cubic meter (mol/m3) */
+
+#define ZW_SENSOR_UNIT_CO_LVL_MM3     0x00    /**< Carbon Monoxide CO-level unit: mole per cubic meter (mol/m3) */
+
+#define ZW_SENSOR_UNIT_SOIL_HUMD_PERC 0x00    /**< Soil Humidity unit: Percentage value */
+
+#define ZW_SENSOR_UNIT_SOIL_REAC_PH   0x00    /**< Soil Reactivity unit: acidity (pH) */
+
+#define ZW_SENSOR_UNIT_SOIL_SAL_MM3   0x00    /**< Soil Salinity unit: mole per cubic meter (mol/m3) */
+
+#define ZW_SENSOR_UNIT_HEART_RT_BPM   0x00    /**< Heart Rate unit: beats/minute (Bpm) */
+
+#define ZW_SENSOR_UNIT_BLOOD_PRS_SYS  0x00    /**< Blood Pressure unit: Systolic mmHg (upper number) */
+#define ZW_SENSOR_UNIT_BLOOD_PRS_DIA  0x01    /**< Blood Pressure unit: Diastolic mmHg (lower number)*/
+
+#define ZW_SENSOR_UNIT_MUSCLE_MS_KG   0x00    /**< Muscle Mass unit: kilogram (kg) */
+
+#define ZW_SENSOR_UNIT_FAT_MS_KG      0x00    /**< Fat Mass unit: kilogram (kg) */
+
+#define ZW_SENSOR_UNIT_BONE_MS_KG     0x00    /**< Bone Mass unit: kilogram (kg) */
+
+#define ZW_SENSOR_UNIT_TBW_KG         0x00    /**< Total Body Water unit: kilogram (kg) */
+
+#define ZW_SENSOR_UNIT_BMR_J          0x00    /**< Basic Metabolic Rate unit: joule (J)*/
+
+#define ZW_SENSOR_UNIT_BMI_IDX        0x00    /**< Body Mass Index unit: BMI Index */
+
+#define ZW_SENSOR_UNIT_ACCEL_X_MS2    0x00    /**< Acceleration, X-axis unit: (m/s2) */
+
+#define ZW_SENSOR_UNIT_ACCEL_Y_MS2    0x00    /**< Acceleration, Y-axis unit: (m/s2) */
+
+#define ZW_SENSOR_UNIT_ACCEL_Z_MS2    0x00    /**< Acceleration, Z-axis unit: (m/s2) */
+
+#define ZW_SENSOR_UNIT_SMOKE_DEN_PERC 0x00    /**< Smoke Density unit: Percentage value */
+
+#define ZW_SENSOR_UNIT_WATER_FLW_LHR  0x00    /**< Water Flow unit: liter/hour (l/h) */
+
+#define ZW_SENSOR_UNIT_WATER_PRS_KPA  0x00    /**< Water Pressure unit: kilopascal (kPa)*/
+
+#define ZW_SENSOR_UNIT_RF_SGN_RSSI    0x00    /**< RF Signal Strength unit: RSSI (Percentage value) */
+#define ZW_SENSOR_UNIT_RF_SGN_DBM     0x01    /**< RF Signal Strength unit: (dBm) */
+
+#define ZW_SENSOR_UNIT_PM_10_MOLE     0x00    /**< Mole per cubic meter (mol/m3)*/
+#define ZW_SENSOR_UNIT_PM_10_UG       0x01    /**< Microgram per cubic meter (µg/m3)*/
+
+#define ZW_SENSOR_UNIT_RESPI_RATE_BPM 0x00    /**< Breaths per minute (bpm)*/
+
+#define ZW_SENSOR_UNIT_REL_MOD_PERC   0x00    /**< Percentage value (%)*/
+
+#define ZW_SENSOR_UNIT_BOILER_WTR_TEMP_C 0x00  /**< Celcius (C)*/
+
+#define ZW_SENSOR_UNIT_DHW_TEMP_C     0x00     /**< Celcius (C)*/
+
+#define ZW_SENSOR_UNIT_OUTSIDE_TEMP_C 0x00     /**< Celcius (C)*/
+
+#define ZW_SENSOR_UNIT_EXHAUST_TEMP_C 0x00     /**< Celcius (C)*/
+
+#define ZW_SENSOR_UNIT_WATER_CHLOR_LVL_MGL    0x00    /**< Milligram per liter (mg/l)*/
+
+#define ZW_SENSOR_UNIT_WATER_ACID_PH  0x00     /**< Acidity (pH)*/
+
+#define ZW_SENSOR_UNIT_WATER_OXI_RED_MV       0x00    /**< MilliVolt (mV)*/
+
+----------------------------------------------------------------------------------------------------------------
+
+/** Meter Type definition */
+#define ZW_METER_TYPE_ELEC           0x01    /**< Electric meter*/
+#define ZW_METER_TYPE_GAS            0x02    /**< Gas meter*/
+#define ZW_METER_TYPE_WATER          0x03    /**< Water meter*/
+
+----------------------------------------------------------------------------------------------------------------
+
+/** Meter Supported Unit Bit-mask definition : 1=supported, 0=not supported */
+#define ZW_METER_SUP_UNIT_ELEC_KWH       0x01    /**< Electric meter unit: kWh*/
+#define ZW_METER_SUP_UNIT_ELEC_KVAH      0x02    /**< Electric meter unit: kVAh*/
+#define ZW_METER_SUP_UNIT_ELEC_W         0x04    /**< Electric meter unit: W*/
+#define ZW_METER_SUP_UNIT_ELEC_PULSE     0x08    /**< Electric meter unit: pulse count*/
+#define ZW_METER_SUP_UNIT_ELEC_V         0x10    /**< Electric meter unit: V*/
+#define ZW_METER_SUP_UNIT_ELEC_A         0x20    /**< Electric meter unit: A*/
+#define ZW_METER_SUP_UNIT_ELEC_PF        0x40    /**< Electric meter unit: power factor*/
+
+#define ZW_METER_SUP_UNIT_GAS_CM         0x01    /**< Gas meter unit: cubic meters*/
+#define ZW_METER_SUP_UNIT_GAS_CF         0x02    /**< Gas meter unit: cubic feet*/
+#define ZW_METER_SUP_UNIT_GAS_PULSE      0x08    /**< Gas meter unit: pulse count*/
+
+#define ZW_METER_SUP_UNIT_WATER_CM       0x01    /**< Water meter unit: cubic meters*/
+#define ZW_METER_SUP_UNIT_WATER_CF       0x02    /**< Water meter unit: cubic feet*/
+#define ZW_METER_SUP_UNIT_WATER_GAL      0x04    /**< Water meter unit: US gallons*/
+#define ZW_METER_SUP_UNIT_WATER_PULSE    0x08    /**< Water meter unit: pulse count*/
+
+----------------------------------------------------------------------------------------------------------------
+/** Z-wave alarm type */
+#define ZW_ALRM_SMOKE       0x01    /**< Smoke alarm*/
+#define ZW_ALRM_CO          0x02    /**< Carbon monoxide alarm*/
+#define ZW_ALRM_CO2         0x03    /**< Carbon dioxide alarm*/
+#define ZW_ALRM_HEAT        0x04    /**< Heat alarm*/
+#define ZW_ALRM_WATER       0x05    /**< Water alarm*/
+#define ZW_ALRM_LOCK        0x06    /**< Lock access control alarm*/
+#define ZW_ALRM_BURGLAR     0x07    /**< Burglar alarm or home security*/
+#define ZW_ALRM_POWER       0x08    /**< Power management alarm*/
+#define ZW_ALRM_SYSTEM      0x09    /**< System alarm*/
+#define ZW_ALRM_EMERGENCY   0x0A    /**< Emergency alarm*/
+#define ZW_ALRM_CLOCK       0x0B    /**< Alarm clock*/
+#define ZW_ALRM_APPLIANCE   0x0C    /**< Home appliance alarm*/
+#define ZW_ALRM_HEALTH      0x0D    /**< Home health alarm*/
+#define ZW_ALRM_SIREN       0x0E    /**< Siren alarm*/
+#define ZW_ALRM_WATER_VLV   0x0F    /**< Water Valve alarm*/
+#define ZW_ALRM_WEATHER     0x10    /**< Weather alarm*/
+#define ZW_ALRM_IRRIGATION  0x11    /**< Irrigation alarm*/
+#define ZW_ALRM_GAS         0x12    /**< Gas alarm*/
+#define ZW_ALRM_PEST_CTL    0x13    /**< Pest control*/
+#define ZW_ALRM_LIGHT_SNSR  0x14    /**< Light sensor*/
+
+----------------------------------------------------------------------------------------------------------------
+
+/** Z-wave alarm events*/
+
+/** Z-wave alarm event for all alarm types*/
+#define ZW_ALRM_EVT_UNKNOWN             0xFE    /**< Unknown event*/
+#define ZW_ALRM_EVT_INACTIVE_CLEAR      0x00    /**< Event inactive (push mode) / Previous Events cleared (pull mode)*/
+
+/** Z-wave alarm event for smoke alarm*/
+#define ZW_ALRM_EVT_SMOKE_L             0x01    /**< Smoke detected with location info*/
+#define ZW_ALRM_EVT_SMOKE               0x02    /**< Smoke detected with unknown location info*/
+#define ZW_ALRM_EVT_SMOKE_TEST          0x03    /**< Smoke alarm test*/
+#define ZW_ALRM_EVT_SMOKE_REPLA         0x04    /**< Replacement required*/
+#define ZW_ALRM_EVT_SMOKE_REPLA_EOL     0x05    /**< Replacement required, End-of-life*/
+#define ZW_ALRM_EVT_SMOKE_MAINTNC_PLAN  0x07    /**< Maintenance required, planned periodic inspection*/
+#define ZW_ALRM_EVT_SMOKE_MAINTNC_DUST  0x08    /**< Maintenance required, dust in device*/
+
+/** Z-wave alarm event for carbon monoxide alarm*/
+#define ZW_ALRM_EVT_CO_L                0x01    /**< Carbon monoxide detected with location info*/
+#define ZW_ALRM_EVT_CO                  0x02    /**< Carbon monoxide detected with unknown location info*/
+#define ZW_ALRM_EVT_CO_TEST             0x03    /**< Carbon monoxide test. Event parameter value: 1=OK, 2=Failed*/
+#define ZW_ALRM_EVT_CO_REPLA            0x04    /**< Replacement required*/
+#define ZW_ALRM_EVT_CO_REPLA_EOL        0x05    /**< Replacement required, End-of-life*/
+#define ZW_ALRM_EVT_CO_SILENCED         0x06    /**< Alarm silenced*/
+#define ZW_ALRM_EVT_CO_MAINTNC_PLAN     0x07    /**< Maintenance required, planned periodic inspection*/
+
+/** Z-wave alarm event for carbon dioxide alarm*/
+#define ZW_ALRM_EVT_CO2_L               0x01    /**< Carbon dioxide detected with location info*/
+#define ZW_ALRM_EVT_CO2                 0x02    /**< Carbon dioxide detected with unknown location info*/
+#define ZW_ALRM_EVT_CO2_TEST            0x03    /**< Carbon dioxide test. Event parameter value: 1=OK, 2=Failed*/
+#define ZW_ALRM_EVT_CO2_REPLA           0x04    /**< Replacement required*/
+#define ZW_ALRM_EVT_CO2_REPLA_EOL       0x05    /**< Replacement required, End-of-life*/
+#define ZW_ALRM_EVT_CO2_SILENCED        0x06    /**< Alarm silenced*/
+#define ZW_ALRM_EVT_CO2_MAINTNC_PLAN    0x07    /**< Maintenance required, planned periodic inspection*/
+
+/** Z-wave alarm event for heat alarm*/
+#define ZW_ALRM_EVT_OVERHEAT_L          0x01    /**< Overheat detected with location info*/
+#define ZW_ALRM_EVT_OVERHEAT            0x02    /**< Overheat detected with unknown location info*/
+#define ZW_ALRM_EVT_TEMP_RISE_L         0x03    /**< Rapid temperature rise detected with location info*/
+#define ZW_ALRM_EVT_TEMP_RISE           0x04    /**< Rapid temperature rise detected with unknown location info*/
+#define ZW_ALRM_EVT_UNDRHEAT_L          0x05    /**< Underheat detected with location info*/
+#define ZW_ALRM_EVT_UNDRHEAT            0x06    /**< Underheat detected with unknown location info*/
+#define ZW_ALRM_EVT_HT_TEST             0x07    /**< Heat alarm test*/
+#define ZW_ALRM_EVT_HT_REPLA_EOL        0x08    /**< Replacement required, End-of-life*/
+#define ZW_ALRM_EVT_HT_SILENCED         0x09    /**< Alarm silenced*/
+#define ZW_ALRM_EVT_HT_MAINTNC_DUST     0x0A    /**< Maintenance required, dust in device*/
+#define ZW_ALRM_EVT_HT_MAINTNC_PLAN     0x0B    /**< Maintenance required, planned periodic inspection*/
+#define ZW_ALRM_EVT_RAPID_TEMP_FALL_L   0x0C    /**< Rapid temparature fall with location info*/
+#define ZW_ALRM_EVT_RAPID_TEMP_FALL     0x0D    /**< Rapid temparature fall*/
+
+/** Z-wave alarm event for water alarm*/
+#define ZW_ALRM_EVT_LEAK_L              0x01    /**< Water leak detected with location info*/
+#define ZW_ALRM_EVT_LEAK                0x02    /**< Water leak detected with unknown location info*/
+#define ZW_ALRM_EVT_LVL_L               0x03    /**< Water level dropped detected with location info*/
+#define ZW_ALRM_EVT_LVL                 0x04    /**< Water level dropped detected with unknown location info*/
+#define ZW_ALRM_EVT_REPLACE_WATER_FILTER    0x05    /**< Replace Water Filter*/
+#define ZW_ALRM_EVT_WATER_FLOW          0x06    /**< Water flow. Event parameter value: 1=no data, 2=below low treshold,
+                                                     3=above high treshold, 4=max*/
+#define ZW_ALRM_EVT_WATER_PRESSURE      0x07    /**< Water pressure. Event parameter meaning same as those for water flow. */
+#define ZW_ALRM_EVT_WATER_TEMP          0x08    /**< Water temparature. Event parameter value: 1=no data, 2=below low treshold,
+                                                     3=above high treshold*/
+#define ZW_ALRM_EVT_WATER_LEVEL         0x09    /**< Water level. Event parameter meaning same as those for water temparature. */
+#define ZW_ALRM_EVT_SUMP_PUMP_ACTV      0x0A    /**< Sump pump active*/
+#define ZW_ALRM_EVT_SUMP_PUMP_FAIL      0x0B    /**< Sump pump failure*/
+
+/** Z-wave alarm event for lock access control alarm*/
+#define ZW_ALRM_EVT_MANUAL_LCK          0x01    /**< Manual lock operation*/
+#define ZW_ALRM_EVT_MANUAL_ULCK         0x02    /**< Manual unlock operation*/
+#define ZW_ALRM_EVT_RF_LCK              0x03    /**< RF lock operation*/
+#define ZW_ALRM_EVT_RF_ULCK             0x04    /**< RF unlock operation*/
+#define ZW_ALRM_EVT_KEYPAD_LCK          0x05    /**< Keypad lock operation with user identifier info*/
+#define ZW_ALRM_EVT_KEYPAD_ULCK         0x06    /**< Keypad unlock operation with user identifier info*/
+#define ZW_ALRM_EVT_MANUAL_NOT_FUL_LCK  0x07    /**< Manual not fully locked operation*/
+#define ZW_ALRM_EVT_RF_NOT_FUL_LCK      0x08    /**< RF not fully locked operation*/
+#define ZW_ALRM_EVT_AUTO_LCK            0x09    /**< Auto lock locked operation*/
+#define ZW_ALRM_EVT_AUTO_NOT_FUL_OPER   0x0A    /**< Auto lock not fully operation*/
+#define ZW_ALRM_EVT_LCK_JAMMED          0x0B    /**< Lock jammed*/
+#define ZW_ALRM_EVT_ALL_CODE_DEL        0x0C    /**< All user codes deleted*/
+#define ZW_ALRM_EVT_1_CODE_DEL          0x0D    /**< Single user code deleted*/
+#define ZW_ALRM_EVT_CODE_ADDED          0x0E    /**< New user code added*/
+#define ZW_ALRM_EVT_CODE_DUP            0x0F    /**< New user code not added due to duplicate code*/
+#define ZW_ALRM_EVT_KEYPAD_DISABLED     0x10    /**< Keypad temporary disabled*/
+#define ZW_ALRM_EVT_KEYPAD_BUSY         0x11    /**< Keypad busy*/
+#define ZW_ALRM_EVT_NEW_PROG_CODE       0x12    /**< New program code entered - unique code for lock configuration*/
+#define ZW_ALRM_EVT_USR_CODE_LIMIT      0x13    /**< Manually enter user access code exceeds code limit*/
+#define ZW_ALRM_EVT_RF_ULCK_INVLD_CODE  0x14    /**< Unlock by RF with invalid user code*/
+#define ZW_ALRM_EVT_RF_LCK_INVLD_CODE   0x15    /**< Locked by RF with invalid user code*/
+#define ZW_ALRM_EVT_WINDOW_DOOR_OPEN    0x16    /**< Window/door is open*/
+#define ZW_ALRM_EVT_WINDOW_DOOR_CLOSED  0x17    /**< Window/door is closed*/
+#define ZW_ALRM_EVT_WIN_DR_HDL_OPEN     0x18    /**< Window/door handle is open*/
+#define ZW_ALRM_EVT_WIN_DR_HDL_CLOSED   0x19    /**< Window/door handle is closed*/
+/**< 0x1A - 0x3F Reserved*/
+#define ZW_ALRM_EVT_BARRIER_INIT					0x40    /**< Barrier performing Initialization process. Event parameter value:
+                                                                 0=Completed, 0xFF=In progress*/
+#define ZW_ALRM_EVT_BARRIER_OP_FORCE_EXCEED			0x41    /**< Barrier operation (Open / Close) force has been exceeded.*/
+#define ZW_ALRM_EVT_BARRIER_MOTOR_TIME_EXCEED		0x42    /**< Barrier motor has exceeded manufacturer’s operational time limit.
+                                                                 Event parameter value: 0 to 0x7F = 0 to 127 seconds; 0x80 to 0xFE = 1 to 127 minutes*/
+#define ZW_ALRM_EVT_BARRIER_MECHANIC_EXCEED			0x43    /**< Barrier operation has exceeded physical mechanical limits.
+                                                                 (For example: barrier has opened past the open limit)*/
+#define ZW_ALRM_EVT_BARRIER_OP_FAILED				0x44    /**< Barrier unable to perform requested operation due to UL requirements.*/
+#define ZW_ALRM_EVT_BARRIER_OP_DISABLED				0x45    /**< Barrier Unattended operation has been disabled per UL requirements*/
+#define ZW_ALRM_EVT_BARRIER_MALFUNC					0x46    /**< Barrier failed to perform Requested operation, device malfunction*/
+#define ZW_ALRM_EVT_BARRIER_VACAT_MODE				0x47    /**< Barrier Vacation Mode. Event parameter value: 0=disabled, 0xFF=enabled*/
+#define ZW_ALRM_EVT_BARRIER_BEAM_OBST				0x48    /**< Barrier Safety Beam Obstacle. Event parameter value: 0=no obstruction, 0xFF=obstruction*/
+#define ZW_ALRM_EVT_BARRIER_SNR_ERR					0x49    /**< Barrier Sensor Not Detected / Supervisory Error. Event parameter value:
+                                                                 0=sensor not defined, 1 to 0xFF=sensor ID*/
+#define ZW_ALRM_EVT_BARRIER_LOW_BATT				0x4A    /**< Barrier Sensor Low Battery Warning. Event parameter value: 0=sensor not defined,
+                                                                 1 to 0xFF=sensor ID*/
+#define ZW_ALRM_EVT_BARRIER_SHORT					0x4B    /**< Barrier detected short in Wall Station wires*/
+#define ZW_ALRM_EVT_BARRIER_NON_ZWAVE				0x4C    /**< Barrier associated with non-Z-wave remote control.*/
+
+
+/** Z-wave alarm event for burglar alarm*/
+#define ZW_ALRM_EVT_INTRUSION_L         0x01    /**< Intrusion detected with location info*/
+#define ZW_ALRM_EVT_INTRUSION           0x02    /**< Intrusion detected with unknown location info*/
+#define ZW_ALRM_EVT_TMPR_COVER          0x03    /**< Tampering, product covering removed*/
+#define ZW_ALRM_EVT_TMPR_CODE           0x04    /**< Tampering, Invalid Code*/
+#define ZW_ALRM_EVT_GLASS_L             0x05    /**< Glass breakage detected with location info*/
+#define ZW_ALRM_EVT_GLASS               0x06    /**< Glass breakage detected with unknown location info*/
+#define ZW_ALRM_EVT_MOTION_DET_L        0x07    /**< Motion detected with location info*/
+#define ZW_ALRM_EVT_MOTION_DET          0x08    /**< Motion detected with unknown location info*/
+
+/** Z-wave alarm event for power management alarm*/
+#define ZW_ALRM_EVT_POWER               0x01    /**< Power has been applied*/
+#define ZW_ALRM_EVT_AC_OFF              0x02    /**< AC mains disconnected*/
+#define ZW_ALRM_EVT_AC_ON               0x03    /**< AC mains re-connected*/
+#define ZW_ALRM_EVT_SURGE               0x04    /**< Surge Detection*/
+#define ZW_ALRM_EVT_VOLT_DROP           0x05    /**< Voltage Drop/Drift detected*/
+#define ZW_ALRM_EVT_OVER_CURRENT        0x06    /**< Over-current detected*/
+#define ZW_ALRM_EVT_OVER_VOLT           0x07    /**< Over-voltage detected*/
+#define ZW_ALRM_EVT_OVER_LOAD           0x08    /**< Over-load detected*/
+#define ZW_ALRM_EVT_LOAD_ERR            0x09    /**< Load error*/
+#define ZW_ALRM_EVT_REPLACE_BATT_SOON   0x0A    /**< Replace battery soon*/
+#define ZW_ALRM_EVT_REPLACE_BATT_NOW    0x0B    /**< Replace battery now*/
+#define ZW_ALRM_EVT_BATT_CHARGING       0x0C    /**< Battery is charging*/
+#define ZW_ALRM_EVT_BATT_CHARGED        0x0D    /**< Battery is fully charged*/
+#define ZW_ALRM_EVT_CHARGE_BATT_SOON    0x0E    /**< Charge battery soon*/
+#define ZW_ALRM_EVT_CHARGE_BATT_NOW     0x0F    /**< Charge battery now!*/
+#define ZW_ALRM_EVT_BKUP_BATT_LOW       0x10    /**< Back-up battery is low*/
+#define ZW_ALRM_EVT_BATT_FLUID_LOW      0x11    /**< Battery fluid is low*/
+
+/** Z-wave alarm event for system alarm*/
+#define ZW_ALRM_EVT_HW                  0x01    /**< System hardware failure*/
+#define ZW_ALRM_EVT_SW                  0x02    /**< System software failure*/
+#define ZW_ALRM_EVT_HW_OEM_CODE         0x03    /**< System hardware failure with OEM proprietary failure code*/
+#define ZW_ALRM_EVT_SW_OEM_CODE         0x04    /**< System software failure with OEM proprietary failure code*/
+
+/** Z-wave alarm event for emergency alarm*/
+#define ZW_ALRM_EVT_POLICE              0x01    /**< Contact police*/
+#define ZW_ALRM_EVT_FIRE                0x02    /**< Contact fire service*/
+#define ZW_ALRM_EVT_MEDICAL             0x03    /**< Contact medical service*/
+
+/** Z-wave alarm event for alarm clock*/
+#define ZW_ALRM_EVT_WKUP                0x01    /**< Wake up alert*/
+#define ZW_ALRM_EVT_TIMER_ENDED         0x02    /**< Timer ended*/
+#define ZW_ALRM_EVT_TIME_REMAINING      0x03    /**< Time remaining. Event parameter value (3 bytes): byte-0 unit = hours,
+                                                     byte-1 unit = minutes, byte-2 unit = seconds*/
+
+/** Z-wave alarm event for Appliance*/
+#define ZW_ALRM_EVT_PROG_STARTED		0x01    /**< Program started*/
+#define ZW_ALRM_EVT_PROG_IN_PROGRESS	0x02    /**< Program in progress*/
+#define ZW_ALRM_EVT_PROG_END			0x03    /**< Program completed*/
+#define ZW_ALRM_EVT_REPLACE_FILTER		0x04    /**< Replace main filter*/
+#define ZW_ALRM_EVT_SET_TEMP_ERR		0x05    /**< Failure to set target temperature*/
+#define ZW_ALRM_EVT_SUPPLYING_WATER		0x06    /**< Supplying water*/
+#define ZW_ALRM_EVT_WATER_SUPPLY_ERR	0x07    /**< Water supply failure*/
+#define ZW_ALRM_EVT_BOILING				0x08    /**< Boiling*/
+#define ZW_ALRM_EVT_BOILING_ERR			0x09    /**< Boiling failure*/
+#define ZW_ALRM_EVT_WASHING				0x0A    /**< Washing*/
+#define ZW_ALRM_EVT_WASHING_ERR			0x0B    /**< Washing failure*/
+#define ZW_ALRM_EVT_RINSING				0x0C    /**< Rinsing*/
+#define ZW_ALRM_EVT_RINSING_ERR			0x0D    /**< Rinsing failure*/
+#define ZW_ALRM_EVT_DRAINING			0x0E    /**< Draining*/
+#define ZW_ALRM_EVT_DRAINING_ERR		0x0F    /**< Draining failure*/
+#define ZW_ALRM_EVT_SPINNING			0x10    /**< Spinning*/
+#define ZW_ALRM_EVT_SPINNING_ERR		0x11    /**< Spinning failure*/
+#define ZW_ALRM_EVT_DRYING				0x12    /**< Drying*/
+#define ZW_ALRM_EVT_DRYING_ERR			0x13    /**< Drying failure*/
+#define ZW_ALRM_EVT_FAN_ERR				0x14    /**< Fan failure*/
+#define ZW_ALRM_EVT_COMPRESSOR_ERR		0x15    /**< Compressor failure*/
+
+/** Z-wave alarm event for Home Health*/
+#define ZW_ALRM_EVT_LEAVING_BED						0x01    /**< Leaving Bed*/
+#define ZW_ALRM_EVT_SITTING_ON_BED					0x02    /**< Sitting on bed*/
+#define ZW_ALRM_EVT_LYING_ON_BED					0x03    /**< Lying on bed*/
+#define ZW_ALRM_EVT_POSTURE_CHANGED					0x04    /**< Posture changed*/
+#define ZW_ALRM_EVT_SITTING_ON_BED_EDGE				0x05    /**< Sitting on edge of bed*/
+#define ZW_ALRM_EVT_VOLATILE_ORGANIC_COMPOUND_LVL   0x06    /**< Volatile Organic Compound level. Event parameter value (pollution level):
+                                                                 1=clean, 2=Slightly polluted, 3=Moderately polluted, 4=Highly polluted,*/
+
+/** Z-wave alarm event for Siren*/
+#define ZW_ALRM_EVT_SIREN_ACT						0x01    /**< Siren Active*/
+
+/** Z-wave alarm event for Water Valve*/
+#define ZW_ALRM_EVT_VALVE_OP						0x01    /**< Valve Operation. Event parameter value: 0=closed, 1=open*/
+#define ZW_ALRM_EVT_MSTR_VALVE_OP					0x02    /**< Master Valve Operation. Event parameter value: 0=closed, 1=open*/
+#define ZW_ALRM_EVT_SHORT_CCT						0x03    /**< Valve Short Circuit*/
+#define ZW_ALRM_EVT_MSTR_SHORT_CCT					0x04    /**< Master Valve Short Circuit*/
+#define ZW_ALRM_EVT_CUR_ALRM						0x05    /**< Valve Current Alarm. Event parameter value: 1=no data, 2=below low treshold,
+                                                                 3=above high treshold, 4=max*/
+#define ZW_ALRM_EVT_MSTR_CUR_ALRM					0x06    /**< Master Valve Current Alarm. Event parameter value same as Valve Current Alarm*/
+
+/** Z-wave alarm event for Weather*/
+#define ZW_ALRM_EVT_RAIN							0x01    /**< Rain*/
+#define ZW_ALRM_EVT_MOIST							0x02    /**< Moisture*/
+#define ZW_ALRM_EVT_FREEZE							0x03    /**< Freeze*/
+
+/** Z-wave alarm event for Irrigation*/
+#define ZW_ALRM_EVT_SCHED_START						0x01    /**< Schedule Started. Event parameter value is schedule ID*/
+#define ZW_ALRM_EVT_SCHED_FIN						0x02    /**< Schedule Finished. Event parameter value is schedule ID*/
+#define ZW_ALRM_EVT_VLV_TBL_RUN_START				0x03    /**< Valve Table Run Started. Event parameter value is valve table ID*/
+#define ZW_ALRM_EVT_VLV_TBL_RUN_FIN					0x04    /**< Valve Table Run Finished. Event parameter value is valve table ID*/
+#define ZW_ALRM_EVT_DEV_UNCONFIG					0x05    /**< Device is not Configured*/
+
+/** Z-wave alarm event for Gas*/
+#define ZW_ALRM_EVT_COMBUST_GAS_DET_L				0x01    /**< Combustible Gas detected with location info*/
+#define ZW_ALRM_EVT_COMBUST_GAS_DET					0x02    /**< Combustible Gas detected with unknown location info*/
+#define ZW_ALRM_EVT_TOXIC_GAS_DET_L					0x03    /**< Toxic Gas detected with location info*/
+#define ZW_ALRM_EVT_TOXIC_GAS_DET					0x04    /**< Toxic Gas detected with unknown location info*/
+#define ZW_ALRM_EVT_GAS_ALRM_TEST					0x05    /**< Gas Alarm Test*/
+#define ZW_ALRM_EVT_GAS_ALRM_REPLACE				0x06    /**< Replacement Required*/
+
+/** Z-wave alarm event for Pest Control*/
+#define ZW_ALRM_EVT_TRAP_ARMED_L					0x01    /**< Trap armed with location info*/
+#define ZW_ALRM_EVT_TRAP_ARMED						0x02    /**< Trap armed*/
+#define ZW_ALRM_EVT_TRAP_REARM_REQ_L				0x03    /**< Trap re-arm required with location info*/
+#define ZW_ALRM_EVT_TRAP_REARM_REQ					0x04    /**< Trap re-arm required*/
+#define ZW_ALRM_EVT_PEST_DET_L						0x05    /**< Pest detected with location info*/
+#define ZW_ALRM_EVT_PEST_DET						0x06    /**< Pest detected*/
+#define ZW_ALRM_EVT_PEST_EXTERMINATED_L				0x07    /**< Pest exterminated with location info*/
+#define ZW_ALRM_EVT_PEST_EXTERMINATED				0x08    /**< Pest exterminated*/
+
+/** Z-wave alarm event for Light Sensor*/
+#define ZW_ALRM_EVT_LIGHT_DET						0x01    /**< Light detected*/
+#define ZW_ALRM_EVT_COLOR_TRANS_DET					0x02    /**< Light color transition detected*/
+
+----------------------------------------------------------------------------------------------------------------
+/** Z-wave alarm event parameter types */
+#define ZW_ALRM_PARAM_LOC               0x01    /**< node location UTF-8 string (NULL terminated)*/
+#define ZW_ALRM_PARAM_USRID             0x02    /**< user id*/
+#define ZW_ALRM_PARAM_OEM_ERR_CODE      0x03    /**< OEM proprietary system failure code */
+#define ZW_ALRM_PARAM_PROPRIETARY       0x04	/**< Proprietary event parameters */
+#define ZW_ALRM_PARAM_EVENT_ID		    0x05	/**< Event id which is no more active*/
+#define ZW_ALRM_PARAM_UNKNOWN		0xFF 	/**< Unknown alarm event parameters. It could be from a higher version of CC,
+						  or the device violates the spec and send parameters when Spec does not define*/
+
+----------------------------------------------------------------------------------------------------------------
+/** Z-wave alarm sensor Type definition */
+#define ZW_ALRM_SNSR_TYPE_GP			0x00    /**< General Purpose Alarm*/
+#define ZW_ALRM_SNSR_TYPE_SMOKE			0x01    /**< Smoke Alarm*/
+#define ZW_ALRM_SNSR_TYPE_CO			0x02    /**< CO Alarm*/
+#define ZW_ALRM_SNSR_TYPE_CO2			0x03    /**< CO2 Alarm*/
+#define ZW_ALRM_SNSR_TYPE_HEAT			0x04    /**< Heat Alarm*/
+#define ZW_ALRM_SNSR_TYPE_WATER_LEAK	0x05    /**< Water Leak Alarm*/
+
+----------------------------------------------------------------------------------------------------------------
+/** Thermostat Setpoint Type definition */
+#define ZW_THRMO_SETP_TYP_HEATING           1       /**< Heating */
+#define ZW_THRMO_SETP_TYP_COOLING           2       /**< Cooling */
+#define ZW_THRMO_SETP_TYP_FURNACE           7       /**< Furnace */
+#define ZW_THRMO_SETP_TYP_DRY               8       /**< Dry air */
+#define ZW_THRMO_SETP_TYP_MOIST             9       /**< Moist air */
+#define ZW_THRMO_SETP_TYP_AUTO_CHANGEOVER   10      /**< Auto changeover */
+#define ZW_THRMO_SETP_TYP_ENE_SAVE_HEAT     11      /**< Energy Save Heating */
+#define ZW_THRMO_SETP_TYP_ENE_SAVE_COOL     12      /**< Energy Save Cooling */
+#define ZW_THRMO_SETP_TYP_AWAY_HEAT         13      /**< Away heating */
+#define ZW_THRMO_SETP_TYP_AWAY_COOL         14      /**< Away cooling */
+#define ZW_THRMO_SETP_TYP_FULL_POWER        15      /**< Full power */
+
+----------------------------------------------------------------------------------------------------------------
+/** Thermostat Setpoint Unit definition */
+#define ZW_THRMO_SETP_UNIT_C           0       /**< Celsius */
+#define ZW_THRMO_SETP_UNIT_F           1       /**< Fahrenheit */
+

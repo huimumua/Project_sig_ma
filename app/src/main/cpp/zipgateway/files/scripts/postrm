@@ -1,0 +1,25 @@
+#!/bin/sh -e
+set -e
+
+# It is possible that Debconf has already been removed, too.
+if [ -e /usr/share/debconf/confmodule ]; then
+  . /usr/share/debconf/confmodule
+fi
+
+#echo postrm
+#echo ${1}
+# (normally) Automatically added by dh_installdebconf
+if [ "$1" = purge ]; then
+    db_purge
+fi
+
+#echo "removing br-lan"
+if [ -f /etc/network/interfaces.d/br-lan ]
+then
+    rm /etc/network/interfaces.d/br-lan
+fi
+#echo "remvoing sysctl"
+if [ -f /etc/sysctl.d/30-zgwifi.conf ]
+then
+    rm /etc/sysctl.d/30-zgwifi.conf
+fi

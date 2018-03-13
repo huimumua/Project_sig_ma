@@ -1,0 +1,96 @@
+===============================================================================
+To generate Z-ware library
+===============================================================================
+For Ubuntu Linux, run the commands:
+source install_openssl_lib.sh                           #need to be run whenever changing platform or build options
+source build_openssl_lib.sh linux {debug | release} [shared | no-shared]  #build either debug or release library version and
+                                                                          #optional shared or no-shared library with default to no-shared
+make TARGET_PLATFORM=LINUX_ZIP2 [DEBUG=1] [SHARED=1]    #build either debug or release version and shared or static library with 
+                                                        #default to release and static library
+**NOTE: arguments in {} are compulsory; those in [] are optional.
+
+---------------------------------------------------------------------------------
+For BeagleBone Black platform, run the commands:
+source install_openssl_lib.sh                                #need to be run whenever changing platform or build options
+source build_openssl_lib.sh beaglebone {debug | release} [shared | no-shared]  #build either debug or release library version and
+                                                                               #optional shared or no-shared library with default to no-shared
+make TARGET_PLATFORM=BEAGLEBONE_ZIP2 [DEBUG=1] [SHARED=1]    #build either debug or release version and shared or static library with 
+                                                             #default to release and static library
+**NOTE: arguments in {} are compulsory; those in [] are optional.
+
+---------------------------------------------------------------------------------
+For Raspberry Pi platform, run the command:
+source install_openssl_lib.sh                               #need to be run whenever changing platform or build options
+source build_openssl_lib.sh raspberry {debug | release} [shared | no-shared]  #build either debug or release library version and
+                                                                              #optional shared or no-shared library with default to no-shared
+make TARGET_PLATFORM=RASPBERRY_ZIP2 [DEBUG=1] [SHARED=1]    #build either debug or release version and shared or static library with 
+                                                            #default to release and static library
+**NOTE: arguments in {} are compulsory; those in [] are optional.
+
+---------------------------------------------------------------------------------
+For MAC OS X platform [EXPERIMENTAL, UNSUPPORTED], run the command:
+source install_openssl_lib.sh                                #need to be run whenever changing platform or build options
+source build_openssl_lib.sh osx {debug | release}            #build either debug or release library version
+make TARGET_PLATFORM=OSX_ZIP2 [DEBUG=1]
+
+**NOTE: arguments in {} are compulsory; those in [] are optional.
+
+---------------------------------------------------------------------------------
+For Sigma SMP86XX Tangox platform [EXPERIMENTAL, UNSUPPORTED], run the command:
+source install_openssl_lib.sh                                #need to be run whenever changing platform or build options
+source build_openssl_lib.sh smp86xx {debug | release}        #build either debug or release library version
+make TARGET_PLATFORM=SIGMA_ZIP2 [DEBUG=1]
+
+**NOTE: arguments in {} are compulsory; those in [] are optional.
+
+---------------------------------------------------------------------------------
+For SMP8756 Vantage platform [EXPERIMENTAL, UNSUPPORTED], run the command:
+source install_openssl_lib.sh                                #need to be run whenever changing platform or build options
+source build_openssl_lib.sh smp87xx {debug | release}        #build either debug or release library version
+make TARGET_PLATFORM=VANTAGE_ZIP2 [DEBUG=1]
+
+**NOTE: arguments in {} are compulsory; those in [] are optional.
+
+---------------------------------------------------------------------------------
+For Android platform [EXPERIMENTAL, UNSUPPORTED], run the command:
+source download_android_ndk.sh                               #only need to run once
+source install_android_toolchain.sh                          #only need to run once
+source install_openssl_lib.sh                                #need to be run whenever changing platform or build options
+source build_openssl_lib.sh android {debug | release}        #build either debug or release library version
+source build_using_android_toolchain.sh
+
+**NOTE: arguments in {} are compulsory; those in [] are optional.
+
+---------------------------------------------------------------------------------
+For D-link mt7628 platform [EXPERIMENTAL, UNSUPPORTED], run the commands:
+source install_openssl_lib.sh                                #need to be run whenever changing platform or build options
+source build_openssl_lib.sh smp86xx {debug | release}        #build either debug or release library version
+make TARGET_PLATFORM=DLINK_ZIP2 [DEBUG=1]
+
+**NOTE: arguments in {} are compulsory; those in [] are optional.
+
+---------------------------------------------------------------------------------
+
+For Windows [EXPERIMENTAL, UNSUPPORTED], run Microsoft Visual C++ 2010 Express using the project file "zipctl.sln".
+
+===============================================================================
+To generate Z-ware portal library
+===============================================================================
+For Linux:
+
+Run these commands to use OpenSSL library:
+source install_openssl_lib.sh                              #need to be run whenever changing platform or build options
+source build_openssl_lib.sh linux {debug | release} [shared | no-shared]  #build either debug or release library version and
+                                                                          #optional shared or no-shared library with default to no-shared
+make TARGET_PRODUCT=PORTAL_OPENSSL [DEBUG=1] [SHARED=1]    #build either debug or release version and shared or static library with 
+                                                           #default to release and static library
+
+**NOTE: arguments in {} are compulsory; those in [] are optional.
+
+===============================================================================
+To enable debug information, add "DEBUG=1" at build time
+===============================================================================
+Examples:
+make TARGET_PRODUCT=PORTAL_OPENSSL DEBUG=1 SHARED=0
+make TARGET_PLATFORM=LINUX_ZIP2 DEBUG=1 SHARED=0
+

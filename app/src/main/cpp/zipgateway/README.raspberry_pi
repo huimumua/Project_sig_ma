@@ -1,0 +1,39 @@
+How to build openssl and libusb for zipgateway:
+==============================================
+
+Openssl:
+========
+
+1. Download from https://www.openssl.org/source/
+2. Assuming toolchain is in /mnt/data/rpi/tools/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi/
+3. set $PATH
+# export PATH=$PATH:/mnt/data/rpi/tools/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi/bin/
+4. Set cross compiler
+# export cross=arm-bcm2708hardfp-linux-gnueabi-
+5. Configure with build/ as install directory
+# ./Configure linux-armv4 --prefix=$PWD/build/ shared
+6. make
+# make CC="${cross}gcc" AR="${cross}ar r" RANLIB="${cross}ranlib"
+7. make install
+# make CC="${cross}gcc" AR="${cross}ar r" RANLIB="${cross}ranlib" install_sw
+
+
+Libusb:
+=======
+1. Download from libusb sources
+2. ./configure CC=/mnt/data/rpi/tools/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi/bin/arm-bcm2708hardfp-linux-gnueabi-gcc --host=arm-linux --enable-udev=no
+3. make CC=/mnt/store/beaglebone/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-gcc
+
+Build zipgateway for Raspberry Pi with wireless:
+=======================
+1. Create build directory
+# mkdir build_rpi
+# cd build_rpi
+
+2. cmake
+# cmake -DOPENSSL_SRC=/mnt/data/rpi/openssl-1.0.1j -DLIBUSB_SRC=/mnt/data/rpi/libusb-1.0.19 -DCMAKE_TOOLCHAIN_FILE=../cmake/Rpi.cmake  ..
+Note: Rpi.cmake looks for build/ directory inside openssl sources for libssl.so
+
+3. make
+# make package
+

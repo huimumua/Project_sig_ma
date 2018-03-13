@@ -1,0 +1,54 @@
+===============================================================================
+To generate sample application executable
+===============================================================================
+For Ubuntu Linux, run the command:
+make TARGET_PLATFORM=LINUX_ZIP2 [DEBUG=1] [SHARED=1]    #build either debug or release version and shared or static application with 
+                                                        #default to release and static application
+**NOTE: arguments in [] are optional.
+
+---------------------------------------------------------------------------------
+For BeagleBone Black platform, run the command:
+make TARGET_PLATFORM=BEAGLEBONE_ZIP2 [DEBUG=1] [SHARED=1]    #build either debug or release version and shared or static application with 
+                                                             #default to release and static application
+**NOTE: arguments in [] are optional.
+
+---------------------------------------------------------------------------------
+For Raspberry Pi platform, run the command:
+make TARGET_PLATFORM=RASPBERRY_ZIP2 [DEBUG=1] [SHARED=1]    #build either debug or release version and shared or static application with 
+                                                            #default to release and static application
+**NOTE: arguments in [] are optional.
+
+---------------------------------------------------------------------------------
+For MAC OS X platform [EXPERIMENTAL, UNSUPPORTED], run the command:
+make TARGET_PLATFORM=OSX_ZIP2
+
+---------------------------------------------------------------------------------
+For Sigma SMP86XX Tangox platform [EXPERIMENTAL, UNSUPPORTED], run the command:
+make TARGET_PLATFORM=SIGMA_ZIP2
+
+---------------------------------------------------------------------------------
+For SMP8756 Vantage platform [EXPERIMENTAL, UNSUPPORTED], run the command:
+make TARGET_PLATFORM=VANTAGE_ZIP2
+
+---------------------------------------------------------------------------------
+For Android platform [EXPERIMENTAL, UNSUPPORTED], run the command:
+make TARGET_PLATFORM=ANDROID_ZIP2
+
+
+===============================================================================
+To enable debug information, add "DEBUG=1" at build time
+===============================================================================
+Example:
+make DEBUG=1
+make TARGET_PLATFORM=LINUX_ZIP2 DEBUG=1
+
+===============================================================================
+To install binaries and configuration files to "install" sub-directory
+===============================================================================
+make install_all
+
+===============================================================================
+To install binaries only to "install" sub-directory
+===============================================================================
+make install_bin
+
