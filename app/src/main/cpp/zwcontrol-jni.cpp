@@ -363,7 +363,7 @@ static int controller_getSwitchAll(JNIEnv *env, jclass object, jint nodeId)
 
 static int controller_startLearnMode(JNIEnv *env, jclass object)
 {
-    return 0;
+    return zwcontrol_start_learn_mode(&appl_ctx);
 }
 
 static int controller_setBinarySwitchState(JNIEnv *env, jclass object, jint nodeId, jint state)
