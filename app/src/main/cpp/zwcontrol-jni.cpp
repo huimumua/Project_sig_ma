@@ -122,6 +122,51 @@ static int ZwControlResCallBack(const char* res)
     return 0;
 }
 
+static int ZwControlReqCallBack(const char* res)
+{
+    if(ZwControlServiceClass == NULL)
+        return -1;
+
+    int needDetach;
+
+    JNIEnv* env = getJNIEnv(&needDetach);
+
+    if(env == NULL)
+    {
+        return -1;
+    }
+
+    if(CallBackMethodID == NULL)
+    {
+        CallBackMethodID = env->GetStaticMethodID(ZwControlServiceClass, "ZwaveControlReq_CallBack", "([BI)I");
+
+        if(CallBackMethodID == NULL)
+        {
+            if(needDetach)
+            {
+                detachJNI();
+            }
+
+            return -1;
+        }
+    }
+
+    int len = strlen(res);
+
+    jbyteArray bytes = env->NewByteArray(len);
+    env->SetByteArrayRegion(bytes, 0, len, (jbyte*)res);
+    int val = env->CallStaticIntMethod(ZwControlServiceClass, CallBackMethodID, bytes, len);
+    check_and_clear_exceptions(env, __FUNCTION__);
+    env->DeleteLocalRef(bytes);
+
+    if(needDetach)
+    {
+        detachJNI();
+    }
+
+    return val;
+}
+
 static int create_controller(JNIEnv *env, jclass object)
 {
     if(ZwControlServiceClass == NULL)
@@ -154,7 +199,7 @@ static jint open_controller(JNIEnv *env, jclass object, jstring path, jstring In
     env->ReleaseStringUTFChars(path, resPath);
     env->ReleaseStringUTFChars(InfoPath, infoFile);
 
-    zwcontrol_setcallback(ZwControlResCallBack);
+    zwcontrol_setcallback(ZwControlResCallBack, ZwControlReqCallBack);
 
     int len = (int)strlen((char*)str);
 

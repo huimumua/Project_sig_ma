@@ -12,6 +12,7 @@ extern int  StartZipGateWay(const char *resPath);
 extern void StopZipGateWay();
 
 static ResCallBack resCallBack = NULL;
+static ReqCallBack reqCallBack = NULL;
 static int initStatus = 0;
 
 #define MAX_DTLS_PSK  64  //Maximum DTLS pre-shared key hex string length
@@ -1815,14 +1816,29 @@ static void hl_add_node_s2_cb(void *usr_param, sec2_add_cb_prm_t *cb_param)
         ALOGD("                      Security 2 key 2 (04)\n");
         ALOGD("                      Security 0       (80)\n");
 
-        granted_key = cb_param->cb_prm.req_key.req_keys;
+        if(reqCallBack != NULL)
+        {
+            
+        }
+        else
+        {
+            granted_key = cb_param->cb_prm.req_key.req_keys;
+        }
 
         grant_csa = 0;
         if (cb_param->cb_prm.req_key.req_csa)
         {
             ALOGD("Device requested for client-side authentication (CSA)\n");
 
-            grant_csa = 1;
+            if(reqCallBack != NULL)
+            {
+
+            }
+            else
+            {
+                grant_csa = 1;
+            }
+
             ALOGD("Please enter this 10-digit CSA Pin into the joining device:%s\n", cb_param->cb_prm.req_key.csa_pin);
 
             //No DSK callback when in CSA mode
@@ -2366,9 +2382,10 @@ int  zwcontrol_init(hl_appl_ctx_t *hl_appl, const char *resPath, const char* inf
     return -1;
 }
 
-int zwcontrol_setcallback(ResCallBack callBack)
+int zwcontrol_setcallback(ResCallBack callBackRes, ReqCallBack callBackReq)
 {
-    resCallBack = callBack;
+    resCallBack = callBackRes;
+    reqCallBack = callBackReq;
     return 0;
 }
 
