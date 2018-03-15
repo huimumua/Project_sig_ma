@@ -34,7 +34,7 @@ public class ZwaveControlHelper {
 
     public static int ZwaveControlReq_CallBack(byte[] result, int len)
     {
-        Log.d("ZwaveControlHelper", "ZwaveControlReq_CallBack " + new String(result));
+        android.util.Log.d("ZwaveControlHelper", "ZwaveControlReq_CallBack " + new String(result));
         return 0;
     }
 

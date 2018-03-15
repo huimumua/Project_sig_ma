@@ -643,7 +643,7 @@ PROCESS_THREAD(dtls_server_process, ev, data)
                             uip_ipaddr_copy(&UIP_IP_BUF->srcipaddr,  &udpconn.ripaddr);
                             uip_ipaddr_copy(&UIP_IP_BUF->destipaddr, &udpconn.sipaddr);
 
-                            if (nodeId == MyNodeID)
+                            if (nodeId == MyNodeID || nodeId == 1)
                             {
                                 uip_debug_ipaddr_print(&udpconn.ripaddr);
                                 uip_debug_ipaddr_print(&udpconn.sipaddr);

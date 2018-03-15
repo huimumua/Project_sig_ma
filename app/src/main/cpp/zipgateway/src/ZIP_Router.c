@@ -338,6 +338,11 @@ nodeOfIP(uip_ip6addr_t* ip)
   else if (is_4to6_addr((ip6addr_t*) ip))
   {
     //return ipv46_get_nat_addr((uip_ipv4addr_t*) &ip->u8[12]); //djnakata
+    if(ip->u8[15] == 1)
+    {
+      return MyNodeID;
+    }
+
     return ip->u8[15];
   }
 		return 0;

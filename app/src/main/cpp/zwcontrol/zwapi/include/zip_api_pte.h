@@ -891,7 +891,7 @@ typedef enum
     EVT_CTLR_TMOUT,                  ///< Timeout
     EVT_CTLR_START,                  ///< Start getting controller information
     EVT_CTLR_NODE_ID,                ///< Received Z/IP router controller node id
-    //EVT_CTLR_PAN_ADDR,               ///< Received Z/IP router controller IPv6 PAN address
+    EVT_CTLR_PAN_ADDR,               ///< Received Z/IP router controller IPv6 PAN address
     EVT_CTLR_ID_ADDR_FAILED,         ///< Received Z/IP router controller node id failed
     EVT_CTLR_NODE_INFO,              ///< Received Z/IP router controller node info
     EVT_CTLR_NODE_INFO_RETRY,        ///< Retry to get controller node info

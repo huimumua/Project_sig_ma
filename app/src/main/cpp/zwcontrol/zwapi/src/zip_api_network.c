@@ -7883,10 +7883,10 @@ static void zwnet_ctlr_id_addr_cb(appl_layer_ctx_t *appl_ctx, nd_advt_rpt_t *rpt
             {   //Global address
                 evt = EVT_CTLR_NODE_ID;
             }
-//          else
-//          {   //Site-local (PAN) address
-//              evt = EVT_CTLR_PAN_ADDR;
-//          }
+          else
+          {   //Site-local (PAN) address
+              evt = EVT_CTLR_PAN_ADDR;
+          }
             break;
 
         case ZIP_ND_INFORMATION_OBSOLETE:
