@@ -2,7 +2,6 @@ package com.askey.firefly.zwave.control.jni;
 
 import com.askey.firefly.zwave.control.service.ZwaveControlService;
 import com.askey.firefly.zwave.control.application.ZwaveProvisionList;
-import android.util.Log;
 
 /**
  * 项目名称：ZwaveControl

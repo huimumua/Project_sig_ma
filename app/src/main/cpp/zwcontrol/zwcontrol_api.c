@@ -1357,7 +1357,7 @@ static void hl_nw_notify_hdlr(nw_notify_msg_t *notify_msg)
                 }
             }
 
-            if(notify_msg->op == ZWNET_OP_RESET && notify_msg->sts == ZW_ERR_NONE)
+            if(((notify_msg->op == ZWNET_OP_RESET) || (notify_msg->op == ZWNET_OP_INITIATE)) && notify_msg->sts == ZW_ERR_NONE)
             {
                 // Report controller info
                 cJSON *jsonRoot;
@@ -1383,7 +1383,7 @@ static void hl_nw_notify_hdlr(nw_notify_msg_t *notify_msg)
                         cJSON_AddNumberToObject(jsonRoot, "Node Id", (unsigned)zw_node->nodeid);
 
                         ALOGI("________________________________________________________");
-                        ALOGI("Controller Reset done, attribute:");
+                        ALOGI("Controller attribute:");
                         ALOGI("               Home Id: %s",str);
                         if(hl_appl->zwnet->zwave_role & ZW_ROLE_SIS)
                         {
@@ -1816,29 +1816,14 @@ static void hl_add_node_s2_cb(void *usr_param, sec2_add_cb_prm_t *cb_param)
         ALOGD("                      Security 2 key 2 (04)\n");
         ALOGD("                      Security 0       (80)\n");
 
-        if(reqCallBack != NULL)
-        {
-            
-        }
-        else
-        {
-            granted_key = cb_param->cb_prm.req_key.req_keys;
-        }
+        granted_key = cb_param->cb_prm.req_key.req_keys;
 
         grant_csa = 0;
         if (cb_param->cb_prm.req_key.req_csa)
         {
             ALOGD("Device requested for client-side authentication (CSA)\n");
 
-            if(reqCallBack != NULL)
-            {
-
-            }
-            else
-            {
-                grant_csa = 1;
-            }
-
+            grant_csa = 1;
             ALOGD("Please enter this 10-digit CSA Pin into the joining device:%s\n", cb_param->cb_prm.req_key.csa_pin);
 
             //No DSK callback when in CSA mode
@@ -4065,11 +4050,10 @@ int  zwcontrol_update_node(hl_appl_ctx_t *hl_appl, uint8_t nodeId)
 
     return result;
 }
-
 //Callback function for zwnet_initiate.
 void cb_get_dsk_fn(void *usr_ctx, char *dsk)
 {
-    ALOGI("Controller learn mode callback, dsk: %s",dsk);
+    ALOGI("learn mode callback, cb_get_dsk_fn, dsk: %s",dsk);
 }
 
 int  zwcontrol_start_learn_mode(hl_appl_ctx_t* hl_appl)
@@ -4080,7 +4064,7 @@ int  zwcontrol_start_learn_mode(hl_appl_ctx_t* hl_appl)
 
     if (result != 0)
     {
-        ALOGI("hl_lrn_mod_set with error: %d", result);
+        ALOGI("hl_lrn_mod_set with error:%d", result);
     }
 
     return result;
