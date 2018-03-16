@@ -1343,8 +1343,7 @@ PROCESS_THREAD(zip_process, ev, data)
         if (data == (void*) 0)
         {
     		  LOG_PRINTF("Resetting....\n");
-          //djnakata
-          //bridge_state = booting;
+
           if (!ZIP_Router_Reset())
           {
             ERR_PRINTF("Fatal error\n");

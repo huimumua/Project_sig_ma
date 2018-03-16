@@ -16,6 +16,7 @@ static jclass  ZwControlServiceClass;
 static JavaVM  *ZwControlServiceVM = NULL;
 
 static jmethodID CallBackMethodID = NULL;
+static jmethodID CallBackMethodID2 = NULL;
 
 static void check_and_clear_exceptions(JNIEnv* env, const char* method_name)
 {
@@ -136,11 +137,11 @@ static int ZwControlReqCallBack(const char* res)
         return -1;
     }
 
-    if(CallBackMethodID == NULL)
+    if(CallBackMethodID2 == NULL)
     {
-        CallBackMethodID = env->GetStaticMethodID(ZwControlServiceClass, "ZwaveControlReq_CallBack", "([BI)I");
+        CallBackMethodID2 = env->GetStaticMethodID(ZwControlServiceClass, "ZwaveControlReq_CallBack", "([BI)I");
 
-        if(CallBackMethodID == NULL)
+        if(CallBackMethodID2 == NULL)
         {
             if(needDetach)
             {
@@ -155,7 +156,7 @@ static int ZwControlReqCallBack(const char* res)
 
     jbyteArray bytes = env->NewByteArray(len);
     env->SetByteArrayRegion(bytes, 0, len, (jbyte*)res);
-    int val = env->CallStaticIntMethod(ZwControlServiceClass, CallBackMethodID, bytes, len);
+    int val = env->CallStaticIntMethod(ZwControlServiceClass, CallBackMethodID2, bytes, len);
     check_and_clear_exceptions(env, __FUNCTION__);
     env->DeleteLocalRef(bytes);
 
