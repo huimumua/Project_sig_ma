@@ -806,6 +806,8 @@ PROCESS_THREAD(dhcp_client_process, ev, data) {
   uip_ipaddr_t addr;
   PROCESS_BEGIN();
 
+  PROCESS_EXIT();  //djnakata
+
   if (cfg.ipv4disable) {
       PROCESS_EXIT();
   }
