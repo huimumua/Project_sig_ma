@@ -1368,7 +1368,7 @@ static void hl_nw_notify_hdlr(nw_notify_msg_t *notify_msg)
                     return ;
                 }
 
-                cJSON_AddStringToObject(jsonRoot, "MessageType", "Controller(reset) Attribute");
+                cJSON_AddStringToObject(jsonRoot, "MessageType", "Controller Attribute");
                 {
                     zwnode_p    zw_node;
                     char str[50] = {0};
