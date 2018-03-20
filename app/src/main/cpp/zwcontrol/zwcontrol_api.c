@@ -1816,19 +1816,64 @@ static void hl_add_node_s2_cb(void *usr_param, sec2_add_cb_prm_t *cb_param)
         ALOGD("                      Security 2 key 2 (04)\n");
         ALOGD("                      Security 0       (80)\n");
 
-        granted_key = cb_param->cb_prm.req_key.req_keys;
+        //granted_key = cb_param->cb_prm.req_key.req_keys;
+        if(reqCallBack != NULL)
+        {
+            cJSON *jsonRoot;
+            jsonRoot = cJSON_CreateObject();
+            char str[10] = {0};
+            sprintf(str, "%X", cb_param->cb_prm.req_key.req_keys);
+            cJSON_AddStringToObject(jsonRoot, "Grant Keys Msg", "Request Keys");
+            cJSON_AddStringToObject(jsonRoot, "Keys", str);
+
+            char *p = cJSON_Print(jsonRoot);
+
+            if(p != NULL)
+            {
+                granted_key = reqCallBack(p);
+                free(p);
+            }
+
+            cJSON_Delete(jsonRoot);
+        }
+        else
+        {
+            granted_key = cb_param->cb_prm.req_key.req_keys;
+        }
+        ALOGD("User granted keys: %x",granted_key);
 
         grant_csa = 0;
         if (cb_param->cb_prm.req_key.req_csa)
         {
             ALOGD("Device requested for client-side authentication (CSA)\n");
+            if(reqCallBack != NULL)
+            {
+                cJSON *jsonRoot;
+                jsonRoot = cJSON_CreateObject();
+                char str[10] = {0};
+                sprintf(str, "%X", cb_param->cb_prm.req_key.req_keys);
+                cJSON_AddStringToObject(jsonRoot, "Client Side Au Msg", "Request CSA");
 
-            grant_csa = 1;
+                char *p = cJSON_Print(jsonRoot);
+
+                if(p != NULL)
+                {
+                    grant_csa = reqCallBack(p);
+                    free(p);
+                }
+
+                cJSON_Delete(jsonRoot);
+            }
+            else
+            {
+                grant_csa = 1;
+            }
+            ALOGD("User grant_csa: %x",grant_csa);
+
             ALOGD("Please enter this 10-digit CSA Pin into the joining device:%s\n", cb_param->cb_prm.req_key.csa_pin);
 
             //No DSK callback when in CSA mode
             hl_appl->sec2_cb_enter &= ~SEC2_ENTER_DSK;
-
         }
 
         res = zwnet_add_sec2_grant_key(hl_appl->zwnet, granted_key, grant_csa);
