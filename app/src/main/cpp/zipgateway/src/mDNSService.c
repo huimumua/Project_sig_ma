@@ -2555,6 +2555,7 @@ PROCESS_THREAD(mDNS_server_process, ev, data)
     if (NULL == server_conn)
     {
       PRINTF("could not initialize connection 1\n");
+      PROCESS_EXIT(); //djnakata
     }
     udp_bind(server_conn, UIP_HTONS(MDNS_PORT));
 
