@@ -6770,10 +6770,26 @@ static void hl_sw_mul_lvl_report_cb(zwifd_p ifd, zwlevel_dat_p val, time_t ts)
 
     cJSON_AddStringToObject(jsonRoot, "MessageType", "Switch Multi-lvl Report Information");
     cJSON_AddNumberToObject(jsonRoot, "Node id", ifd->nodeid);
-
     cJSON_AddNumberToObject(jsonRoot, "Cur Val", val->curr_val);
-    cJSON_AddNumberToObject(jsonRoot, "Tgt Val", val->tgt_val);
-    cJSON_AddNumberToObject(jsonRoot, "Durration", val->dur);
+
+
+    if(0xFE == val->tgt_val)
+    {
+        cJSON_AddStringToObject(jsonRoot, "Tgt Val", "Unsupported");
+    }
+    else
+    {
+        cJSON_AddNumberToObject(jsonRoot, "Tgt Val", val->tgt_val);
+    }
+
+    if(0xFE == val->dur)
+    {
+        cJSON_AddStringToObject(jsonRoot, "Durration", "Unsupported");
+    }
+    else
+    {
+        cJSON_AddNumberToObject(jsonRoot, "Durration", val->dur);
+    }
 
     if(resCallBack)
     {
