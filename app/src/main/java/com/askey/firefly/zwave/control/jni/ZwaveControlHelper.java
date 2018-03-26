@@ -135,8 +135,8 @@ public class ZwaveControlHelper {
     public native static int ZwController_GetSwitchAll(int deviceId);
     public native static int ZwController_StartLearnMode();
     // For broadcast request
-    public native static int ZwController_SetSwitchAllOnBroadcast();
-    public native static int ZwController_SetSwitchAllOffBroadcast();
+    //public native static int ZwController_SetSwitchAllOnBroadcast();
+    //public native static int ZwController_SetSwitchAllOffBroadcast();
 
     /**
     ** zwave controller jni interface
@@ -181,7 +181,7 @@ public class ZwaveControlHelper {
     ** zwave controller jni interface
     ** support CC: COMMAND_CLASS_DOOR_LOCK
     **/
-    public native static int ZwController_getDoorLockOperation(int deviceId);
+    //public native static int ZwController_getDoorLockOperation(int deviceId);
 
     /**
     ** @param mode (hex)
@@ -193,18 +193,18 @@ public class ZwaveControlHelper {
     ** (FE) Door/Lock State Unknown
     ** (FF) Door Secured
     **/
-    public native static int ZwController_setDoorLockOperation(int deviceId, int mode);
+    /*public native static int ZwController_setDoorLockOperation(int deviceId, int mode);
     public native static int ZwController_getDoorLockConfiguration(int deviceId);
     public native static int ZwController_setDoorLockConfiguration(int deviceId, int type, int out_sta,
-                                                                   int in_sta, int tmout_min, int tmout_sec);
+                                                                   int in_sta, int tmout_min, int tmout_sec);*/
 
     /**
     ** zwave controller jni interface
     ** support CC: COMMAND_CLASS_USER_CODE
     **/
-    public native static int ZwController_getUserCode(int deviceId, int user_id);
+    /*public native static int ZwController_getUserCode(int deviceId, int user_id);
     public native static int ZwController_setUserCode(int deviceId, int user_id, int status);
-    public native static int ZwController_getUserCodeNumber(int deviceId);
+    public native static int ZwController_getUserCodeNumber(int deviceId);*/
 
     /**
     ** zwave controller jni interface
@@ -250,14 +250,14 @@ public class ZwaveControlHelper {
     ** zwave controller jni interface
     ** support CC: COMMAND_CLASS_DOOR_LOCK_LOGGING
     **/
-    public native static int ZwController_getDoorLockLoggingSupportedRecords(int deviceId);
-    public native static int ZwController_getDoorLockLoggingRecords(int deviceId, int rec_num);
+    /*public native static int ZwController_getDoorLockLoggingSupportedRecords(int deviceId);
+    public native static int ZwController_getDoorLockLoggingRecords(int deviceId, int rec_num);*/
 
     /**
     ** zwave controller jni interface
     ** support CC: COMMAND_CLASS_LANGUAGE
     **/
-    public native static int ZwController_getLanguage(int deviceId);
+    //public native static int ZwController_getLanguage(int deviceId);
 
     /**
     ** zwave controller jni interface
@@ -287,17 +287,17 @@ public class ZwaveControlHelper {
     ** zwave controller jni interface
     ** support CC: COMMAND_CLASS_BARRIER_OPERATOR
     **/
-    public native static int ZwController_setBarrierOperator(int deviceId, int value);
+    /*public native static int ZwController_setBarrierOperator(int deviceId, int value);
     public native static int ZwController_getBarrierOperator(int deviceId);
     public native static int ZwController_setBarrierOperatorSignal(int deviceId, int subSysType, int state);
     public native static int ZwController_getBarrierOperatorSignal(int deviceId, int subSysType);
-    public native static int ZwController_getSupportedBarrierOperatorSignal(int deviceId);
+    public native static int ZwController_getSupportedBarrierOperatorSignal(int deviceId);*/
 
     /**
     ** zwave controller jni interface
     ** support CC: COMMAND_CLASS_BASIC_TARIFF_INFO
     **/
-    public native static int ZwController_getBasicTariffInfo(int deviceId);
+    //public native static int ZwController_getBasicTariffInfo(int deviceId);
 
     /**
     ** zwave controller jni interface
@@ -368,8 +368,8 @@ public class ZwaveControlHelper {
     ** zwave controller jni interface
     ** Add for RSSI info get
     **/
-    public native static int ZwController_getControllerNetworkRssiInfo();
-    public native static int ZwController_getDeviceNetworkRssiInfo(int deviceId);
+    //public native static int ZwController_getControllerNetworkRssiInfo();
+    //public native static int ZwController_getDeviceNetworkRssiInfo(int deviceId);
     public native static int ZwController_startNetworkHealthCheck();
 
     /**
