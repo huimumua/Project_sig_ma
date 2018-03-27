@@ -3141,7 +3141,7 @@ static void hl_notification_info_show(zwifd_p intf, cJSON *interfaceInfo)
     uint8_t             sup_evt[248];
     uint8_t             evt_len;
 
-    //if (zwif_notification_info_cache_get(intf, &sup_notify, &notify_cnt) != 0)
+    if (zwif_notification_info_cache_get(intf, &sup_notify, &notify_cnt) != 0)
     {
         return;
     }

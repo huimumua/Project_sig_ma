@@ -2806,9 +2806,16 @@ void zwif_get_desc(zwif_p intf, zwifd_p desc)
     desc->nodeid = intf->ep->node->nodeid;
     desc->net = intf->ep->node->net;
 
-    //Reset the data portion of the descriptor
-    desc->data_cnt = 0;
-    desc->data = NULL;
+    //Copy command class specific data portion
+    if ((intf->data_cnt > 0) && (intf->data_item_sz > 0))
+    {
+        desc->data = calloc(intf->data_cnt, intf->data_item_sz);
+        if (desc->data)
+        {
+            desc->data_cnt = intf->data_cnt;
+            memcpy(desc->data, intf->data, (intf->data_cnt * intf->data_item_sz));
+        }
+    }
 }
 
 /**
