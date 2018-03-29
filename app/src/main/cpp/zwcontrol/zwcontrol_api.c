@@ -1811,10 +1811,12 @@ static void hl_add_node_s2_cb(void *usr_param, sec2_add_cb_prm_t *cb_param)
         ALOGD("\nDevice requested keys bit-mask: %02Xh\n", cb_param->cb_prm.req_key.req_keys);
 
         ALOGD("Key (bit-mask in hex) :\n");
-        ALOGD("                      Security 2 key 0 (01)\n");
-        ALOGD("                      Security 2 key 1 (02)\n");
-        ALOGD("                      Security 2 key 2 (04)\n");
-        ALOGD("                      Security 0       (80)\n");
+        ALOGD("                   Security 2 key 0    (01)\n");
+        ALOGD("                   Security 2 key 1    (02)\n");
+        ALOGD("                   Security 2 key 2    (04)\n");
+        ALOGD("                   Security 2 key All  (07)\n");
+        ALOGD("                   Security 0 key      (80)\n");
+        ALOGD("                   Security   key All  (87)\n");
 
         //granted_key = cb_param->cb_prm.req_key.req_keys;
         if(reqCallBack != NULL)
@@ -3208,7 +3210,7 @@ static void hl_notification_info_show(zwifd_p intf, cJSON *interfaceInfo)
                     ALOGI("                           Supported event:%s",water_alarm_evt[sup_evt[l]]);
                 }
             } // dump supported event for notification type end
-        }
+        } // dump supported type for notification end
     }
 }
 
