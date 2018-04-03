@@ -34,7 +34,7 @@ public class ZwaveControlHelper {
     public static int ZwaveControlReq_CallBack(byte[] result, int len)
     {
         android.util.Log.d("ZwaveControlHelper", "ZwaveControlReq_CallBack " + new String(result));
-        return 0;
+        return 0x80;
     }
 
     public native static int CreateZwController();
@@ -46,7 +46,7 @@ public class ZwaveControlHelper {
     ** zwave controller jni interface
     ** controller/device control
     **/
-    public native static int ZwController_AddDevice(byte[] dsk, int dsklen);
+    public native static int ZwController_AddDevice();
     public native static int ZwController_RemoveDevice();
     public native static int ZwController_GetDeviceInfo();
     public native static int ZwController_GetDeviceList();

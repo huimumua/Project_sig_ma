@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.LoginFilter;
 import android.util.Log;
+import android.os.Process;
 
 import com.askey.firefly.zwave.control.bean.DeviceList;
 import com.askey.firefly.zwave.control.dao.ImportData;
@@ -37,6 +38,7 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import android.os.Trace;
 
 import static android.R.id.message;
 import static com.askey.firefly.zwave.control.utils.Const.DEBUG;
@@ -154,26 +156,36 @@ public static ZwaveControlService getInstance() {
             for(int i = 0; i < bstr.length; ++i)
                 dsk[i] = bstr[i];
             dsk[str.length()] = '\0';*/
-            byte[] dsk = new byte[6];
+            /*byte[] dsk = new byte[6];
             dsk[0] = '4';
             dsk[1] = '4';
             dsk[2] = '7';
             dsk[3] = '0';
             dsk[4] = '2';
             dsk[5] = '\0';
-            int result =  ZwaveControlHelper.ZwController_AddDevice(dsk, 6);
+            int result =  ZwaveControlHelper.ZwController_AddDevice(dsk, dsk.length);*/
+            int result = 0;//ZwaveControlHelper.ZwController_StartLearnMode();
             return result;
         }
 
         @Override
         public int removeDevice(IZwaveContrlCallBack callBack) throws RemoteException {
+            //Thread.currentThread().dumpStack();
+            //android.util.Log.d(TAG,"LinHui", new Throwable());
+            //new RuntimeException("LinHui").printStackTrace();
+            //Process.sendSignal(android.os.Process.myPid(), Process.SIGNAL_QUIT);
+            //Trace.beginSection("app:ZwController_RemoveDevice");
+            long startTime = System.currentTimeMillis();
             int result = ZwaveControlHelper.ZwController_RemoveDevice();
+            //Trace.endSection();
+            long spendTime = System.currentTimeMillis() - startTime;
+            Log.i(TAG,"took " + spendTime + " ms");
             return result;
         }
 
         @Override
         public int getDevices(IZwaveContrlCallBack callBack) throws RemoteException {
-           int result = ZwaveControlHelper.ZwController_GetDeviceInfo();
+            int result = ZwaveControlHelper.ZwController_GetDeviceInfo();
             return result;
         }
 
@@ -213,14 +225,14 @@ public static ZwaveControlService getInstance() {
         @Override
         public int getDeviceBattery(IZwaveContrlCallBack callBack, int deviceId) throws RemoteException {
             Logg.i(TAG,"=====getDeviceBattery==deviceId==="+deviceId);
-            int result = ZwaveControlHelper.ZwController_GetDeviceBattery(deviceId);
+            int result = ZwaveControlHelper.ZwController_GetSwitchMultiLevel(deviceId);
 
             return result;
         }
 
         @Override
         public int getSensorMultiLevel(IZwaveContrlCallBack callBack,int deviceId) throws RemoteException {
-            Logg.i(TAG,"=====getSensorMultiLevel==deviceId==="+deviceId);
+            /*Logg.i(TAG,"=====getSensorMultiLevel==deviceId==="+deviceId);
             String str = "55106-03713-41807-09806-27111-48391-14810-50406";
             byte[] bstr = str.getBytes();
             byte[] dsk = new byte[str.length()+1];
@@ -244,8 +256,8 @@ public static ZwaveControlService getInstance() {
             for(int i = 0; i < bstr.length; ++i)
                 dsk1[i] = bstr1[i];
             dsk1[str1.length()] = '\0';
-           // result = ZwaveControlHelper.ZwController_addProvisionListEntry(dsk1, dsk1.length);
-            int result = 0;
+            result = ZwaveControlHelper.ZwController_addProvisionListEntry(dsk1, dsk1.length);*/
+            int result = ZwaveControlHelper.ZwController_getSwitchColor(deviceId, 2);
             return result;
         }
 
@@ -256,8 +268,8 @@ public static ZwaveControlService getInstance() {
             String str = "55106-03713-41807-09806-27111-48391-14810-50406";
             byte[] bstr = str.getBytes();
             byte[] dsk = new byte[str.length()+1];
-
-            for(int i = 0; i < bstr.length; ++i)
+            int i = 0;
+            for(i = 0; i < bstr.length; ++i)
                 dsk[i] = bstr[i];
             dsk[str.length()] = '\0';
 
@@ -269,7 +281,7 @@ public static ZwaveControlService getInstance() {
                 Log.i(TAG,"======================");
             }
 
-            for(int i = 0; i < 6; i++)
+            for(i = 0; i < 6; i++)
             {
                 plList[i] = new ZwaveProvisionList();
             }

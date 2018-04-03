@@ -1852,8 +1852,6 @@ static void hl_add_node_s2_cb(void *usr_param, sec2_add_cb_prm_t *cb_param)
             {
                 cJSON *jsonRoot;
                 jsonRoot = cJSON_CreateObject();
-                char str[10] = {0};
-                sprintf(str, "%X", cb_param->cb_prm.req_key.req_keys);
                 cJSON_AddStringToObject(jsonRoot, "Client Side Au Msg", "Request CSA");
 
                 char *p = cJSON_Print(jsonRoot);
@@ -1925,6 +1923,31 @@ static void hl_add_node_s2_cb(void *usr_param, sec2_add_cb_prm_t *cb_param)
         if (accept && dsk_prm->pin_required)
         {
             /*if (prompt_str(hl_appl, "Enter 5-digit PIN that matches the received DSK:", 200, dsk_str))*/
+            ALOGD("Enter 5-digit PIN that matches the received DSK: %s\n",dsk_prm->dsk);
+            int pin_code = 0;
+            if(reqCallBack != NULL)
+            {
+                cJSON *jsonRoot;
+                jsonRoot = cJSON_CreateObject();
+                cJSON_AddStringToObject(jsonRoot, "PIN Requested Msg", "Enter 5-digit PIN");
+
+                char *p = cJSON_Print(jsonRoot);
+
+                if(p != NULL)
+                {
+                    pin_code = reqCallBack(p);
+                    free(p);
+                }
+
+                cJSON_Delete(jsonRoot);
+            }
+
+            if(pin_code != 0)
+            {
+                sprintf(hl_appl->dsk, "%d", pin_code);
+                hl_appl->dsk[5] = '\0';
+            }
+
             {
                 dsk_str[0] = hl_appl->dsk[0];
                 dsk_str[1] = hl_appl->dsk[1];
@@ -1932,7 +1955,6 @@ static void hl_add_node_s2_cb(void *usr_param, sec2_add_cb_prm_t *cb_param)
                 dsk_str[3] = hl_appl->dsk[3];
                 dsk_str[4] = hl_appl->dsk[4];
                 dsk_str[5] = hl_appl->dsk[5];
-
 #ifdef USE_SAFE_VERSION
                 strcat_s(dsk_str, 200, dsk_prm->dsk);
 #else
@@ -2205,10 +2227,10 @@ static int nw_init(const char* resPath, hl_appl_ctx_t *hl_appl)
     return ret;
 }
 
-static int hl_add_node(hl_appl_ctx_t *hl_appl, const char* dsk, int dsklen)
+static int hl_add_node(hl_appl_ctx_t *hl_appl)
 {
     int     res;
-    char    dsk_str[200];
+    //char    dsk_str[200];
     zwnetd_p netdesc;
 
     netdesc = zwnet_get_desc(hl_appl->zwnet);
@@ -2227,7 +2249,7 @@ static int hl_add_node(hl_appl_ctx_t *hl_appl, const char* dsk, int dsklen)
     {
         hl_appl->sec2_add_prm.dsk = NULL;
 
-        if(dsk != NULL && dsklen > 10) // dsklen will 5-digit or full code
+        /*if(dsk != NULL && dsklen > 10) // dsklen will 5-digit or full code
         {
             memcpy(dsk_str, dsk, dsklen);
             ALOGI("Security 2, assign full dsk code");
@@ -2236,7 +2258,7 @@ static int hl_add_node(hl_appl_ctx_t *hl_appl, const char* dsk, int dsklen)
         else if(dsk != NULL && dsklen == 6) // for 5-digit DSK
         {
             memcpy(hl_appl->dsk, dsk, dsklen);
-        }
+        }*/
 
         hl_appl->sec2_add_prm.usr_param = hl_appl;
         hl_appl->sec2_add_prm.cb = hl_add_node_s2_cb;
@@ -2421,7 +2443,7 @@ int zwcontrol_setcallback(ResCallBack callBackRes, ReqCallBack callBackReq)
     return 0;
 }
 
-int zwcontrol_add_node(hl_appl_ctx_t *hl_appl, const char* dsk, int dsklen)
+int zwcontrol_add_node(hl_appl_ctx_t *hl_appl)
 {
     if(hl_appl->init_status == 0)
     {
@@ -2430,17 +2452,13 @@ int zwcontrol_add_node(hl_appl_ctx_t *hl_appl, const char* dsk, int dsklen)
 
     int result = -1;
 
-    result = hl_add_node(hl_appl, dsk, dsklen);
+    result = hl_add_node(hl_appl);
 
     if(hl_appl->sec2_add_node)
     {
-        if (dsk != NULL && dsklen > 0 && result == 0)
+        (result == 0)
         {
-            ALOGI("Add node in security, please wait...\n");
-        }
-        else if(result == 0)
-        {
-            ALOGI("Add node success!");
+            ALOGI("Add node in progress, please wait!");
         }
         else
         {
