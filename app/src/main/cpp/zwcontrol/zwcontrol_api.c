@@ -2456,7 +2456,7 @@ int zwcontrol_add_node(hl_appl_ctx_t *hl_appl)
 
     if(hl_appl->sec2_add_node)
     {
-        (result == 0)
+        if(result == 0)
         {
             ALOGI("Add node in progress, please wait!");
         }

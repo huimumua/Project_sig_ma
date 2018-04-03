@@ -17,7 +17,7 @@ public class ZwaveReceiver extends BroadcastReceiver {
         if (intent.getAction().equals("action.com.askey.zwave.add")) {
 
             byte[] dsk = new byte[200];
-            ZwaveControlHelper.ZwController_AddDevice(dsk, 0);
+            ZwaveControlHelper.ZwController_AddDevice();
 
         } else if (intent.getAction().equals("action.com.askey.zwave.remove")) {
 
