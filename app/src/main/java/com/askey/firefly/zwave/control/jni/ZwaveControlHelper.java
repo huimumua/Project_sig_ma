@@ -50,6 +50,7 @@ public class ZwaveControlHelper {
     public native static int ZwController_RemoveDevice();
     public native static int ZwController_GetDeviceInfo();
     public native static int ZwController_GetDeviceList();
+    public native static int ZwController_getSpecifyDeviceInfo(int deviceId);
     public native static int ZwController_RemoveFailedDevice(int deviceId);
     public native static int ZwController_ReplaceFailedDevice(int deviceId, byte[] dsk, int dsklen);
     public native static int ZwController_SetDefault();

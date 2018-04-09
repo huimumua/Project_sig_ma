@@ -3808,6 +3808,279 @@ static int hl_node_list_dump(hl_appl_ctx_t *hl_appl, cJSON *jsonRoot)
     return 0;
 }
 
+
+static int hl_specify_node_desc_dump(hl_appl_ctx_t *hl_appl, int nodeId, cJSON *jsonRoot)
+{
+    int         result;
+    zwnetd_p    net_desc;
+    zwnoded_p   node;
+    zwepd_p     ep;
+    zwifd_p     intf;
+    desc_cont_t *last_node_cont;
+    desc_cont_t *last_ep_cont;
+    desc_cont_t *last_intf_cont;
+    char str[100] = {0};
+
+    if(jsonRoot == NULL)
+    {
+        return -1;
+    }
+
+    plt_mtx_lck(hl_appl->desc_cont_mtx);
+
+    //Check whether the descriptor container linked list is initialized
+    if (!hl_appl->desc_cont_hd)
+    {
+        result = hl_desc_init(&hl_appl->desc_cont_hd, hl_appl->zwnet);
+        if (result != 0)
+        {
+            ALOGI("hl_desc_init with error:%d", result);
+            return result;
+        }
+    }
+
+    cJSON * NodeInfoArray = cJSON_CreateArray();
+
+    if(NodeInfoArray == NULL)
+    {
+        return -1;
+    }
+
+    cJSON_AddItemToObject(jsonRoot, "Detialed Node Info", NodeInfoArray);
+
+    //Get the first node (local controller) and home id
+    last_node_cont = hl_appl->desc_cont_hd;
+
+    net_desc = zwnet_get_desc(hl_appl->zwnet);
+
+    while (last_node_cont)
+    {
+        if(((zwnoded_p)last_node_cont->desc)->nodeid == nodeId)
+        {
+            cJSON *NodeInfo = cJSON_CreateObject();
+
+            if(NodeInfo == NULL)
+            {
+                return -1;
+            }
+
+            cJSON_AddItemToArray(NodeInfoArray, NodeInfo);
+
+            if (last_node_cont->type != DESC_TYPE_NODE)
+            {
+                ALOGI("node: wrong desc type:%u", last_node_cont->type);
+            }
+
+            node = (zwnoded_p)last_node_cont->desc;
+
+            ALOGI("__________________________________________________________________________");
+            ALOGI("Node id:%u[%u], Home id:%08X", (unsigned)node->nodeid,
+                  last_node_cont->id, (unsigned)net_desc->id);
+            //ALOGI("Node status:%s", hl_node_status_str(node->alive));
+
+            sprintf(str, "%08X", net_desc->id);
+            cJSON_AddStringToObject(NodeInfo, "Home id", str);
+            cJSON_AddNumberToObject(NodeInfo, "Node id", node->nodeid);
+            //cJSON_AddStringToObject(NodeInfo, "Node status", hl_node_status_str(node->alive));
+
+            if (node->sleep_cap)
+            {
+                /*ALOGI("Node is capable to sleep with wakeup interval:%us", node->wkup_intv);
+
+                sprintf(str, "%us", node->wkup_intv);
+                cJSON_AddStringToObject(NodeInfo, "wakeup interval", str);*/
+            }
+
+            if (node->sensor)
+            {
+                ALOGI("Node is FLIRS");
+            }
+
+            ALOGI("Node security inclusion status:%s", hl_is_security_inclusion(node->security_incl_status));
+            /*ALOGI("Vendor id:%04X", node->vid);
+            ALOGI("Product type id:%04X", node->type);
+            ALOGI("Product id:%04X", node->pid);*/
+            /*plt_msg_show(hl_plt_ctx_get(hl_appl), "Category:%s", (node->category <= DEV_WALL_CTLR)?
+                                                                 dev_category_str[node->category] : "unknown");*/
+            /*ALOGI("Z-wave library type:%u", node->lib_type);
+            ALOGI("Z-wave protocol version:%u.%02u\n", (unsigned)(node->proto_ver >> 8),
+                  (unsigned)(node->proto_ver & 0xFF));
+            ALOGI("Application version:%u.%02u\n", (unsigned)(node->app_ver >> 8),
+                  (unsigned)(node->app_ver & 0xFF));*/
+
+            cJSON_AddStringToObject(NodeInfo, "Node security inclusion status", hl_is_security_inclusion(node->security_incl_status));
+
+            /*sprintf(str, "%04X", node->vid);
+            cJSON_AddStringToObject(NodeInfo, "Vendor id", str);
+
+            sprintf(str, "%04X", node->type);
+            cJSON_AddStringToObject(NodeInfo, "Product type id", str);
+
+            sprintf(str, "%04X", node->pid);
+            cJSON_AddStringToObject(NodeInfo, "Product id", str);*/
+
+            /*cJSON_AddStringToObject(NodeInfo, "Category", (node->category <= DEV_WALL_CTLR)?
+                                                      dev_category_str[node->category] : "unknown");*/
+            /*cJSON_AddNumberToObject(NodeInfo, "Z-wave library type", node->lib_type);
+
+            sprintf(str, "%u.%02u", node->proto_ver >> 8, node->proto_ver & 0xFF);
+            cJSON_AddStringToObject(NodeInfo, "Z-wave protocol version", str);
+
+            sprintf(str, "%u.%02u", node->app_ver >> 8, node->app_ver & 0xFF);
+            cJSON_AddStringToObject(NodeInfo, "Application version", str);*/
+
+            /*hl_ext_ver_show(hl_appl, node, NodeInfo);
+
+            if (node->dev_id.len > 0)
+            {
+                hl_dev_id_show(hl_appl, &node->dev_id);
+            }*/
+
+            cJSON * EpInfoArray =  cJSON_CreateArray();
+
+            if(EpInfoArray == NULL)
+            {
+                return -1;
+            }
+
+            cJSON_AddItemToObject(NodeInfo, "EndPoint List", EpInfoArray);
+
+            //Get endpoint
+            last_ep_cont = last_node_cont->down;
+
+            while (last_ep_cont)
+            {
+                cJSON *EpInfo = cJSON_CreateObject();
+
+                if(EpInfo == NULL)
+                {
+                    return -1;
+                }
+
+                cJSON_AddItemToArray(EpInfoArray, EpInfo);
+
+                if (last_ep_cont->type != DESC_TYPE_EP)
+                {
+                    ALOGI("ep: wrong desc type:%u", last_ep_cont->type);
+                }
+
+                ep = (zwepd_p)last_ep_cont->desc;
+
+                ALOGI("Endpoint id:%u[%u]", ep->epid, last_ep_cont->id);
+                ALOGI("Device class: generic:%02X, specific:%02X",
+                      ep->generic, ep->specific);
+                //ALOGI("Endpoint name:%s", ep->name);
+                //ALOGI("Endpoint location:%s", ep->loc);
+
+                cJSON_AddNumberToObject(EpInfo, "Endpoint id", ep->epid);
+                cJSON_AddNumberToObject(EpInfo, "Endpoint interface id", last_ep_cont->id);
+
+                /*sprintf(str, "%02X", ep->generic);
+                cJSON_AddStringToObject(EpInfo, "Device class generic", str);
+
+                sprintf(str, "%02X", ep->specific);
+                cJSON_AddStringToObject(EpInfo, "Device class specific", str);*/
+                //cJSON_AddStringToObject(EpInfo, "Endpoint name", ep->name);
+                //cJSON_AddStringToObject(EpInfo, "Endpoint location", ep->loc);
+
+                /*if (ep->zwplus_info.zwplus_ver)
+                {
+                    hl_zwaveplus_show(hl_appl, &ep->zwplus_info, EpInfo);
+                }*/
+
+                cJSON * InterfaceInfoArray =  cJSON_CreateArray();
+
+                if(InterfaceInfoArray == NULL)
+                {
+                    return -1;
+                }
+
+                cJSON_AddItemToObject(EpInfo, "Interface List", InterfaceInfoArray);
+
+                //Get interface
+                last_intf_cont = last_ep_cont->down;
+
+                while (last_intf_cont)
+                {
+                    if(node->nodeid == 1)
+                        break;
+                    cJSON *InterfaceInfo = cJSON_CreateObject();
+
+                    if(InterfaceInfo == NULL)
+                    {
+                        return -1;
+                    }
+
+                    cJSON_AddItemToArray(InterfaceInfoArray, InterfaceInfo);
+
+                    if (last_intf_cont->type != DESC_TYPE_INTF)
+                    {
+                        ALOGI("interface: wrong desc type:%u", last_intf_cont->type);
+                    }
+
+                    intf = (zwifd_p)last_intf_cont->desc;
+
+                    ALOGI("              Interface: %02Xv%u:%s [%u]%c%c%c",
+                          (unsigned)intf->cls, intf->real_ver, hl_class_str_get(intf->cls, intf->real_ver),
+                          last_intf_cont->id, (intf->propty & IF_PROPTY_SECURE)? '*' : ' ',
+                          (intf->propty & IF_PROPTY_UNSECURE)? '^' : ' ', (intf->propty & IF_PROPTY_SECURE_S2)? '@' : ' ');
+
+                    cJSON_AddStringToObject(InterfaceInfo, "Interface Class", hl_class_str_get(intf->cls, intf->ver));
+                    cJSON_AddNumberToObject(InterfaceInfo, "Interface Id", last_intf_cont->id);
+                    cJSON_AddStringToObject(InterfaceInfo, "Interface security level", hl_cmdclass_security_level_str_get(intf->propty));
+
+                    if (intf->cls == COMMAND_CLASS_SENSOR_MULTILEVEL)
+                    {
+                        hl_sup_sensor_show(intf, InterfaceInfo);
+                        result = zwif_sensor_rpt_set(intf, hl_ml_snsr_rep_cb_1);
+                    }
+                    else if (intf->cls == COMMAND_CLASS_ASSOCIATION_GRP_INFO)
+                    {
+                        hl_grp_info_show(intf, InterfaceInfo);
+                    }
+                    else if (intf->cls == COMMAND_CLASS_METER)
+                    {
+                        hl_meter_info_show(intf, InterfaceInfo);
+                    }
+                    else if (intf->cls == COMMAND_CLASS_NOTIFICATION_V4)
+                    {
+                        hl_notification_info_show(intf, InterfaceInfo);
+                        //result = zwif_notification_rpt_set(intf, hl_notification_get_report_cb);
+                    }
+                    else if (intf->cls == COMMAND_CLASS_BATTERY)
+                    {
+                        result = zwif_battery_rpt_set(intf, hl_battery_report_cb);
+                    }
+                    else if (intf->cls == COMMAND_CLASS_SENSOR_BINARY)
+                    {
+                        //result = zwif_bsensor_rpt_set(intf, hl_bin_snsr_rep_cb);
+                    }
+
+                    //Get the next interface
+                    last_intf_cont = last_intf_cont->next;
+                }
+
+                //Get the next endpoint
+                last_ep_cont = last_ep_cont->next;
+            }
+            break;
+        } // end if(last_node_cont->id == nodeId)
+
+        //Get the next node
+        last_node_cont = last_node_cont->next;
+    }
+
+    if(NULL == last_node_cont)
+    {
+        ALOGW("The specify node not found in node list, please try another!");
+    }
+    ALOGI("__________________________________________________________________________");
+
+    plt_mtx_ulck(hl_appl->desc_cont_mtx);
+
+    return 0;
+}
+
 int  zwcontrol_get_node_list(hl_appl_ctx_t *hl_appl)
 {
     if (hl_appl->init_status == 0){
@@ -3885,6 +4158,47 @@ int  zwcontrol_get_node_info(hl_appl_ctx_t *hl_appl)
 
     return res;
 }
+
+
+int  zwcontrol_get_specify_node_info(hl_appl_ctx_t *hl_appl, uint32_t nodeId)
+{
+    if (hl_appl->init_status == 0){
+        ALOGE("Controller not open, please open it and try again");
+        return -1;
+    }
+
+    cJSON *jsonRoot;
+    jsonRoot = cJSON_CreateObject();
+
+    if(jsonRoot == NULL)
+    {
+        return -1;
+    }
+
+    cJSON_AddStringToObject(jsonRoot, "MessageType", "Specify Node Info");
+
+    int res =  hl_specify_node_desc_dump(hl_appl, nodeId, jsonRoot);
+
+    if(res == 0)
+    {
+        char *p = cJSON_Print(jsonRoot);
+
+        if(p != NULL)
+        {
+            if(resCallBack)
+            {
+                resCallBack(p);
+            }
+
+            free(p);
+        }
+    }
+
+    cJSON_Delete(jsonRoot);
+
+    return res;
+}
+
 
 int  zwcontrol_rm_failed_node(hl_appl_ctx_t *hl_appl, uint32_t nodeId)
 {

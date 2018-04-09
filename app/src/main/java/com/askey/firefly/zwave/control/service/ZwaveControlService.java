@@ -156,15 +156,15 @@ public static ZwaveControlService getInstance() {
             for(int i = 0; i < bstr.length; ++i)
                 dsk[i] = bstr[i];
             dsk[str.length()] = '\0';*/
-            /*byte[] dsk = new byte[6];
+            byte[] dsk = new byte[6];
             dsk[0] = '4';
             dsk[1] = '4';
             dsk[2] = '7';
             dsk[3] = '0';
             dsk[4] = '2';
             dsk[5] = '\0';
-            int result =  ZwaveControlHelper.ZwController_AddDevice(dsk, dsk.length);*/
-            int result = 0;//ZwaveControlHelper.ZwController_StartLearnMode();
+            int result =  ZwaveControlHelper.ZwController_AddDevice();
+            //int result = 0;//ZwaveControlHelper.ZwController_StartLearnMode();
             return result;
         }
 
@@ -257,7 +257,7 @@ public static ZwaveControlService getInstance() {
                 dsk1[i] = bstr1[i];
             dsk1[str1.length()] = '\0';
             result = ZwaveControlHelper.ZwController_addProvisionListEntry(dsk1, dsk1.length);*/
-            int result = ZwaveControlHelper.ZwController_getSwitchColor(deviceId, 2);
+            int result = ZwaveControlHelper.ZwController_getSpecifyDeviceInfo(deviceId);
             return result;
         }
 

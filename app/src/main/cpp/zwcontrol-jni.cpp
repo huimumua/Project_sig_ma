@@ -249,6 +249,11 @@ static int controller_getDeviceInfo(JNIEnv *env, jclass object)
     return zwcontrol_get_node_info(&appl_ctx);
 }
 
+static int controller_getSpecifyDeviceInfo(JNIEnv *env, jclass object, jint nodeId)
+{
+    return zwcontrol_get_specify_node_info(&appl_ctx, (uint32_t)nodeId);
+}
+
 static int controller_removeFailedDevice(JNIEnv *env, jclass object, jint nodeId)
 {
     return zwcontrol_rm_failed_node(&appl_ctx, nodeId);
@@ -904,6 +909,7 @@ static const JNINativeMethod gMethods[] = {
         {"ZwController_RemoveDevice", "()I", (void *)controller_removedevice},
         {"ZwController_GetDeviceList", "()I", (void *)controller_getDeviceList},
         {"ZwController_GetDeviceInfo", "()I", (void *)controller_getDeviceInfo},
+        {"ZwController_getSpecifyDeviceInfo", "(I)I", (void *)controller_getSpecifyDeviceInfo},
         {"ZwController_RemoveFailedDevice",    "(I)I", (void *)controller_removeFailedDevice},
         {"ZwController_ReplaceFailedDevice",    "(I[BI)I", (void *)controller_replaceFailedDevice},
         {"ZwController_SetDefault", "()I", (void*)controller_setDefault},
