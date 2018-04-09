@@ -7648,6 +7648,374 @@ int  zwcontrol_wake_up_interval_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uin
 }
 
 
+// Command Class Door Lock
+
+/**
+hl_dlck_op_report_cb - Door lock operation status report callback
+@param[in]  ifd     The interface that received the report
+@param[in]  op_sts  Operation status
+@return
+*/
+static void hl_dlck_op_report_cb(zwifd_p ifd, zwdlck_op_p  op_sts, time_t ts)
+{
+    ALOGI("Door lock operation mode:%02X,", op_sts->mode);
+    ALOGI("Outside door handles mode:%02X,", op_sts->out_mode);
+    ALOGI("Inside door handles mode:%02X,", op_sts->in_mode);
+    ALOGI("Door condition:%02X,", op_sts->cond);
+
+    cJSON *jsonRoot;
+    jsonRoot = cJSON_CreateObject();
+
+    if(jsonRoot == NULL)
+    {
+        return;
+    }
+
+    cJSON_AddStringToObject(jsonRoot, "MessageType", "Door Lock Operation Report");
+    cJSON_AddNumberToObject(jsonRoot, "Node id", ifd->nodeid);
+    cJSON_AddNumberToObject(jsonRoot, "Door Lock op mode", op_sts->mode);
+    cJSON_AddNumberToObject(jsonRoot, "Outside Door mode", op_sts->out_mode);
+    cJSON_AddNumberToObject(jsonRoot, "Inside Door mode", op_sts->in_mode);
+    cJSON_AddNumberToObject(jsonRoot, "Door Condition", op_sts->cond);
+
+    if (op_sts->tmout_min != 0xFE)
+    {
+        ALOGI("Remaining time in unsecured state:%u:%u,",
+                     op_sts->tmout_min, op_sts->tmout_sec);
+        cJSON_AddNumberToObject(jsonRoot, "Unsecured State Time(min)", op_sts->tmout_min);
+        cJSON_AddNumberToObject(jsonRoot, "Unsecured State Time(sec)", op_sts->tmout_sec);
+    }
+
+
+    if(resCallBack)
+    {
+        char *p = cJSON_Print(jsonRoot);
+
+        if(p)
+        {
+            resCallBack(p);
+            free(p);
+        }
+    }
+
+    cJSON_Delete(jsonRoot);
+}
+
+/**
+hl_dlck_op_rep_setup - Setup door lock operation status report
+@param[in]  hl_appl     The high-level api context
+@return  0 on success, negative error number on failure
+*/
+int32_t hl_dlck_op_rep_setup(hl_appl_ctx_t   *hl_appl)
+{
+    int     result;
+    zwifd_p ifd;
+
+    //Get the interface descriptor
+    plt_mtx_lck(hl_appl->desc_cont_mtx);
+    ifd = hl_intf_desc_get(hl_appl->desc_cont_hd, hl_appl->rep_desc_id);
+    if (!ifd)
+    {
+        plt_mtx_ulck(hl_appl->desc_cont_mtx);
+        return ZW_ERR_INTF_NOT_FOUND;
+    }
+
+    result = zwif_dlck_op_rpt_set(ifd, hl_dlck_op_report_cb);
+
+    plt_mtx_ulck(hl_appl->desc_cont_mtx);
+
+    if (result < 0)
+    {
+        ALOGI("hl_dlck_op_rep_setup with error:%d", result);
+    }
+
+    return result;
+}
+
+/**
+hl_dlck_op_rep_get - Get the state of the door lock device
+@param[in]  hl_appl     The high-level api context
+@return  0 on success, negative error number on failure
+*/
+int32_t hl_dlck_op_rep_get(hl_appl_ctx_t   *hl_appl)
+{
+    int     result;
+    zwifd_p ifd;
+
+    //Get the interface descriptor
+    plt_mtx_lck(hl_appl->desc_cont_mtx);
+    ifd = hl_intf_desc_get(hl_appl->desc_cont_hd, hl_appl->dst_desc_id);
+    if (!ifd)
+    {
+        plt_mtx_ulck(hl_appl->desc_cont_mtx);
+        return ZW_ERR_INTF_NOT_FOUND;
+    }
+
+    result = zwif_dlck_op_get(ifd, ZWIF_GET_BMSK_LIVE);
+
+    plt_mtx_ulck(hl_appl->desc_cont_mtx);
+
+    if (result < 0)
+    {
+        ALOGI("hl_dlck_op_rep_get with error:%d", result);
+    }
+
+    return result;
+}
+
+int  zwcontrol_door_lock_operation_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
+{
+    if(!hl_appl->init_status)
+    {
+        return -1;
+    }
+
+    if(hl_destid_get(hl_appl, nodeId, COMMAND_CLASS_DOOR_LOCK, 0))
+    {
+        return -1;
+    }
+
+    int result = hl_dlck_op_rep_setup(hl_appl);
+    if(result == 0){
+        ALOGI("Door lock operation report func setup done.");
+        result = hl_dlck_op_rep_get(hl_appl);
+    }
+
+    return result;
+}
+
+/**
+hl_dlck_op_set - Set door lock operation
+@param[in]  hl_appl     The high-level api context
+@return  0 on success, negative error number on failure
+*/
+int32_t hl_dlck_op_set(hl_appl_ctx_t   *hl_appl)
+{
+    int         result;
+    zwifd_p ifd;
+
+    //Get the interface descriptor
+    plt_mtx_lck(hl_appl->desc_cont_mtx);
+    ifd = hl_intf_desc_get(hl_appl->desc_cont_hd, hl_appl->rep_desc_id);
+    if (!ifd)
+    {
+        plt_mtx_ulck(hl_appl->desc_cont_mtx);
+        return ZW_ERR_INTF_NOT_FOUND;
+    }
+
+    result = zwif_dlck_op_set(ifd, hl_appl->dlck_mode, NULL, NULL);
+
+    plt_mtx_ulck(hl_appl->desc_cont_mtx);
+
+    if (result < 0)
+    {
+        ALOGI("hl_dlck_op_set with error:%d", result);
+    }
+
+    return result;
+}
+
+int  zwcontrol_door_lock_operation_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_t mode)
+{
+    if(!hl_appl->init_status)
+    {
+        return -1;
+    }
+
+    if(hl_destid_get(hl_appl, nodeId, COMMAND_CLASS_DOOR_LOCK, 0))
+    {
+        return -1;
+    }
+
+    // mode (hex)
+    // (0) Door Unsecured, (1) Door Unsecured with timeout
+    // (10) Door Unsecured for inside Door Handles, 16
+    // (11) Door Unsecured for inside Door Handles with timeout, 17
+    // (20) Door Unsecured for outside Door Handles, 32
+    // (21) Door Unsecured for outside Door Handles with timeout, 33
+    // (FE) Door/Lock State Unknown
+    // (FF) Door Secured
+    hl_appl->dlck_mode = mode;
+
+    int result = hl_dlck_op_set(hl_appl);
+    if(result != 0)
+    {
+        ALOGE("zwcontrol_door_lock_operation_set with error: %d",result);
+    }
+
+    return result;
+}
+
+/**
+hl_dlck_cfg_report_cb - Report callback for door lock configuration
+@param[in]  ifd     interface
+@param[in]  config  configuration
+*/
+static void hl_dlck_cfg_report_cb(zwifd_p ifd, zwdlck_cfg_p  config, time_t ts)
+{
+    ALOGI("Door lock operation type:%s,",
+                 (config->type == ZW_DOOR_OP_CONST)? "constant" : "timed");
+    ALOGI("Outside door handles state:%02X,", config->out_sta);
+    ALOGI("Inside door handles state:%02X,", config->in_sta);
+
+    cJSON *jsonRoot;
+    jsonRoot = cJSON_CreateObject();
+
+    if(jsonRoot == NULL)
+    {
+        return;
+    }
+
+    cJSON_AddStringToObject(jsonRoot, "MessageType", "Door Lock Configuration Report");
+    cJSON_AddNumberToObject(jsonRoot, "Node id", ifd->nodeid);
+    cJSON_AddStringToObject(jsonRoot, "Door Lock op type", (config->type == ZW_DOOR_OP_CONST)? "constant" : "timed");
+    cJSON_AddNumberToObject(jsonRoot, "Outside Door state", config->out_sta);
+    cJSON_AddNumberToObject(jsonRoot, "Inside Door state", config->in_sta);
+
+    if (config->type == ZW_DOOR_OP_TIMED)
+    {
+        ALOGI("Time the lock stays unsecured.:%u:%u,",
+                     config->tmout_min, config->tmout_sec);
+        cJSON_AddNumberToObject(jsonRoot, "Unsecured State Time(min)", config->tmout_min);
+        cJSON_AddNumberToObject(jsonRoot, "Unsecured State Time(sec)", config->tmout_sec);
+    }
+
+    if(resCallBack)
+    {
+        char *p = cJSON_Print(jsonRoot);
+
+        if(p)
+        {
+            resCallBack(p);
+            free(p);
+        }
+    }
+
+    cJSON_Delete(jsonRoot);
+}
+
+/**
+hl_dlck_cfg_get - Get configuration parameter
+@param[in]  hl_appl     The high-level api context
+@return  0 on success, negative error number on failure
+*/
+int32_t hl_dlck_cfg_get(hl_appl_ctx_t   *hl_appl)
+{
+    int     result;
+    zwifd_p ifd;
+
+    //Get the interface descriptor
+    plt_mtx_lck(hl_appl->desc_cont_mtx);
+    ifd = hl_intf_desc_get(hl_appl->desc_cont_hd, hl_appl->dst_desc_id);
+    if (!ifd)
+    {
+        plt_mtx_ulck(hl_appl->desc_cont_mtx);
+        return ZW_ERR_INTF_NOT_FOUND;
+    }
+
+    result = zwif_dlck_cfg_get(ifd, hl_dlck_cfg_report_cb, ZWIF_GET_BMSK_LIVE);
+
+    plt_mtx_ulck(hl_appl->desc_cont_mtx);
+
+    if (result < 0)
+    {
+        ALOGI("hl_dlck_cfg_get with error:%d", result);
+    }
+
+    return result;
+}
+
+int  zwcontrol_door_lock_config_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
+{
+    if(!hl_appl->init_status)
+    {
+        return -1;
+    }
+
+    if(hl_destid_get(hl_appl, nodeId, COMMAND_CLASS_DOOR_LOCK, 0))
+    {
+        return -1;
+    }
+
+    int result = hl_dlck_cfg_get(hl_appl);
+    if(result < 0)
+    {
+        ALOGI("zwcontrol_door_lock_config_get with error: %d",result);
+    }
+
+    return result;
+}
+
+/**
+hl_dlck_cfg_set - Set the configuration of the door lock device
+@param[in]  hl_appl     The high-level api context
+@return  0 on success, negative error number on failure
+*/
+int32_t hl_dlck_cfg_set(hl_appl_ctx_t   *hl_appl)
+{
+    int     result;
+    zwifd_p ifd;
+
+    //Get the interface descriptor
+    plt_mtx_lck(hl_appl->desc_cont_mtx);
+    ifd = hl_intf_desc_get(hl_appl->desc_cont_hd, hl_appl->rep_desc_id);
+    if (!ifd)
+    {
+        plt_mtx_ulck(hl_appl->desc_cont_mtx);
+        return ZW_ERR_INTF_NOT_FOUND;
+    }
+
+    result = zwif_dlck_cfg_set(ifd, &hl_appl->dlck_config);
+
+    plt_mtx_ulck(hl_appl->desc_cont_mtx);
+
+    if (result < 0)
+    {
+        ALOGE("hl_dlck_cfg_set with error:%d", result);
+    }
+
+    return result;
+}
+
+int  zwcontrol_door_lock_config_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_t type, uint8_t out_sta,
+                                    uint8_t in_sta, uint8_t tmout_min, uint8_t tmout_sec)
+{
+    if(!hl_appl->init_status)
+    {
+        return -1;
+    }
+
+    if(hl_destid_get(hl_appl, nodeId, COMMAND_CLASS_DOOR_LOCK, 0))
+    {
+        return -1;
+    }
+
+    // "Operation type: (1)Constant (2)Timed
+    hl_appl->dlck_config.type = type;
+    // For door handles states, each bit represents a handle with bit set to 0 for disable; 1 for enable
+    // Outside Door Handles State 0 to f (hex)
+    hl_appl->dlck_config.out_sta = out_sta;
+    // Inside Door Handles State 0 to f (hex)
+    hl_appl->dlck_config.in_sta = in_sta;
+    if (hl_appl->dlck_config.type == ZW_DOOR_OP_TIMED)
+    {
+        // Duration lock stays unsecured in
+        // minutes (1-254)
+        hl_appl->dlck_config.tmout_min = tmout_min;
+        // seconds (1-59)
+        hl_appl->dlck_config.tmout_sec = tmout_sec;
+    }
+
+    int result = hl_dlck_cfg_set(hl_appl);
+    if(result != 0)
+    {
+        ALOGE("zwcontrol_door_lock_config_set with error:%d",result);
+    }
+
+    return result;
+}
+
+
 /*
  **  Command Class Switch Color
  */

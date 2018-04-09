@@ -456,28 +456,29 @@ static int controller_setWakeUpInterval(JNIEnv *env, jclass object, jint nodeId,
     return zwcontrol_wake_up_interval_set(&appl_ctx, (uint32_t)nodeId, (uint32_t)interval);
 }
 
-/*static int controller_getDoorLockOperation(JNIEnv *env, jclass object, jint nodeId)
+static int controller_getDoorLockOperation(JNIEnv *env, jclass object, jint nodeId)
 {
-    return 0;
+    return zwcontrol_door_lock_operation_get(&appl_ctx, (uint32_t)nodeId);
 }
 
 static int controller_setDoorLockOperation(JNIEnv *env, jclass object, jint nodeId, jint mode)
 {
-    return 0;
+    return zwcontrol_door_lock_operation_set(&appl_ctx, (uint32_t)nodeId, (uint8_t)mode);
 }
 
 static int controller_getDoorLockConfiguration(JNIEnv *env, jclass object, jint nodeId)
 {
-    return 0;
+    return zwcontrol_door_lock_config_get(&appl_ctx, (uint32_t)nodeId);
 }
 
 static int controller_setDoorLockConfiguration(JNIEnv *env, jclass object, jint nodeId, jint type, jint out_sta,
                                                jint in_sta, jint tmout_min, jint tmout_sec)
 {
-    return 0;
+    return zwcontrol_door_lock_config_set(&appl_ctx, (uint32_t)nodeId, (uint8_t)type, (uint8_t)out_sta,
+                                          (uint8_t)in_sta, (uint8_t)tmout_min, (uint8_t)tmout_sec);
 }
 
-static int controller_getUserCode(JNIEnv *env, jclass object, jint nodeId, jint user_id)
+/*static int controller_getUserCode(JNIEnv *env, jclass object, jint nodeId, jint user_id)
 {
     return 0;
 }

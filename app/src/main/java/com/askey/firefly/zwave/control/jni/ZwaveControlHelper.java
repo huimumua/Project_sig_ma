@@ -182,7 +182,7 @@ public class ZwaveControlHelper {
     ** zwave controller jni interface
     ** support CC: COMMAND_CLASS_DOOR_LOCK
     **/
-    //public native static int ZwController_getDoorLockOperation(int deviceId);
+    public native static int ZwController_getDoorLockOperation(int deviceId);
 
     /**
     ** @param mode (hex)
@@ -194,10 +194,10 @@ public class ZwaveControlHelper {
     ** (FE) Door/Lock State Unknown
     ** (FF) Door Secured
     **/
-    /*public native static int ZwController_setDoorLockOperation(int deviceId, int mode);
+    public native static int ZwController_setDoorLockOperation(int deviceId, int mode);
     public native static int ZwController_getDoorLockConfiguration(int deviceId);
     public native static int ZwController_setDoorLockConfiguration(int deviceId, int type, int out_sta,
-                                                                   int in_sta, int tmout_min, int tmout_sec);*/
+                                                                   int in_sta, int tmout_min, int tmout_sec);
 
     /**
     ** zwave controller jni interface
