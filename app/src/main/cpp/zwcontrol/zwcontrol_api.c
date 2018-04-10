@@ -2854,6 +2854,11 @@ static char* hl_zwaveplus_icon_to_device_type(uint16_t  usr_icon)
             return "Repeater";
         }
             break;
+        case ICON_TYPE_GENERIC_DOOR_LOCK_KEYPAD:
+        {
+            return "Door Lock Keypad";
+        }
+        break;
 
         case ICON_TYPE_UNASSIGNED:
         {

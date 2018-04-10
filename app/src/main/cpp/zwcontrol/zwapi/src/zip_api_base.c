@@ -8306,7 +8306,7 @@ int zwif_rep_hdlr(zwif_p intf, uint8_t *cmd_buf, uint16_t cmd_len, int nw_lck_st
 
                         }
 
-                        if (report_cb && cache_chg)
+                        if (report_cb)
                         {   //Callback to application
                             rpt_cb = (zwrep_dlck_op_fn)report_cb;
 

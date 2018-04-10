@@ -946,11 +946,11 @@ static const JNINativeMethod gMethods[] = {
         {"ZwController_getMeterSupported", "(I)I", (void*)controller_getMeterSupported},
         {"ZwController_getWakeUpSettings", "(I)I", (void*)controller_getWakeUpSettings},
         {"ZwController_setWakeUpInterval", "(II)I", (void*)controller_setWakeUpInterval},
-        /*{"ZwController_getDoorLockOperation", "(I)I", (void*)controller_getDoorLockOperation},
+        {"ZwController_getDoorLockOperation", "(I)I", (void*)controller_getDoorLockOperation},
         {"ZwController_setDoorLockOperation", "(II)I", (void*)controller_setDoorLockOperation},
         {"ZwController_getDoorLockConfiguration", "(I)I", (void*)controller_getDoorLockConfiguration},
         {"ZwController_setDoorLockConfiguration", "(IIIIII)I", (void*)controller_setDoorLockConfiguration},
-        {"ZwController_getUserCode", "(II)I", (void*)controller_getUserCode},
+        /*{"ZwController_getUserCode", "(II)I", (void*)controller_getUserCode},
         {"ZwController_setUserCode", "(III)I", (void*)controller_setUserCode},
         {"ZwController_getUserCodeNumber", "(I)I", (void*)controller_getUserCodeNumber},*/
         {"ZwController_getProtection", "(I)I", (void*)controller_getProtection},

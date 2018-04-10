@@ -257,7 +257,8 @@ public static ZwaveControlService getInstance() {
                 dsk1[i] = bstr1[i];
             dsk1[str1.length()] = '\0';
             result = ZwaveControlHelper.ZwController_addProvisionListEntry(dsk1, dsk1.length);*/
-            int result = ZwaveControlHelper.ZwController_getSpecifyDeviceInfo(deviceId);
+            //int result = ZwaveControlHelper.ZwController_getSpecifyDeviceInfo(deviceId);
+            int result = ZwaveControlHelper.ZwController_getDoorLockConfiguration(deviceId);
             return result;
         }
 
