@@ -121,7 +121,6 @@ public class ZwaveProvisionList {
 
     public void setType(int type)
     {
-    	android.util.Log.i("=====","setType called");
     	this.type = type;
     }
 

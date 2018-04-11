@@ -9011,7 +9011,7 @@ int32_t hl_switch_all_set(hl_appl_ctx_t   *hl_appl, uint8_t value)
         return ZW_ERR_INTF_NOT_FOUND;
     }
 
-    //result = zwif_switch_all_set(ifd, (uint8_t)value);
+    result = zwif_switch_all_set(ifd, (uint8_t)value);
 
     plt_mtx_ulck(hl_appl->desc_cont_mtx);
 

@@ -266,7 +266,9 @@ public static ZwaveControlService getInstance() {
         public int updateNode(IZwaveContrlCallBack callBack,int deviceId) throws RemoteException {
             Logg.i(TAG,"=====updateNode==deviceId==="+deviceId);
             //int result = ZwaveControlHelper.ZwController_UpdateNode(deviceId);
-            String str = "55106-03713-41807-09806-27111-48391-14810-50406";
+            //String str = "55106-03713-41807-09806-27111-48391-14810-50406";
+            String str = "63051-37515-48950-34995-44120-60331-52032-40158";
+
             byte[] bstr = str.getBytes();
             byte[] dsk = new byte[str.length()+1];
             int i = 0;
@@ -292,7 +294,7 @@ public static ZwaveControlService getInstance() {
             plList[0].setInclusionState(ZwaveProvisionList.PL_INCL_STS_PENDING);
 
             plList[1].setType(ZwaveProvisionList.PL_INFO_TYPE_BOOT_MODE);
-            plList[1].setBootMode(ZwaveProvisionList.PL_BOOT_MODE_SMART_STRT);
+            plList[1].setBootMode(ZwaveProvisionList.PL_BOOT_MODE_S2);
 
             plList[2].setType(ZwaveProvisionList.PL_INFO_TYPE_NAME);
             plList[2].stProvisionList.name = "skysoft";
