@@ -11071,7 +11071,7 @@ static void zwnet_failed_id_rm_cb(appl_layer_ctx_t *appl_ctx, uint8_t sts, uint8
         status = 4;
     }
 
-    debug_zwapi_msg(&nw->plt_ctx, "rm_failed_node_cb: status:%u(%s), node id:%u", sts,
+    ALOGI("rm_failed_node_cb: status:%u(%s), node id:%u", sts,
                     rm_failed_status_msg[status], node_id);
 
     if (sts == ZW_FAILED_NODE_REMOVED)
@@ -11151,11 +11151,11 @@ int zwnet_fail(zwnet_p net, uint8_t nodeid, uint8_t replace, sec2_add_prm_t *sec
         if (net->curr_op == ZWNET_OP_NODE_CACHE_UPT)
         {
             zwnet_abort(net);
-            debug_zwapi_msg(&net->plt_ctx, "Canceled low priority operation");
+            ALOGI("Canceled low priority operation");
         }
         else
         {
-            debug_zwapi_msg(&net->plt_ctx, "Current operation not completed yet, try again later");
+            ALOGI("Current operation not completed yet, try again later");
             plt_mtx_ulck(net->mtx);
             return ZW_ERR_LAST_OP_NOT_DONE;
         }

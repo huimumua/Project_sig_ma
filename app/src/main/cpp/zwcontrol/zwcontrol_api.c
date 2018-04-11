@@ -1716,6 +1716,10 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts)
         {
             cJSON_AddStringToObject(jsonRoot, "Status", "Success");
         }
+        else if(sts == OP_FAILED)
+        {
+            cJSON_AddStringToObject(jsonRoot, "Status", "Failed");
+        }
         else
         {
             cJSON_AddStringToObject(jsonRoot, "Status", "Unknown");
@@ -4261,20 +4265,8 @@ int  zwcontrol_rm_failed_node(hl_appl_ctx_t *hl_appl, uint32_t nodeId)
     }
 
     ALOGD("Remove failed node, id %d",nodeId);
-    hl_appl->failed_node_id = nodeId;
-    int32_t   result;
-    zwnoded_p noded;
 
-    //Get the node descriptor
-    plt_mtx_lck(hl_appl->desc_cont_mtx);
-    noded = hl_node_desc_get(hl_appl->desc_cont_hd, hl_appl->failed_node_id);
-    if (!noded)
-    {
-        plt_mtx_ulck(hl_appl->desc_cont_mtx);
-        return ZW_ERR_NODE_NOT_FOUND;
-    }
-
-    result = zwnet_fail(hl_appl->zwnet, hl_appl->failed_node_id, 0, NULL, 0);
+    int result = zwnet_fail(hl_appl->zwnet, nodeId, 0, NULL, 0);
 
     plt_mtx_ulck(hl_appl->desc_cont_mtx);
 
@@ -4286,7 +4278,7 @@ int  zwcontrol_rm_failed_node(hl_appl_ctx_t *hl_appl, uint32_t nodeId)
     return result;
 }
 
-int  zwcontrol_rp_failed_node(hl_appl_ctx_t *hl_appl, uint32_t nodeId, const char* dsk, int dsklen)
+int  zwcontrol_rp_failed_node(hl_appl_ctx_t *hl_appl, uint32_t nodeId)
 {
     if (!hl_appl->init_status){
         ALOGE("Controller not open, please open it and try again");
@@ -4296,18 +4288,8 @@ int  zwcontrol_rp_failed_node(hl_appl_ctx_t *hl_appl, uint32_t nodeId, const cha
     ALOGD("Replace failed node, id %d",nodeId);
     hl_appl->failed_node_id = nodeId;
     int32_t     result;
-    zwnoded_p noded;
     char    dsk_str[200];
     zwnetd_p netdesc;
-
-    //Get the node descriptor
-    plt_mtx_lck(hl_appl->desc_cont_mtx);
-    noded = hl_node_desc_get(hl_appl->desc_cont_hd, hl_appl->failed_node_id);
-    if (!noded)
-    {
-        plt_mtx_ulck(hl_appl->desc_cont_mtx);
-        return ZW_ERR_NODE_NOT_FOUND;
-    }
 
     netdesc = zwnet_get_desc(hl_appl->zwnet);
 
@@ -4325,11 +4307,11 @@ int  zwcontrol_rp_failed_node(hl_appl_ctx_t *hl_appl, uint32_t nodeId, const cha
     {
         hl_appl->sec2_add_prm.dsk = NULL;
 
-        if(dsk != NULL && dsklen != 0)
+        /*if(dsk != NULL && dsklen != 0)
         {
             memcpy(dsk_str, dsk, 200);
             hl_appl->sec2_add_prm.dsk = dsk_str;
-        }
+        }*/
 
         hl_appl->sec2_add_prm.usr_param = hl_appl;
         hl_appl->sec2_add_prm.cb = hl_add_node_s2_cb;

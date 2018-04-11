@@ -259,12 +259,9 @@ static int controller_removeFailedDevice(JNIEnv *env, jclass object, jint nodeId
     return zwcontrol_rm_failed_node(&appl_ctx, nodeId);
 }
 
-static int controller_replaceFailedDevice(JNIEnv *env, jclass object, jint nodeId, jbyteArray dsk, jint dsklen)
+static int controller_replaceFailedDevice(JNIEnv *env, jclass object, jint nodeId)
 {
-    char array[200];
-
-    env->GetByteArrayRegion(dsk, 0, dsklen, (jbyte*)array);
-    return zwcontrol_rp_failed_node(&appl_ctx, nodeId, array, dsklen);
+    return zwcontrol_rp_failed_node(&appl_ctx, nodeId);
 }
 
 static int controller_setDefault(JNIEnv *env, jclass object)
@@ -294,7 +291,7 @@ static int controller_getSensorMultiLevel(JNIEnv *env, jclass object, jint nodeI
 
 static int control_update_node(JNIEnv *env, jclass object, jint nodeId)
 {
-    return 0;
+    return zwcontrol_update_node(&appl_ctx, (uint32_t)nodeId);
 }
 
 static int control_saveNodeInfo(JNIEnv *env, jclass object, jstring infoFile)
@@ -917,7 +914,7 @@ static const JNINativeMethod gMethods[] = {
         {"ZwController_GetDeviceInfo", "()I", (void *)controller_getDeviceInfo},
         {"ZwController_getSpecifyDeviceInfo", "(I)I", (void *)controller_getSpecifyDeviceInfo},
         {"ZwController_RemoveFailedDevice",    "(I)I", (void *)controller_removeFailedDevice},
-        {"ZwController_ReplaceFailedDevice",    "(I[BI)I", (void *)controller_replaceFailedDevice},
+        {"ZwController_ReplaceFailedDevice",    "(I)I", (void *)controller_replaceFailedDevice},
         {"ZwController_SetDefault", "()I", (void*)controller_setDefault},
         {"ZwController_StopAddDevice", "()I", (void*)controller_stopAddDevice},
         {"ZwController_StopRemoveDevice", "()I", (void*)controller_stopRemoveDevice},

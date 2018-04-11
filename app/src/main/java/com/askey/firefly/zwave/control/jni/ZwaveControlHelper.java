@@ -34,7 +34,7 @@ public class ZwaveControlHelper {
     public static int ZwaveControlReq_CallBack(byte[] result, int len)
     {
         android.util.Log.d("ZwaveControlHelper", "ZwaveControlReq_CallBack " + new String(result));
-        return 0x80;
+        return 0x81;
     }
 
     public native static int CreateZwController();
@@ -52,7 +52,7 @@ public class ZwaveControlHelper {
     public native static int ZwController_GetDeviceList();
     public native static int ZwController_getSpecifyDeviceInfo(int deviceId);
     public native static int ZwController_RemoveFailedDevice(int deviceId);
-    public native static int ZwController_ReplaceFailedDevice(int deviceId, byte[] dsk, int dsklen);
+    public native static int ZwController_ReplaceFailedDevice(int deviceId);
     public native static int ZwController_SetDefault();
     // NOTE: when controller going to inclusion process, it's can not be stoped
     public native static int ZwController_StopAddDevice();

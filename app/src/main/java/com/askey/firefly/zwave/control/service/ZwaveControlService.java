@@ -206,7 +206,7 @@ public static ZwaveControlService getInstance() {
         @Override
         public int replaceFailedDevice(IZwaveContrlCallBack callBack, int deviceId) throws RemoteException {
             byte[] dsk = new byte[200];
-            int result = ZwaveControlHelper.ZwController_ReplaceFailedDevice(deviceId, dsk, 0);
+            int result = ZwaveControlHelper.ZwController_ReplaceFailedDevice(deviceId);
             return result;
         }
 
@@ -225,7 +225,7 @@ public static ZwaveControlService getInstance() {
         @Override
         public int getDeviceBattery(IZwaveContrlCallBack callBack, int deviceId) throws RemoteException {
             Logg.i(TAG,"=====getDeviceBattery==deviceId==="+deviceId);
-            int result = ZwaveControlHelper.ZwController_GetSwitchMultiLevel(deviceId);
+            int result = ZwaveControlHelper.ZwController_RemoveFailedDevice(deviceId);
 
             return result;
         }
