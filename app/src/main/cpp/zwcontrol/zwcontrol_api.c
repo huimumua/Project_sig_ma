@@ -1709,6 +1709,54 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts)
 
         return p;
     }
+    else if(op == ZWNET_OP_RM_FAILED_ID)
+    {
+        cJSON_AddStringToObject(jsonRoot, "MessageType", "Remove Failed Node");
+        if(sts == OP_DONE)
+        {
+            cJSON_AddStringToObject(jsonRoot, "Status", "Success");
+        }
+        else
+        {
+            cJSON_AddStringToObject(jsonRoot, "Status", "Unknown");
+        }
+
+        char *p = cJSON_Print(jsonRoot);
+
+        if(p == NULL)
+        {
+            cJSON_Delete(jsonRoot);
+            return NULL;
+        }
+
+        cJSON_Delete(jsonRoot);
+
+        return p;
+    }
+    else if(op == ZWNET_OP_RP_NODE)
+    {
+        cJSON_AddStringToObject(jsonRoot, "MessageType", "Replace Failed Node");
+        if(sts == OP_DONE)
+        {
+            cJSON_AddStringToObject(jsonRoot, "Status", "Success");
+        }
+        else
+        {
+            cJSON_AddStringToObject(jsonRoot, "Status", "Unknown");
+        }
+
+        char *p = cJSON_Print(jsonRoot);
+
+        if(p == NULL)
+        {
+            cJSON_Delete(jsonRoot);
+            return NULL;
+        }
+
+        cJSON_Delete(jsonRoot);
+
+        return p;
+    }
 
     return NULL;
 }
