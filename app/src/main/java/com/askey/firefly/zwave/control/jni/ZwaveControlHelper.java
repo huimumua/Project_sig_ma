@@ -383,4 +383,6 @@ public class ZwaveControlHelper {
     public native static int ZwController_getAllProvisionListEntry();
     public native static int ZwController_rmAllProvisionListEntry();
 
+    public native static int ZwController_checkNodeIsFailed(int deviceId);
+
 }

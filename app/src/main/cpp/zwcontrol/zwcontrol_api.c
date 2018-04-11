@@ -11195,3 +11195,54 @@ int  zwcontrol_rm_all_provision_list_entry(hl_appl_ctx_t* hl_appl)
 
     return result;
 }
+
+static void is_failed_node_cb(appl_layer_ctx_t *appl_ctx, int8_t tx_sts, void *user_prm, uint8_t nodeid, zw_tx_cb_prm_t *param)
+{
+    ALOGI("is_failed_node_cb, nodeId:%d , status:%d",nodeid, tx_sts);
+    cJSON *jsonRoot;
+    jsonRoot = cJSON_CreateObject();
+
+    if(jsonRoot == NULL)
+    {
+        return;
+    }
+
+    cJSON_AddStringToObject(jsonRoot, "MessageType", "Node Is Failed Check Report");
+    cJSON_AddNumberToObject(jsonRoot, "Node id", nodeid);
+    if(tx_sts == TRANSMIT_COMPLETE_OK)
+    {
+        cJSON_AddStringToObject(jsonRoot, "Status", "Alive");
+    }
+    else
+    {
+        cJSON_AddStringToObject(jsonRoot, "Status", "Down(failed)");
+    }
+
+    if(resCallBack)
+    {
+        char *p = cJSON_Print(jsonRoot);
+
+        if(p)
+        {
+            resCallBack(p);
+            free(p);
+        }
+    }
+
+    cJSON_Delete(jsonRoot);
+}
+
+int  zwcontrol_check_node_isFailed(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
+{
+    if(!hl_appl->init_status)
+    {
+        return -1;
+    }
+
+    int result = zwnode_probe_by_id(hl_appl->zwnet, nodeId, is_failed_node_cb, NULL, 0);
+
+    if(result != 0)
+    {
+        ALOGE("zwcontrol_check_node_isFailed send with error: %d", result);
+    }
+}

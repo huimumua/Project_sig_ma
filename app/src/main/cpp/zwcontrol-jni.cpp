@@ -901,6 +901,11 @@ static int controller_rmAllProvisionListEntry(JNIEnv *env, jclass object)
     return zwcontrol_rm_all_provision_list_entry(&appl_ctx); 
 }
 
+static int controller_checkNodeIsFailed(JNIEnv *env, jclass object, jint nodeId)
+{
+    return zwcontrol_check_node_isFailed(&appl_ctx, (uint32_t)nodeId);
+}
+
 static const JNINativeMethod gMethods[] = {
         {"CreateZwController",     "()I", (void *)create_controller},
         {"OpenZwController",       "(Ljava/lang/String;Ljava/lang/String;[B)I", (void *)open_controller},
@@ -1002,6 +1007,7 @@ static const JNINativeMethod gMethods[] = {
         {"ZwController_getProvisionListEntry", "([BI)I", (void*)controller_getProvisionListEntry},
         {"ZwController_getAllProvisionListEntry", "()I", (void*)controller_getAllProvisionListEntry},
         {"ZwController_rmAllProvisionListEntry", "()I", (void*)controller_rmAllProvisionListEntry},
+        {"ZwController_checkNodeIsFailed", "(I)I", (void*)controller_checkNodeIsFailed},
 
 };
 
