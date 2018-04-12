@@ -1,7 +1,7 @@
 project(zwcontrol C)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wparentheses -Wno-array-bounds -fPIE -DOS_ANDROID -DOS_LINUX -DZIP_V2 -DUSE_OPENSSL")
-set(CMAKE_LD_FLAGS "-fPIE")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wparentheses -Wno-array-bounds -fPIE -DOS_ANDROID -DOS_LINUX -DZIP_V2 -DUSE_OPENSSL -fPIC")
+set(CMAKE_LD_FLAGS "-fPIE -fPIC")
 
 set(OPENSSL_LIBRARIES "ssl")
 set(LIBCRYPTO_LIBRARIES "crypto")

@@ -61,7 +61,8 @@ static char* trim(char* b)
     ++b;
   while (e > b && isspace(*(e - 1))) /* scan back from end */
     --e;
-  *e = '\0'; /* terminate new string */
+  if(e != NULL)
+    *e = '\0'; /* terminate new string */
   return b;
 }
 
