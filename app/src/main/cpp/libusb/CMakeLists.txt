@@ -11,4 +11,4 @@ set(src libusb/core.c
 
 INCLUDE_DIRECTORIES(. ./libusb ./libusb/os)
 
-add_library(usb SHARED ${src})
+add_library(zusb SHARED ${src})

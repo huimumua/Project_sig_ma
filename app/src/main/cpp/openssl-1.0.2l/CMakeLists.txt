@@ -670,7 +670,7 @@ set(src_list_ssl ssl/s2_meth.c
 
 INCLUDE_DIRECTORIES(. ./include ./crypto ./crypto/asn1 ./crypto/evp ./crypto/modes)
 
-add_library(crypto SHARED ${src_list_crypto})
-add_library(ssl SHARED ${src_list_ssl})
+add_library(zcrypto SHARED ${src_list_crypto})
+add_library(zssl SHARED ${src_list_ssl})
 
-target_link_libraries(ssl crypto)
+target_link_libraries(zssl zcrypto)
