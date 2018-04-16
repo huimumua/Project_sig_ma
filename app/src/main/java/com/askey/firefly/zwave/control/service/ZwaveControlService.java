@@ -225,7 +225,7 @@ public static ZwaveControlService getInstance() {
         @Override
         public int getDeviceBattery(IZwaveContrlCallBack callBack, int deviceId) throws RemoteException {
             Logg.i(TAG,"=====getDeviceBattery==deviceId==="+deviceId);
-            int result = ZwaveControlHelper.ZwController_RemoveFailedDevice(deviceId);
+            int result = ZwaveControlHelper.ZwController_ReplaceFailedDevice(deviceId);
 
             return result;
         }

@@ -1744,6 +1744,14 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts)
         {
             cJSON_AddStringToObject(jsonRoot, "Status", "Success");
         }
+        else if(sts == OP_RP_NODE_PROTOCOL_DONE)
+        {
+            cJSON_AddStringToObject(jsonRoot, "Status", "Protocol done");
+        }
+        else if(sts == OP_RP_NODE_GET_NODE_INFO)
+        {
+            cJSON_AddStringToObject(jsonRoot, "Status", "Getting Node Information");
+        }
         else
         {
             cJSON_AddStringToObject(jsonRoot, "Status", "Unknown");
