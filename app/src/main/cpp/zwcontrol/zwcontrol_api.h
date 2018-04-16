@@ -228,6 +228,7 @@ int  zwcontrol_meter_reset(hl_appl_ctx_t* hl_appl, uint32_t nodeId);
  **  Command Class Power Level
  */
 int  zwcontrol_powerLevel_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId);
+int  zwcontrol_powerLevel_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint32_t powerLvl, uint32_t timeout);
 
 
 /*

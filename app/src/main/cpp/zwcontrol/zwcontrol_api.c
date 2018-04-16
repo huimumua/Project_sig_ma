@@ -6061,6 +6061,41 @@ int  zwcontrol_powerLevel_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
 }
 
 
+int  zwcontrol_powerLevel_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint32_t powerLvl, uint32_t timeout)
+{
+    if(!hl_appl->init_status)
+    {
+        return -1;
+    }
+
+    if(hl_destid_get(hl_appl, nodeId, COMMAND_CLASS_POWERLEVEL, 0))
+    {
+        return -1;
+    }
+
+    zwifd_p ifd;
+
+    //Get the interface descriptor
+    plt_mtx_lck(hl_appl->desc_cont_mtx);
+    ifd = hl_intf_desc_get(hl_appl->desc_cont_hd, hl_appl->rep_desc_id);
+    if (!ifd)
+    {
+        plt_mtx_ulck(hl_appl->desc_cont_mtx);
+        return ZW_ERR_INTF_NOT_FOUND;
+    }
+
+    int result = zwif_power_level_set(ifd, powerLvl, timeout);
+
+    plt_mtx_ulck(hl_appl->desc_cont_mtx);
+
+    if(result < 0)
+    {
+        ALOGE("zwcontrol_powerLevel_set with error: %d",result);
+    }
+
+    return result;
+}
+
 /*
  **  Command Class Sensor Multi-Level
  */

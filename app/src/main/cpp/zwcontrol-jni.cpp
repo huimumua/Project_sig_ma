@@ -373,6 +373,11 @@ static int controller_getPowerLevel(JNIEnv *env, jclass object, jint nodeId)
     return zwcontrol_powerLevel_get(&appl_ctx, (uint32_t)nodeId);
 }
 
+static int controller_setPowerLevel(JNIEnv *env, jclass object, jint nodeId, jint powerLvl, jint timeout)
+{
+    return zwcontrol_powerLevel_set(&appl_ctx, (uint32_t)nodeId, (uint32_t)powerLvl, (uint32_t)timeout);
+}
+
 static int controller_setSwitchAllOn(JNIEnv *env, jclass object, jint nodeId)
 {
     return zwcontrol_switch_all_on(&appl_ctx, (uint32_t)nodeId);
@@ -932,6 +937,7 @@ static const JNINativeMethod gMethods[] = {
         {"ZwController_SetConfigurationBulk", "(IIIIII[I)I", (void*)controller_setConfigurationBulk},
         {"ZwController_startStopSwitchLevelChange", "(IIIIII)I", (void*)controller_startStopSwitchLevelChange},
         {"ZwController_GetPowerLevel", "(I)I", (void*)controller_getPowerLevel},
+        {"ZwController_SetPowerLevel", "(III)I", (void*)controller_setPowerLevel},
         {"ZwController_SetSwitchAllOn", "(I)I", (void*)controller_setSwitchAllOn},
         {"ZwController_SetSwitchAllOff", "(I)I", (void*)controller_setSwitchAllOff},
         //{"ZwController_SetSwitchAllOnBroadcast", "()I", (void*)controller_setSwitchAllOnBroadcast},

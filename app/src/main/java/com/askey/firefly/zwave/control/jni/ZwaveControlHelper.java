@@ -125,6 +125,7 @@ public class ZwaveControlHelper {
     ** support CC: COMMAND_CLASS_POWERLEVEL
     **/
     public native static int ZwController_GetPowerLevel(int deviceId);
+    public native static int ZwController_SetPowerLevel(int deviceId, int powerLvl, int timeout);
 
     /**
     ** zwave controller jni interface
