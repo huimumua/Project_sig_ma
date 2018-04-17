@@ -1313,6 +1313,8 @@ static void hl_nw_notify_hdlr(nw_notify_msg_t *notify_msg)
     hl_appl_ctx_t    *hl_appl = notify_msg->hl_appl;
     int              result;
 
+    ALOGI("hl_nw_notify_cb op:%u, status:%u", (unsigned)notify_msg->op, notify_msg->sts);
+
     //Check to display progress of get detailed node info
     if (notify_msg->sts & OP_GET_NI_TOTAL_NODE_MASK)
     {
@@ -1325,8 +1327,6 @@ static void hl_nw_notify_hdlr(nw_notify_msg_t *notify_msg)
               (unsigned)notify_msg->op, cmplt_nodes, total_nodes);
         return;
     }
-
-    ALOGI("hl_nw_notify_cb op:%u, status:%u", (unsigned)notify_msg->op, notify_msg->sts);
 
     switch (notify_msg->op)
     {
@@ -1757,9 +1757,47 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts)
         {
             cJSON_AddStringToObject(jsonRoot, "Status", "Getting Node Information");
         }
+        else if(sts == OP_FAILED)
+        {
+            cJSON_AddStringToObject(jsonRoot, "Status", "Failed");
+        }
         else
         {
-            cJSON_AddStringToObject(jsonRoot, "Status", "Unknown or Failed");
+            cJSON_AddStringToObject(jsonRoot, "Status", "Unknown");
+        }
+
+        char *p = cJSON_Print(jsonRoot);
+
+        if(p == NULL)
+        {
+            cJSON_Delete(jsonRoot);
+            return NULL;
+        }
+
+        cJSON_Delete(jsonRoot);
+
+        return p;
+    }
+    else if(op == ZWNET_OP_INITIATE)
+    {
+        cJSON_AddStringToObject(jsonRoot, "MessageType", "Controller Init Status");
+        if(sts == OP_DONE)
+        {
+            initStatus = 1;
+            cJSON_AddStringToObject(jsonRoot, "Status", "Success");
+        }
+        else if(sts == OP_FAILED)
+        {
+            initStatus = -1;
+            cJSON_AddStringToObject(jsonRoot, "Status", "Failed");
+        }
+        else if(sts == OP_INI_PROTOCOL_DONE)
+        {
+            cJSON_AddStringToObject(jsonRoot, "Status", "Init Protocol Done");
+        }
+        else
+        {
+            cJSON_AddStringToObject(jsonRoot, "Status", "Unknown");
         }
 
         char *p = cJSON_Print(jsonRoot);
