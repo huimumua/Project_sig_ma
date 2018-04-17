@@ -4519,6 +4519,29 @@ int  zwcontrol_update_node(hl_appl_ctx_t *hl_appl, uint8_t nodeId)
 void cb_get_dsk_fn(void *usr_ctx, char *dsk)
 {
     ALOGI("learn mode callback, cb_get_dsk_fn, dsk: %s",dsk);
+    cJSON *jsonRoot;
+    jsonRoot = cJSON_CreateObject();
+
+    if(jsonRoot == NULL)
+    {
+        return;
+    }
+
+    cJSON_AddStringToObject(jsonRoot, "MessageType", "Controller DSK Report");
+    cJSON_AddStringToObject(jsonRoot, "DSK", dsk);
+
+    if(resCallBack)
+    {
+        char *p = cJSON_Print(jsonRoot);
+
+        if(p)
+        {
+            resCallBack(p);
+            free(p);
+        }
+    }
+
+    cJSON_Delete(jsonRoot);
 }
 
 int  zwcontrol_start_learn_mode(hl_appl_ctx_t* hl_appl)
