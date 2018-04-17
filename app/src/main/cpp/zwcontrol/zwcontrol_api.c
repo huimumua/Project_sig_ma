@@ -1656,11 +1656,16 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts)
     }
     else if(op == ZWNET_OP_RESET)
     {
+        cJSON_AddStringToObject(jsonRoot, "MessageType", "Controller Reset Status");
         if(sts == OP_DONE)
         {
-            cJSON_AddStringToObject(jsonRoot, "MessageType", "Controller Reset Status");
             cJSON_AddStringToObject(jsonRoot, "Status", "Success");
         }
+        else
+        {
+            cJSON_AddStringToObject(jsonRoot, "Status", "Failed");
+        }
+
         char *p = cJSON_Print(jsonRoot);
 
         if(p == NULL)
@@ -1754,7 +1759,7 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts)
         }
         else
         {
-            cJSON_AddStringToObject(jsonRoot, "Status", "Unknown");
+            cJSON_AddStringToObject(jsonRoot, "Status", "Unknown or Failed");
         }
 
         char *p = cJSON_Print(jsonRoot);
