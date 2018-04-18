@@ -5918,7 +5918,7 @@ int zwif_rep_hdlr(zwif_p intf, uint8_t *cmd_buf, uint16_t cmd_len, int nw_lck_st
                                 plt_mtx_lck(ifd.net->mtx);
                         }
 
-                        if (report_cb/* && cache_chg*/)
+                        if (report_cb && cache_chg)
                         {   //Callback to application
                             rpt_cb = (zwrep_level_fn)report_cb;
 
