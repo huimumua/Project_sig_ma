@@ -6416,7 +6416,7 @@ static void hl_notification_get_report_cb(zwifd_p ifd, zwalrm_p param, time_t ts
     }
     else
     {
-        ALOGI("please check the event type you write in");
+        ALOGI("Please check the event type you write in");
         cJSON_AddStringToObject(jsonRoot, "Notification-event", "Unknown event/state");
     }
     /*cJSON_AddNumberToObject(jsonRoot, "Notification-event-length", param->ex_evt_len);
@@ -6957,8 +6957,11 @@ static void hl_bin_report_cb(zwifd_p ifd, zwswitch_p val, time_t ts)
     cJSON_AddStringToObject(jsonRoot, "MessageType", "Binary Switch Get Information");
     cJSON_AddNumberToObject(jsonRoot, "Node id", ifd->nodeid);
     cJSON_AddNumberToObject(jsonRoot, "Cur Val", val->curr_val);
-    cJSON_AddNumberToObject(jsonRoot, "Tar Val", val->tgt_val);
-    cJSON_AddNumberToObject(jsonRoot, "Durration", val->dur);
+    if(val->tgt_val != 0xFE)
+    {
+        cJSON_AddNumberToObject(jsonRoot, "Tar Val", val->tgt_val);
+        cJSON_AddNumberToObject(jsonRoot, "Durration", val->dur);
+    }
 
     if(resCallBack)
     {

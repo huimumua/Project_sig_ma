@@ -360,7 +360,7 @@ public static ZwaveControlService getInstance() {
 
         @Override
         public int getPowerLevel(IZwaveContrlCallBack callBack, int deviceId) throws RemoteException {
-            int result = ZwaveControlHelper.ZwController_rmAllProvisionListEntry();
+            int result = ZwaveControlHelper.ZwController_SetBinarySwitchState(deviceId, 0xFF);
             return result;
         }
 
@@ -368,8 +368,8 @@ public static ZwaveControlService getInstance() {
 
         @Override
         public int setSwitchAllOn(IZwaveContrlCallBack callBack, int deviceId) throws RemoteException {
-            int result = ZwaveControlHelper.ZwController_SetSwitchAllOn(deviceId);
-            result = ZwaveControlHelper.ZwController_getNotification(deviceId, 0, 5, 5);
+            //int result = ZwaveControlHelper.ZwController_SetSwitchAllOn(deviceId);
+            int result = ZwaveControlHelper.ZwController_SetBinarySwitchState(deviceId, 0);
 
             setSwitchAllOnCallBack(String.valueOf(result));
             return result;
@@ -377,7 +377,7 @@ public static ZwaveControlService getInstance() {
 
         @Override
         public int setSwitchAllOff(IZwaveContrlCallBack callBack, int deviceId) throws RemoteException {
-            int result = ZwaveControlHelper.ZwController_getNotification(deviceId, 0, 5, 2);
+            int result = ZwaveControlHelper.ZwController_GetBinarySwitchState(deviceId);
             setSwitchAllOffCallBack(String.valueOf(result));
             return result;
         }
