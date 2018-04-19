@@ -6379,7 +6379,7 @@ static void hl_notification_get_report_cb(zwifd_p ifd, zwalrm_p param, time_t ts
 
     ALOGD("V1 Alarm type:%x", param->type);
     ALOGD("V1 Alarm level:%x", param->level);
-    ALOGD("Unsolicited notification status:%x", param->ex_status);
+    ALOGD("Notification status:%x", param->ex_status);
     ALOGD("Notification type:%X", param->ex_type);
     ALOGD("Notification event:%X", param->ex_event);
 
@@ -6395,17 +6395,29 @@ static void hl_notification_get_report_cb(zwifd_p ifd, zwalrm_p param, time_t ts
     cJSON_AddNumberToObject(jsonRoot, "Alarm-level", param->level);*/
     cJSON_AddNumberToObject(jsonRoot, "Notification-status", param->ex_status);
     cJSON_AddStringToObject(jsonRoot, "Notification-type", notif_type[param->ex_type]);
-    if(param->ex_type == 0x06)
+    if(param->ex_event != 0xFE)
     {
-        cJSON_AddStringToObject(jsonRoot, "Notification-event", access_control_evt[param->ex_event]);
+        if(param->ex_type == 0x06)
+        {
+            cJSON_AddStringToObject(jsonRoot, "Notification-event", access_control_evt[param->ex_event]);
+        }
+        else if (param->ex_type == 0x07)
+        {
+            cJSON_AddStringToObject(jsonRoot, "Notification-event", home_security_evt[param->ex_event]);
+        }
+        else if (param->ex_type == 0x05)
+        {
+            cJSON_AddStringToObject(jsonRoot, "Notification-event", water_alarm_evt[param->ex_event]);
+        }
+        else
+        {
+            ALOGW("This notification type: %d, is not supported to report, please connected tiny_hui, thanks.", param->ex_type);
+        }
     }
-    else if (param->ex_type == 0x07)
+    else
     {
-        cJSON_AddStringToObject(jsonRoot, "Notification-event", home_security_evt[param->ex_event]);
-    }
-    else if (param->ex_type == 0x05)
-    {
-        cJSON_AddStringToObject(jsonRoot, "Notification-event", water_alarm_evt[param->ex_event]);
+        ALOGI("please check the event type you write in");
+        cJSON_AddStringToObject(jsonRoot, "Notification-event", "Unknown event/state");
     }
     /*cJSON_AddNumberToObject(jsonRoot, "Notification-event-length", param->ex_evt_len);
     cJSON_AddNumberToObject(jsonRoot, "Notification-event-param-type", param->ex_evt_type);*/

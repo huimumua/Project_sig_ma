@@ -369,6 +369,8 @@ public static ZwaveControlService getInstance() {
         @Override
         public int setSwitchAllOn(IZwaveContrlCallBack callBack, int deviceId) throws RemoteException {
             int result = ZwaveControlHelper.ZwController_SetSwitchAllOn(deviceId);
+            result = ZwaveControlHelper.ZwController_getNotification(deviceId, 0, 5, 5);
+
             setSwitchAllOnCallBack(String.valueOf(result));
             return result;
         }
@@ -376,7 +378,6 @@ public static ZwaveControlService getInstance() {
         @Override
         public int setSwitchAllOff(IZwaveContrlCallBack callBack, int deviceId) throws RemoteException {
             int result = ZwaveControlHelper.ZwController_getNotification(deviceId, 0, 5, 2);
-
             setSwitchAllOffCallBack(String.valueOf(result));
             return result;
         }
