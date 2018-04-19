@@ -316,7 +316,7 @@ public class ZwaveControlHelper {
     ** support CC: COMMAND_CLASS_NOTIFICATION
     **/
     public native static int ZwController_setNotification(int deviceId, int type, int status);
-    public native static int ZwController_getNotification(int deviceId, int alarm_type, int notif_type, int status);
+    public native static int ZwController_getNotification(int deviceId, int alarm_type, int notif_type, int evt);
     public native static int ZwController_getSupportedNotification(int deviceId);
     public native static int ZwController_getSupportedEventNotification(int deviceId, int notif_type);
 

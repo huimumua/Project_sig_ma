@@ -655,9 +655,9 @@ static int controller_setNotification(JNIEnv *env, jclass object, jint nodeId, j
     return zwcontrol_notification_set(&appl_ctx, (uint32_t)nodeId, (uint8_t)type, (uint8_t)status);
 }
 
-static int controller_getNotification(JNIEnv *env, jclass object, jint nodeId, jint alarmType, jint notifType, jint status)
+static int controller_getNotification(JNIEnv *env, jclass object, jint nodeId, jint alarmType, jint notifType, jint evt)
 {
-    return zwcontrol_notification_get(&appl_ctx,(uint32_t)nodeId, (uint8_t)alarmType, (uint8_t)notifType, (uint8_t)status);
+    return zwcontrol_notification_get(&appl_ctx,(uint32_t)nodeId, (uint8_t)alarmType, (uint8_t)notifType, (uint8_t)evt);
 }
 
 static int controller_getSupportedNotification(JNIEnv *env, jclass object, jint nodeId)

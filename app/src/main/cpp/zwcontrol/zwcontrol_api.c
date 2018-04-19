@@ -6462,7 +6462,7 @@ hl_notification_rep_get - Get the notification
 @param[in]  hl_appl     The high-level api context
 @return  0 on success, negative error number on failure
 */
-int hl_notification_rep_get(hl_appl_ctx_t   *hl_appl, uint8_t alarmType, uint8_t notificationType, uint8_t state)
+int hl_notification_rep_get(hl_appl_ctx_t   *hl_appl, uint8_t alarmType, uint8_t notificationType, uint8_t evt)
 {
     int     result;
     zwifd_p ifd;
@@ -6477,7 +6477,7 @@ int hl_notification_rep_get(hl_appl_ctx_t   *hl_appl, uint8_t alarmType, uint8_t
         return ZW_ERR_INTF_NOT_FOUND;
     }
 
-    result = zwif_notification_get(ifd, (uint8_t) alarmType, (uint8_t) notificationType, (uint8_t) state);
+    result = zwif_notification_get(ifd, (uint8_t) alarmType, (uint8_t) notificationType, (uint8_t) evt);
 
     plt_mtx_ulck(hl_appl->desc_cont_mtx);
 
@@ -6493,7 +6493,7 @@ int hl_notification_rep_get(hl_appl_ctx_t   *hl_appl, uint8_t alarmType, uint8_t
     return result;
 }
 
-int  zwcontrol_notification_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_t alarmType, uint8_t notificationType, uint8_t state)
+int  zwcontrol_notification_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_t alarmType, uint8_t notificationType, uint8_t evt)
 {
     if(!hl_appl->init_status)
     {
@@ -6507,8 +6507,8 @@ int  zwcontrol_notification_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_t
     int result = hl_notification_get_rep_setup(hl_appl);
     if(result == 0)
     {
-        ALOGW("hl_notification_set done, alarmType:%x, notificationType:%x, event:%x", alarmType, notificationType, state);
-        result = hl_notification_rep_get(hl_appl, (uint8_t) alarmType, (uint8_t) notificationType, (uint8_t) state);
+        ALOGW("hl_notification_set done, alarmType:%x, notificationType:%x, event:%x", alarmType, notificationType, evt);
+        result = hl_notification_rep_get(hl_appl, (uint8_t) alarmType, (uint8_t) notificationType, (uint8_t) evt);
     }
     return result;
 }
