@@ -635,6 +635,7 @@ void zwnet_node_cb(zwnet_p nw, uint8_t node_id, int mode)
         cb_req.param.node.user = nw->init.user;
         cb_req.param.node.node_id = node_id;
         cb_req.param.node.mode = mode;
+        ALOGI("zwnet_node_cb, node_id:%d, mode:%d",node_id, mode);
 
         util_list_add(nw->cb_mtx, &nw->cb_req_hd,
                       (uint8_t *)&cb_req, sizeof(zwnet_cb_req_t));
@@ -656,6 +657,7 @@ static void zwnet_node_sts_cb(appl_layer_ctx_t *appl_ctx, uint8_t node_id, uint8
 
     if (nw && nw->init.node)
     {
+        ALOGI("call zwnet_node_cb, node_id:%d, sts:%d",node_id, sts);
         zwnet_node_cb(nw, node_id, (sts + ZWNET_NODE_STATUS_ALIVE));
     }
 }
@@ -10902,7 +10904,7 @@ int zwnet_add(zwnet_p net, uint8_t add, sec2_add_prm_t *sec2_param, int incl_on_
         }
         else
         {
-            debug_zwapi_msg(&net->plt_ctx, "Current operation not completed yet, try again later");
+            ALOGI("Current operation not completed yet, try again later");
             plt_mtx_ulck(net->mtx);
             return ZW_ERR_LAST_OP_NOT_DONE;
         }
@@ -10920,7 +10922,7 @@ int zwnet_add(zwnet_p net, uint8_t add, sec2_add_prm_t *sec2_param, int incl_on_
             plt_mtx_ulck(net->mtx);
             return ZW_ERR_NONE;
         }
-        debug_zwapi_msg(&net->plt_ctx, "zwnet_add: remove node with error:%d", result);
+        ALOGI("zwnet_add: remove node with error:%d", result);
         plt_mtx_ulck(net->mtx);
         return ZW_ERR_OP_FAILED;
     }
@@ -10970,7 +10972,7 @@ int zwnet_add(zwnet_p net, uint8_t add, sec2_add_prm_t *sec2_param, int incl_on_
             return ZW_ERR_NONE;
         }
 
-        debug_zwapi_msg(&net->plt_ctx, "zwnet_add failed");
+        ALOGI("zwnet_add failed");
         plt_mtx_ulck(net->mtx);
         return ZW_ERR_OP_FAILED;
     }

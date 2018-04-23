@@ -1,7 +1,12 @@
 package com.askey.firefly.zwave.control.jni;
 
+import android.util.Log;
+
 import com.askey.firefly.zwave.control.service.ZwaveControlService;
 import com.askey.firefly.zwave.control.application.ZwaveProvisionList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * 项目名称：ZwaveControl
@@ -13,6 +18,8 @@ import com.askey.firefly.zwave.control.application.ZwaveProvisionList;
  * 修改备注：
  */
 public class ZwaveControlHelper {
+
+    public final static String LOG_TAG = "ZwaveControlHelper";
 
     static {
         System.loadLibrary("zwcontrol-jni");
@@ -34,7 +41,46 @@ public class ZwaveControlHelper {
     public static int ZwaveControlReq_CallBack(byte[] result, int len)
     {
         android.util.Log.d("ZwaveControlHelper", "ZwaveControlReq_CallBack " + new String(result));
-        return 0x81;
+        String jniResult = new String(result);
+        String messageType = null;
+        JSONObject jsonObject = null;
+
+        String grantKeysMsg = null;
+        String csaMsg = null;
+        String pinReq = null;
+
+        try {
+            jsonObject = new JSONObject(jniResult);
+            grantKeysMsg = jsonObject.optString("Grant Keys Msg");
+            Log.i(LOG_TAG,"  grantKeysMsg:"+grantKeysMsg);
+            pinReq = jsonObject.optString("PIN Requested Msg");
+        } catch (JSONException e) {
+            android.util.Log.i(LOG_TAG, "JSONException");
+            e.printStackTrace();
+        }
+
+        if("Request Keys".equals(grantKeysMsg))
+        {
+            String keys = null;
+            try {
+                keys = jsonObject.getString("Keys");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+      
+            int intkey = Integer.parseInt(keys);
+            android.util.Log.i(LOG_TAG," grant keys: "+keys+"   int:"+intkey);
+            return intkey;
+        }
+
+        if("Enter 5-digit PIN".equals(pinReq))
+        {
+            android.util.Log.i(LOG_TAG," user input pin code: "+(Integer.toString(12824)));
+            return 12824;
+        }
+
+        android.util.Log.w(LOG_TAG," should not go here!!!!");
+        return  0;
     }
 
     public native static int CreateZwController();

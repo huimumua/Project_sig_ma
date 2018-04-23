@@ -225,7 +225,7 @@ public static ZwaveControlService getInstance() {
         @Override
         public int getDeviceBattery(IZwaveContrlCallBack callBack, int deviceId) throws RemoteException {
             Logg.i(TAG,"=====getDeviceBattery==deviceId==="+deviceId);
-            int result = ZwaveControlHelper.ZwController_SetDefault();
+            int result = ZwaveControlHelper.ZwController_getGroupInfo(deviceId, 2, 0);
 
             return result;
         }
@@ -258,7 +258,9 @@ public static ZwaveControlService getInstance() {
             dsk1[str1.length()] = '\0';
             result = ZwaveControlHelper.ZwController_addProvisionListEntry(dsk1, dsk1.length);*/
             //int result = ZwaveControlHelper.ZwController_getSpecifyDeviceInfo(deviceId);
-            int result = ZwaveControlHelper.ZwController_StartLearnMode();
+            //int result = ZwaveControlHelper.ZwController_StartLearnMode();
+            int[] a = {7,0};
+            int result = ZwaveControlHelper.ZwController_addEndpointsToGroup(deviceId,2, a, 0);
             return result;
         }
 

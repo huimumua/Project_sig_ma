@@ -1927,7 +1927,7 @@ static void hl_add_node_s2_cb(void *usr_param, sec2_add_cb_prm_t *cb_param)
             cJSON *jsonRoot;
             jsonRoot = cJSON_CreateObject();
             char str[10] = {0};
-            sprintf(str, "%X", cb_param->cb_prm.req_key.req_keys);
+            sprintf(str, "%x", cb_param->cb_prm.req_key.req_keys);
             cJSON_AddStringToObject(jsonRoot, "Grant Keys Msg", "Request Keys");
             cJSON_AddStringToObject(jsonRoot, "Keys", str);
 
@@ -1945,7 +1945,7 @@ static void hl_add_node_s2_cb(void *usr_param, sec2_add_cb_prm_t *cb_param)
         {
             granted_key = cb_param->cb_prm.req_key.req_keys;
         }
-        ALOGD("User granted keys: %x",granted_key);
+        ALOGD("User granted keys: %X",granted_key);
 
         grant_csa = 0;
         if (cb_param->cb_prm.req_key.req_csa)
@@ -2561,7 +2561,7 @@ int zwcontrol_add_node(hl_appl_ctx_t *hl_appl)
     {
         if(result == 0)
         {
-            ALOGI("Add node in progress, please wait!");
+            ALOGI("Added node success.");
         }
         else
         {
@@ -3793,7 +3793,7 @@ static int hl_node_desc_dump(hl_appl_ctx_t *hl_appl, cJSON *jsonRoot)
                 else if (intf->cls == COMMAND_CLASS_NOTIFICATION_V4)
                 {
                     hl_notification_info_show(intf, InterfaceInfo);
-                    //result = zwif_notification_rpt_set(intf, hl_notification_get_report_cb);
+                    result = zwif_notification_rpt_set(intf, hl_notification_get_report_cb);
                 }
                 else if (intf->cls == COMMAND_CLASS_BATTERY)
                 {
@@ -3965,6 +3965,7 @@ static int hl_specify_node_desc_dump(hl_appl_ctx_t *hl_appl, int nodeId, cJSON *
     {
         if(((zwnoded_p)last_node_cont->desc)->nodeid == nodeId)
         {
+            ALOGI("Dump node info, node found, id:%d",nodeId);
             cJSON *NodeInfo = cJSON_CreateObject();
 
             if(NodeInfo == NULL)
@@ -4601,7 +4602,7 @@ static int hl_destid_get(hl_appl_ctx_t *hl_appl, int nodeId, int cmd, uint8_t en
 
         if((unsigned)node->nodeid == nodeId)
         {
-            ALOGD("Get Basic node found, id %d",nodeId);
+            ALOGD("The request node found, id %d, now start find it's cmd interface",nodeId);
             break;
         }
         else{
@@ -4669,8 +4670,13 @@ static int hl_destid_get(hl_appl_ctx_t *hl_appl, int nodeId, int cmd, uint8_t en
     {
         return 0;
     }
-
-    return -1;
+    else
+    {
+        ALOGW("--------------------------------------------------------------------------------");
+        ALOGW("  The request cmd interface not found, make sure this node supported it indeed");
+        ALOGW("--------------------------------------------------------------------------------");
+        return -1;
+    }
 }
 
 /**
@@ -4885,6 +4891,7 @@ int  zwcontrol_battery_get(hl_appl_ctx_t *hl_appl, uint32_t nodeId)
     {
         return -1;
     }
+    ALOGI("zwcontrol_battery_get started, node_id:%d",nodeId);
 
     int result = hl_battery_rep_set_get(hl_appl);
 
@@ -5034,6 +5041,8 @@ int  zwcontrol_basic_get(hl_appl_ctx_t *hl_appl, int nodeId)
         return -1;
     }
 
+    ALOGI("zwcontrol_basic_get started, nodeId:%d",nodeId);
+
     int result = hl_basic_rep_set_get(hl_appl);
     if(result == 1)
     {
@@ -5086,6 +5095,8 @@ int  zwcontrol_basic_set(hl_appl_ctx_t *hl_appl, int nodeId, int value)
     {
         return -1;
     }
+
+    ALOGI("zwcontrol_basic_set started, nodeId:%d, value:%d",nodeId, value);
 
     hl_appl->basic_val = (uint16_t)value;
 
@@ -5250,14 +5261,14 @@ int  zwcontrol_configuration_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_
     int result = hl_cfg_rep_setup(hl_appl);
     if(result != 0)
     {
-        ALOGE("hl_cfg_rep_setup with error:%d",result);
+        ALOGE("zwcontrol_configuration_get with error: %d",result);
         return result;
     }
     // How many parameters to get: (0) Single, (1) Range
     hl_appl->cfg_param_mode = paramMode;
     if (hl_appl->cfg_param_mode == 0)
     {
-        ALOGI("configurations get, param:%d", paramNumber);
+        ALOGI("configurations get, param: %d", paramNumber);
         // Parameter number
         hl_appl->cfg_param = paramNumber;
     }
@@ -5365,7 +5376,7 @@ int  zwcontrol_configuration_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_
     {
         hl_appl->cfg_value = 0;
     }
-    ALOGI("configuration set, param:%d, useDefault:%d, value:%d",paramNumber,useDefault,hl_appl->cfg_value);
+    ALOGI("configuration set, param: %d, useDefault: %d, value: %d",paramNumber,useDefault,hl_appl->cfg_value);
 
     int result = hl_cfg_set(hl_appl);
     if (result == 1)
@@ -5838,10 +5849,11 @@ int  zwcontrol_meter_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_t meter_
         return -1;
     }
 
-    //puts("Preferred unit:");
-    //puts("For electric meter: (0) kWh (1) kVAh (2) W (3) Pulse count");
-    //puts("For gas meter: (0) cubic meter (1) cubic feet  (3) Pulse count");
-    //puts("For water meter: (0) cubic meter (1) cubic feet (2) US gallons (3) Pulse count");
+    ALOGI("Preferred unit:");
+    ALOGI("For electric meter: (0) kWh (1) kVAh (2) W (3) Pulse count");
+    ALOGI("For gas meter: (0) cubic meter (1) cubic feet  (3) Pulse count");
+    ALOGI("For water meter: (0) cubic meter (1) cubic feet (2) US gallons (3) Pulse count");
+    ALOGI("zwcontrol_meter_get started, nodeId: %d, meter_unit: %d", nodeId, meter_unit);
     hl_appl->meter_unit = meter_unit;
 
     int result = hl_meter_rep_set_get(hl_appl);
@@ -5954,6 +5966,8 @@ int  zwcontrol_meter_supported_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
         return -1;
     }
 
+    ALOGI("zwcontrol_meter_supported_get started, nodeId: %d",nodeId);
+
     int result = hl_meter_sup(hl_appl);
     if(result == 1)
     {
@@ -6006,8 +6020,10 @@ int  zwcontrol_meter_reset(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
         return -1;
     }
 
+    ALOGI("zwcontrol_meter_reset started");
+
     int result = hl_meter_reset(hl_appl);
-    if(result != 0)
+    if(result < 0)
     {
         ALOGE("zwcontrol_meter_reset with error:%d",result);
     }
@@ -6125,6 +6141,8 @@ int  zwcontrol_powerLevel_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
         return -1;
     }
 
+    ALOGI("zwcontrol_powerLevel_get started, nodeId: %d",nodeId);
+
     int result = hl_power_level_rep_set_get(hl_appl);
     if(result == 1)
     {
@@ -6158,6 +6176,7 @@ int  zwcontrol_powerLevel_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint32_t 
         return ZW_ERR_INTF_NOT_FOUND;
     }
 
+    ALOGI("zwcontrol_powerLevel_set started, nodeId: %d",nodeId);
     int result = zwif_power_level_set(ifd, powerLvl, timeout);
 
     plt_mtx_ulck(hl_appl->desc_cont_mtx);
@@ -6169,6 +6188,7 @@ int  zwcontrol_powerLevel_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint32_t 
 
     return result;
 }
+
 
 /*
  **  Command Class Sensor Multi-Level
@@ -6298,6 +6318,7 @@ int zwcontrol_sensor_multilevel_get(hl_appl_ctx_t *hl_appl, uint32_t nodeId/*, u
 
     /*hl_appl->sensor_type = sensor_type;
       hl_appl->sensor_unit = unit;*/
+    ALOGI("zwcontrol_sensor_multilevel_get started, nodeId: %d",nodeId);
 
     int result = hl_ml_snsr_rep_setup(hl_appl);
 
@@ -6357,11 +6378,15 @@ int  zwcontrol_notification_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_t
     {
         return -1;
     }
+
+    ALOGI("zwcontrol_notification_set started, nodeId: %d, notif_type: %d, status: %d",nodeId, notificationType, status);
     int result = hl_notification_set(hl_appl, (uint8_t)notificationType, (uint8_t)status);
-    if(result != 0)
+
+    if(result < 0)
     {
         ALOGW("hl_notification_set with error:%d",result);
     }
+
     return result;
 }
 
@@ -6519,7 +6544,7 @@ int  zwcontrol_notification_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_t
     int result = hl_notification_get_rep_setup(hl_appl);
     if(result == 0)
     {
-        ALOGW("hl_notification_set done, alarmType:%x, notificationType:%x, event:%x", alarmType, notificationType, evt);
+        ALOGW("Notification report setup done, alarmType:%x, notificationType:%x, event:%x", alarmType, notificationType, evt);
         result = hl_notification_rep_get(hl_appl, (uint8_t) alarmType, (uint8_t) notificationType, (uint8_t) evt);
     }
     return result;
@@ -6613,7 +6638,9 @@ int  zwcontrol_notification_supported_get(hl_appl_ctx_t* hl_appl, uint32_t nodeI
         return -1;
     }
 
+    ALOGI("zwcontrol_notification_supported_get started, nodeId: %d",nodeId);
     int result = hl_notification_sup_get(hl_appl);
+
     if (result == 1)
     {
         ALOGE("zwcontrol_notification_supported_get command queued");
@@ -6718,7 +6745,9 @@ int  zwcontrol_notification_supported_event_get(hl_appl_ctx_t* hl_appl, uint32_t
         return -1;
     }
 
+    ALOGI("zwcontrol_notification_supported_event_get started, nodeId: %d, notification_type: %d", nodeId, notificationType);
     int result = hl_notification_sup_evt_get(hl_appl, notificationType);
+
     if (result == 1)
     {
         ALOGE("zwcontrol_notification_supported_event_get command queued");
@@ -6859,7 +6888,6 @@ int hl_central_scene_sup_get(hl_appl_ctx_t   *hl_appl)
 
 int  zwcontrol_central_scene_supported_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_t endpoindId)
 {
-    ALOGI("zwcontrol_central_scene_supported_get started");
     if(!hl_appl->init_status)
     {
         return -1;
@@ -6869,6 +6897,7 @@ int  zwcontrol_central_scene_supported_get(hl_appl_ctx_t* hl_appl, uint32_t node
     {
         return -1;
     }
+    ALOGI("zwcontrol_central_scene_supported_get started");
 
     int result = hl_central_scene_sup_get(hl_appl);
 
@@ -6929,12 +6958,15 @@ int zwcontrol_switch_binary_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_t
         return -1;
     }
 
+    ALOGI("zwcontrol_switch_binary_set started, nodeId: %d, state: %d",nodeId, bin_state);
+
     hl_appl->bin_state = bin_state;
     int result = hl_bin_set(hl_appl);
     if(result == 1)
     {
         ALOGW("zwcontrol_switch_binary_set command queued");
     }
+
     return result;
 }
 
@@ -7228,6 +7260,7 @@ int  zwcontrol_sensor_binary_supported_sensor_get(hl_appl_ctx_t* hl_appl, uint32
     {
         return -1;
     }
+    ALOGI("zwcontrol_sensor_binary_supported_sensor_get started, nodeId: %d", nodeId);
 
     int result = hl_bin_snsr_sup_rep_setup(hl_appl);
     if(result == 1)
@@ -7435,7 +7468,7 @@ int zwcontrol_get_support_switch_type(hl_appl_ctx_t* hl_appl, int nodeId)
         return -1;
     }
 
-    ALOGI("zwcontroller_get_support_switch started");
+    ALOGI("zwcontrol_get_support_switch_type started");
     if(hl_destid_get(hl_appl, nodeId, COMMAND_CLASS_SWITCH_MULTILEVEL, 0))
     {
         return -1;
@@ -7604,7 +7637,7 @@ int zwcontrol_start_stop_switchlevel_change(hl_appl_ctx_t* hl_appl, uint32_t nod
         hl_appl->mul_lvl_sec_step = 0;
     }
 
-    ALOGD("startLvlVal:%d, duration:%d, pmyChangeDir:%d, secChangeDir:%d, secStep:%d",
+    ALOGD("Start level change, startLvlVal:%d, duration:%d, pmyChangeDir:%d, secChangeDir:%d, secStep:%d",
           startLvlVal, duration, pmyChangeDir, secChangeDir, secStep);
 
     hl_multi_lvl_chg(hl_appl);
@@ -7730,6 +7763,7 @@ int  zwcontrol_wake_up_interval_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
     {
         return -1;
     }
+    ALOGI("zwcontrol_wake_up_interval_get started, nodeId: %d", nodeId);
 
     int result = hl_wkup_get(hl_appl);
     if(result == 1)
@@ -7796,6 +7830,8 @@ int  zwcontrol_wake_up_interval_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uin
 
     if(!hl_appl->node_desc_id)
         return ZW_ERR_NODE_NOT_FOUND;
+
+    ALOGI("zwcontrol_wake_up_interval_set started, nodeId: %d, interval: %d", nodeId, wkup_interval);
 
     int result = hl_wkup_set(hl_appl);
     if(result == 1)
@@ -7934,6 +7970,7 @@ int  zwcontrol_door_lock_operation_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
         return -1;
     }
 
+    ALOGI("zwcontrol_door_lock_operation_get started, nodeId: %d",nodeId);
     int result = hl_dlck_op_rep_setup(hl_appl);
     if(result == 0){
         ALOGI("Door lock operation report func setup done.");
@@ -7986,14 +8023,19 @@ int  zwcontrol_door_lock_operation_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, 
         return -1;
     }
 
-    // mode (hex)
-    // (0) Door Unsecured, (1) Door Unsecured with timeout
-    // (10) Door Unsecured for inside Door Handles, 16
-    // (11) Door Unsecured for inside Door Handles with timeout, 17
-    // (20) Door Unsecured for outside Door Handles, 32
-    // (21) Door Unsecured for outside Door Handles with timeout, 33
-    // (FE) Door/Lock State Unknown
-    // (FF) Door Secured
+    ALOGI("==================================================================");
+    ALOGI("mode (hex):");
+    ALOGI(" (0)  Door Unsecured");
+    ALOGI(" (1)  Door Unsecured with timeout");
+    ALOGI(" (10) Door Unsecured for inside Door Handles, 16");
+    ALOGI(" (11) Door Unsecured for inside Door Handles with timeout, 17");
+    ALOGI(" (20) Door Unsecured for outside Door Handles, 32");
+    ALOGI(" (21) Door Unsecured for outside Door Handles with timeout, 33");
+    ALOGI(" (FE) Door/Lock State Unknown");
+    ALOGI(" (FF) Door Secured");
+    ALOGI("==================================================================");
+
+    ALOGI("zwcontrol_door_lock_operation_set started, nodeId: %d, mode: %d", nodeId, mode);
     hl_appl->dlck_mode = mode;
 
     int result = hl_dlck_op_set(hl_appl);
@@ -8096,6 +8138,7 @@ int  zwcontrol_door_lock_config_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
         return -1;
     }
 
+    ALOGI("zwcontrol_door_lock_config_get started, nodeId: %d",nodeId);
     int result = hl_dlck_cfg_get(hl_appl);
     if(result < 0)
     {
@@ -8149,7 +8192,7 @@ int  zwcontrol_door_lock_config_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uin
         return -1;
     }
 
-    // "Operation type: (1)Constant (2)Timed
+    ALOGI("Operation type: (1)Constant (2)Timed");
     hl_appl->dlck_config.type = type;
     // For door handles states, each bit represents a handle with bit set to 0 for disable; 1 for enable
     // Outside Door Handles State 0 to f (hex)
@@ -8164,6 +8207,7 @@ int  zwcontrol_door_lock_config_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uin
         // seconds (1-59)
         hl_appl->dlck_config.tmout_sec = tmout_sec;
     }
+    ALOGI("zwcontrol_door_lock_config_set started, nodeId: %d, type: %d", nodeId, type);
 
     int result = hl_dlck_cfg_set(hl_appl);
     if(result != 0)
@@ -8271,6 +8315,7 @@ int  zwcontrol_switch_color_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_t
         return -1;
     }
 
+    ALOGI("zwcontrol_switch_color_get started, nodeId: %d, calor id: %s", nodeId, color_comp[compid]);
     int result = hl_sw_color_rep_set_and_get(hl_appl, (uint8_t)compId);
 
     if(result == 1)
@@ -8380,6 +8425,8 @@ int  zwcontrol_switch_color_supported_get(hl_appl_ctx_t* hl_appl, uint32_t nodeI
         return -1;
     }
 
+    ALOGI("zwcontrol_switch_color_supported_get started, nodeId: %d",nodeId);
+
     int result = hl_sw_color_sup_rep_setup(hl_appl);
     if(result == 1)
     {
@@ -8432,6 +8479,7 @@ int  zwcontrol_switch_color_set(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_t
         return -1;
     }
 
+    ALOGI("zwcontrol_switch_color_set started, nodeId: %d, color: %s, value: %d", nodeId, color_comp[compId], value);
     int result = hl_sw_color_set(hl_appl, compId, value);
     if(result == 1)
     {
@@ -9051,8 +9099,10 @@ int  zwcontrol_switch_all_on(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
     {
         return -1;
     }
+
+    ALOGI("zwcontrol_switch_all_on started, nodeId: %d",nodeId);
     int result = hl_switch_all_on(hl_appl);
-    if(result != 0)
+    if(result < 0)
     {
         ALOGW("zwcontrol_switch_all_on with error:%d",result);
     }
@@ -9103,7 +9153,7 @@ int  zwcontrol_switch_all_off(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
         return -1;
     }
     int result = hl_switch_all_off(hl_appl);
-    if(result != 0)
+    if(result < 0)
     {
         ALOGW("zwcontrol_switch_all_off with error: %d",result);
     }
@@ -11005,6 +11055,7 @@ int  zwcontrol_add_provision_list_entry(hl_appl_ctx_t* hl_appl, const char* dsk,
 
 
     info_cnt = 6;*/
+    ALOGI("zwcontrol_add_provision_list_entry started");
 
     int result = zwnet_pl_add(hl_appl->zwnet, dsk, info, info_cnt);
 
@@ -11152,6 +11203,9 @@ static void hl_parse_provision_list_info(struct pl_lst_ent *info, cJSON* jsonRoo
                     ALOGI("network state, nodeId:%d, status:%d",info->info[i].info.nw_sts.node_id, info->info[i].info.nw_sts.status);
                     //Disallowed
                     break;
+
+                default:
+                    ALOGW("This provision type: %d is not supported", info->info[i].type);
             }
         }
     }
@@ -11271,6 +11325,7 @@ int  zwcontrol_get_all_provision_list_entry(hl_appl_ctx_t* hl_appl)
         return -1;
     }
 
+    ALOGI("zwcontrol_get_all_provision_list_entry started");
     int result = zwnet_pl_list_get(hl_appl->zwnet, hl_all_provision_list_get_report, NULL);
 
     if(result < 0)
@@ -11288,6 +11343,7 @@ int  zwcontrol_rm_all_provision_list_entry(hl_appl_ctx_t* hl_appl)
         return -1;
     }
 
+    ALOGI("zwcontrol_rm_all_provision_list_entry started");
     int result = zwnet_pl_list_del(hl_appl->zwnet);
 
     if(result < 0)
