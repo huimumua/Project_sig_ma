@@ -1927,7 +1927,7 @@ static void hl_add_node_s2_cb(void *usr_param, sec2_add_cb_prm_t *cb_param)
             cJSON *jsonRoot;
             jsonRoot = cJSON_CreateObject();
             char str[10] = {0};
-            sprintf(str, "%x", cb_param->cb_prm.req_key.req_keys);
+            sprintf(str, "%d", cb_param->cb_prm.req_key.req_keys);
             cJSON_AddStringToObject(jsonRoot, "Grant Keys Msg", "Request Keys");
             cJSON_AddStringToObject(jsonRoot, "Keys", str);
 
@@ -8315,7 +8315,7 @@ int  zwcontrol_switch_color_get(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_t
         return -1;
     }
 
-    ALOGI("zwcontrol_switch_color_get started, nodeId: %d, calor id: %s", nodeId, color_comp[compid]);
+    ALOGI("zwcontrol_switch_color_get started, nodeId: %d, calor id: %s", nodeId, color_comp[compId]);
     int result = hl_sw_color_rep_set_and_get(hl_appl, (uint8_t)compId);
 
     if(result == 1)
