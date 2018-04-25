@@ -184,31 +184,23 @@ public class CDCSerialDevice
     public static void Close()
     {
         if(task == null){
-            Log.e(TAG,"Read Task Not Running...");
+            //Log.e(TAG,"Read Task Not Running...");
             return;
         }
 
-        setControlCommand(CDC_SET_CONTROL_LINE_STATE, CDC_CONTROL_LINE_OFF, null);
-        Log.i(TAG,"close, setControlCommand done");
-        conn.releaseInterface(iface);
-        Log.i(TAG," close, releaseInterface done");
-        conn.close();
-        Log.i(TAG,"close, conn close done");
-
         task.working.set(false);
-        Log.i(TAG,"close , task working set done");
+        setControlCommand(CDC_SET_CONTROL_LINE_STATE, CDC_CONTROL_LINE_OFF, null);
+        conn.releaseInterface(iface);
+        conn.close();
 
         try
         {
-            Log.i(TAG,"task join started");
-            task.join(100);
-            Log.i(TAG," close task join done");
+            task.join(5000);
         }
         catch (InterruptedException e)
         {
             e.printStackTrace();
         }
-        Log.i(TAG,"Serial cdc closed");
 
         task = null;
     }
@@ -383,6 +375,10 @@ public class CDCSerialDevice
             Log.d(TAG, "Usb Serial Port Reading Task Start...");
             while (working.get()) {
                 UsbRequest request = conn.requestWait();
+                if(!working.get())
+                {
+                    break;
+                }
                 if (request != null && request.getEndpoint().getType() == UsbConstants.USB_ENDPOINT_XFER_BULK
                         && request.getEndpoint().getDirection() == UsbConstants.USB_DIR_IN) {
                     if (buffer.position() > 0) {
