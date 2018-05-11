@@ -1562,6 +1562,10 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts, hl_appl_ctx_t * hl_ap
         {
             cJSON_AddStringToObject(jsonRoot, "Status", "Failed");
         }
+        else if(sts == OP_ADD_NODE_LEARN_READY)
+        {
+            cJSON_AddStringToObject(jsonRoot, "Status", "Learn Ready");
+        }
         else if(sts == OP_ADD_NODE_PROTOCOL_DONE)
         {
             cJSON_AddStringToObject(jsonRoot, "Status", "Protocol Done");
@@ -1609,7 +1613,7 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts, hl_appl_ctx_t * hl_ap
         {
             cJSON_AddStringToObject(jsonRoot, "Status", "Failed");
         }
-        /*else if(sts == OP_RM_NODE_REMOVING)
+        else if(sts == OP_RM_NODE_REMOVING)
         {
             cJSON_AddStringToObject(jsonRoot, "Status", "Removing");
         }
@@ -1620,7 +1624,7 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts, hl_appl_ctx_t * hl_ap
         else if(sts == OP_RM_NODE_FOUND)
         {
             cJSON_AddStringToObject(jsonRoot, "Status", "Node Found");
-        }*/
+        }
         else if(sts == OP_DONE)
         {
             cJSON_AddStringToObject(jsonRoot, "Status", "Success");

@@ -435,9 +435,18 @@ control and data in the mesh network.
 #define     OP_GET_NI_NODE_CMPLT_MASK   0x00FF  /**< Mask to get the number of completed nodes*/
 
 /** Progress status of adding node and migrating primary controller */
-#define     OP_ADD_NODE_PROTOCOL_DONE   1   /**< Protocol part of adding node done*/
-#define     OP_ADD_NODE_GET_NODE_INFO   2   /**< Getting node detailed information*/
-#define     OP_ADD_NODE_PROTOCOL_START  3   /**< Smart Start add node Z-wave protocol started*/
+
+#define     OP_ADD_NODE_LEARN_READY     1   /**< Ready to accept new node*/
+#define     OP_ADD_NODE_FOUND           2   /**< Found new node*/
+#define     OP_ADD_NODE_ADDING          3   /**< Adding new node*/
+#define     OP_ADD_NODE_PROTOCOL_DONE   4   /**< Protocol part of adding node done*/
+#define     OP_ADD_NODE_GET_NODE_INFO   5   /**< Getting node detailed information*/
+#define     OP_ADD_NODE_PROTOCOL_START  6   /**< Smart Start add node Z-wave protocol started*/
+
+/** Progress status of removing node */
+#define     OP_RM_NODE_LEARN_READY      1   /**< Ready to remove a node*/
+#define     OP_RM_NODE_FOUND            2   /**< Found a node*/
+#define     OP_RM_NODE_REMOVING         3   /**< Removing the node*/
 
 /** Progress status of replacing failed node */
 #define     OP_RP_NODE_PROTOCOL_DONE    1   /**< Protocol part of replacing node done*/

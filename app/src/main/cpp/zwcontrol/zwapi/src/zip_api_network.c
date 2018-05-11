@@ -9833,7 +9833,7 @@ zwnet_node_rm_cb - Remove node from network callback function
 */
 static void zwnet_node_rm_cb(appl_layer_ctx_t *appl_ctx, uint8_t sts, uint8_t rm_node_id)
 {
-    const char *status_msg[] = { "OK", "Failed", "unknown"};
+    const char *status_msg[] = { "OK", "Learn Ready", "Failed", "unknown"};
 
     int         status;
     zwnet_p     nw = (zwnet_p)appl_ctx->data;
@@ -9843,16 +9843,18 @@ static void zwnet_node_rm_cb(appl_layer_ctx_t *appl_ctx, uint8_t sts, uint8_t rm
         case REMOVE_NODE_STATUS_DONE:
             status = 0;
             break;
-
-        case REMOVE_NODE_STATUS_FAILED:
+        case REMOVE_NODE_STATUS_LEARN_READY:
             status = 1;
+            break;
+        case REMOVE_NODE_STATUS_FAILED:
+            status = 2;
             break;
 
         default:
-            status = 2;
+            status = 3;
     }
 
-    debug_zwapi_msg(&nw->plt_ctx, "zwnet_node_rm_cb: status:%u (%s)", sts, status_msg[status]);
+    ALOGI("zwnet_node_rm_cb: status:%u (%s)", sts, status_msg[status]);
 
     if (sts == REMOVE_NODE_STATUS_DONE)
     {
@@ -9880,11 +9882,14 @@ static void zwnet_node_rm_cb(appl_layer_ctx_t *appl_ctx, uint8_t sts, uint8_t rm
     //Cancel operation without sending REMOVE_NODE_STOP
 
     //Reset operation to "no operation"
-    nw->curr_op = ZWNET_OP_NONE;
+    //nw->curr_op = ZWNET_OP_NONE;
 
     //Callback to notify status
     if (sts == REMOVE_NODE_STATUS_DONE)
     {
+        //Reset operation to "no operation"
+        nw->curr_op = ZWNET_OP_NONE;
+
         zwnet_sts_t info = {0};
 
         info.type = ZWNET_STS_INFO_NODE_ID;
@@ -9892,8 +9897,13 @@ static void zwnet_node_rm_cb(appl_layer_ctx_t *appl_ctx, uint8_t sts, uint8_t rm
 
         zwnet_notify(nw, ZWNET_OP_RM_NODE, OP_DONE, &info);
     }
+    else if(sts == REMOVE_NODE_STATUS_LEARN_READY)
+    {
+        zwnet_notify(nw, ZWNET_OP_RM_NODE, REMOVE_NODE_STATUS_LEARN_READY, NULL);
+    }
     else
     {
+        nw->curr_op = ZWNET_OP_NONE;
         zwnet_notify(nw, ZWNET_OP_RM_NODE, OP_FAILED, NULL);
     }
 
@@ -10162,6 +10172,12 @@ static void zwnet_add_node_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_sec2_t 
     char                *device_dsk = NULL;
     sec2_node_info_t    *s2_nif_p = NULL;
     sec2_node_info_t    s2_nif = {0};
+
+    if(add_ni->status == ADD_NODE_STATUS_LEARN_READY)
+    {
+        zwnet_notify(nw, (unsigned)nw->curr_op /*ZWNET_OP_ADD_NODE*/, OP_ADD_NODE_LEARN_READY, NULL);
+        return;
+    }
 
     switch (add_ni->status)
     {
