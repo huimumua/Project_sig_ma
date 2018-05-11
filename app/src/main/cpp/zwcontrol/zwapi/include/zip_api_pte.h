@@ -594,6 +594,7 @@ typedef struct _zwnode
     int         dev_cfg_valid;  /**< Flag to indicate dev_cfg_rec is valid*/
     dev_rec_t   dev_cfg_rec;    /**< Device configuration record*/
     uint8_t     security_incl_status;     /**< node security add status */ 
+    uint8_t     isNew;
 
 }
 zwnode_t;

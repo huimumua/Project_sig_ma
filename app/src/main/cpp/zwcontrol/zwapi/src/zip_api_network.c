@@ -1215,6 +1215,8 @@ int zwnet_node_info_update(zwnet_p nw, appl_node_info_t *node_info, sec2_node_in
     node = zwnode_find(&nw->ctl, node_info->node_id);
     if (node)
     {
+        ALOGI("This node has already added into network, now update node info.");
+        node->isNew = 0;
         node->listen = node_info->listen;//update listening flag as old node information in persistent storage doesn't store this variable
 
         //Existing node found, check whether there is any changes
@@ -1329,6 +1331,8 @@ int zwnet_node_info_update(zwnet_p nw, appl_node_info_t *node_info, sec2_node_in
         }
         return ZW_ERR_MEMORY;
     }
+
+    node->isNew = 1;
 
     //Init non-zero value
     node->wkup_intv = -1;
