@@ -75,8 +75,8 @@ public class ZwaveControlHelper {
 
         if("Enter 5-digit PIN".equals(pinReq))
         {
-            android.util.Log.i(LOG_TAG," user input pin code: "+(Integer.toString(12824)));
-            return 12824;
+            android.util.Log.i(LOG_TAG," user input pin code: "+(Integer.toString(30008)));
+            return 30008;
         }
 
         android.util.Log.w(LOG_TAG," should not go here!!!!");

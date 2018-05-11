@@ -2350,7 +2350,7 @@ static int hl_add_node(hl_appl_ctx_t *hl_appl)
 
     if (netdesc->ctl_cap & ZWNET_CTLR_CAP_S2)
     {
-        ALOGD("Controller supports security 2.\n");
+        ALOGD("Controller supports security 2 inclusion.\n");
         hl_appl->sec2_add_node = 1;
     }
     else
@@ -2392,7 +2392,7 @@ static int hl_add_node(hl_appl_ctx_t *hl_appl)
                 hl_appl->sec2_cb_enter |= SEC2_ENTER_DSK;
             }
 
-            hl_appl->sec2_cb_exit = 0;
+            /*hl_appl->sec2_cb_exit = 0;
 
             ALOGD("Waiting for Requested keys and/or DSK callback ...\n");
 
@@ -2403,7 +2403,7 @@ static int hl_add_node(hl_appl_ctx_t *hl_appl)
                 if (hl_appl->sec2_cb_exit == 1)
                     break;
                 plt_sleep(100);
-            }
+            }*/
         }
     }
 
@@ -2567,16 +2567,9 @@ int zwcontrol_add_node(hl_appl_ctx_t *hl_appl)
 
     result = hl_add_node(hl_appl);
 
-    if(hl_appl->sec2_add_node)
+    if(result != 0)
     {
-        if(result == 0)
-        {
-            ALOGI("Added node success.");
-        }
-        else
-        {
-            ALOGE("Add node with error:%d\n", result);
-        }
+        ALOGE("zwcontrol_add_node with error: %d",result);
     }
 
     return result;
