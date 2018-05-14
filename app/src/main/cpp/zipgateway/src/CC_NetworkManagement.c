@@ -294,6 +294,9 @@ static void
 RemoveSelfDestructStatus(BYTE status);
 static void
 nm_send_reply(void* buf, u8_t len);
+//djnakata
+static void
+nm_send_reply2(void* buf, u8_t len);
 static void
 SendNodeList(BYTE bStatus);
 static void
@@ -763,7 +766,13 @@ nm_fsm_post_event(nm_event_t ev, void* event_data)
     }
     break;
   case NM_WAITING_FOR_ADD:
-    if (ev == NM_NODE_ADD_STOP || ev == NM_EV_TIMEOUT)
+    if(ev == NM_EV_ADD_LEARN_READY)
+    {
+      //djnakata
+      nms.buf.ZW_NodeAddStatus1byteFrame.status = ADD_NODE_STATUS_LEARN_READY;
+      nm_send_reply2(&nms.buf, nms.buf_len);
+    }
+    else if (ev == NM_NODE_ADD_STOP || ev == NM_EV_TIMEOUT)
     {
       nms.buf.ZW_NodeAddStatus1byteFrame.status = ADD_NODE_STATUS_FAILED;
       ZW_AddNodeToNetwork(ADD_NODE_STOP, AddNodeStatusUpdate);
@@ -1735,6 +1744,14 @@ nm_send_reply(void* buf, u8_t len)
   ZW_SendDataZIP(&nms.conn, (BYTE*) buf, len, ResetState);
 }
 
+//djnakata
+static void
+nm_send_reply2(void* buf, u8_t len)
+{
+    DBG_PRINTF("Sending nm_send_reply2 network management reply\n");
+    ZW_SendDataZIP(&nms.conn, (BYTE*) buf, len, NULL);
+}
+
 /**
  * Called after info update of a newly included node. After the secure part of the inclusion.
  */
@@ -1778,7 +1795,14 @@ RemoveNodeStatusUpdate(LEARN_INFO* inf)
   DBG_PRINTF("RemoveNodeStatusUpdate status=%d node %d\n", inf->bStatus, inf->bSource);
   switch (inf->bStatus)
   {
-  case ADD_NODE_STATUS_LEARN_READY:
+  case REMOVE_NODE_STATUS_LEARN_READY:
+    //djnakata
+    r->cmdClass = COMMAND_CLASS_NETWORK_MANAGEMENT_INCLUSION;
+    r->cmd = NODE_REMOVE_STATUS;
+    r->status = inf->bStatus;
+    r->seqNo = nms.seq;
+    nm_send_reply2(r, sizeof(ZW_NODE_REMOVE_STATUS_FRAME));
+
     memset(&nms.buf, 0, sizeof(nms.buf));
     /* Start remove timer */
     nms.addRemoveNodeTimerHandle = ZW_LTimerStart(RemoveTimerExpired,
