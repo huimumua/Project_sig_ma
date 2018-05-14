@@ -10163,7 +10163,7 @@ static void zwnet_add_node_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_sec2_t 
     #define NODE_ADD_STATUS_SECURITY_FAILED      9
 */
     const char *status_msg[] = { "OK", "Failed", "Added but insecure",
-                                 "unknown"};
+                                 "Learn Ready", "unknown"};
 
     zwnet_p             nw = (zwnet_p)appl_ctx->data;
     zwnode_p            node;
@@ -10172,12 +10172,6 @@ static void zwnet_add_node_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_sec2_t 
     char                *device_dsk = NULL;
     sec2_node_info_t    *s2_nif_p = NULL;
     sec2_node_info_t    s2_nif = {0};
-
-    if(add_ni->status == ADD_NODE_STATUS_LEARN_READY)
-    {
-        zwnet_notify(nw, (unsigned)nw->curr_op /*ZWNET_OP_ADD_NODE*/, OP_ADD_NODE_LEARN_READY, NULL);
-        return;
-    }
 
     switch (add_ni->status)
     {
@@ -10193,15 +10187,18 @@ static void zwnet_add_node_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_sec2_t 
             status = 2;
             break;
 
+        case ADD_NODE_STATUS_LEARN_READY:
+            status = 3
+
         default:
-            status = 3;
+            status = 4;
     }
 
     int security_incl_status = 0;
     int has_s0_cls = 0;
     has_s2_cls = 0;
 
-    debug_zwapi_msg(&nw->plt_ctx, "add_node_nw_cb: status:%u (%s)", add_ni->status, status_msg[status]);
+    ALOGI("add_node_nw_cb: status:%u (%s)", add_ni->status, status_msg[status]);
 
     if (add_ni_s2->sec2_valid)
     {
@@ -10227,6 +10224,7 @@ static void zwnet_add_node_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_sec2_t 
     if ((add_ni->status == ADD_NODE_STATUS_DONE)
         || (add_ni->status == NODE_ADD_STATUS_SECURITY_FAILED))
     {
+        nw->curr_op = ZWNET_OP_ADD_NODE;
         n2ip_sm_ctx_t   n2ip_sm_ctx = {0};
 
         debug_zwapi_msg(&nw->plt_ctx, "new node id:%u", add_ni->node_id);
@@ -10309,6 +10307,11 @@ static void zwnet_add_node_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_sec2_t 
             zwnet_notify(nw, (unsigned)nw->curr_op /*ZWNET_OP_ADD_NODE*/, OP_FAILED, NULL);
         }
         plt_mtx_ulck(nw->mtx);
+    }
+    else if(add_ni->status == ADD_NODE_STATUS_LEARN_READY)
+    {
+        zwnet_notify(nw, (unsigned)nw->curr_op /*ZWNET_OP_ADD_NODE*/, OP_ADD_NODE_LEARN_READY, NULL);
+        nw->curr_op = ZWNET_OP_NONE;
     }
     else
     {
