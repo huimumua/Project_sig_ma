@@ -10188,7 +10188,7 @@ static void zwnet_add_node_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_sec2_t 
             break;
 
         case ADD_NODE_STATUS_LEARN_READY:
-            status = 3
+            status = 3;
 
         default:
             status = 4;
