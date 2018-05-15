@@ -10189,6 +10189,7 @@ static void zwnet_add_node_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_sec2_t 
 
         case ADD_NODE_STATUS_LEARN_READY:
             status = 3;
+            break;
 
         default:
             status = 4;
@@ -10224,7 +10225,6 @@ static void zwnet_add_node_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_sec2_t 
     if ((add_ni->status == ADD_NODE_STATUS_DONE)
         || (add_ni->status == NODE_ADD_STATUS_SECURITY_FAILED))
     {
-        nw->curr_op = ZWNET_OP_ADD_NODE;
         n2ip_sm_ctx_t   n2ip_sm_ctx = {0};
 
         debug_zwapi_msg(&nw->plt_ctx, "new node id:%u", add_ni->node_id);
@@ -10311,7 +10311,6 @@ static void zwnet_add_node_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_sec2_t 
     else if(add_ni->status == ADD_NODE_STATUS_LEARN_READY)
     {
         zwnet_notify(nw, (unsigned)nw->curr_op /*ZWNET_OP_ADD_NODE*/, OP_ADD_NODE_LEARN_READY, NULL);
-        nw->curr_op = ZWNET_OP_NONE;
     }
     else
     {

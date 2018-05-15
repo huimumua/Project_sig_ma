@@ -1640,7 +1640,8 @@ static void appl_nmgmt_inclusion(appl_layer_ctx_t *appl_ctx,
                 if (cmd_buf[2] == appl_ctx->nm_cb_info[NM_OP_NODE_ADD].seq_num)
                 {
                     cb = appl_ctx->nm_cb_info[NM_OP_NODE_ADD].cb;
-                    appl_ctx->nm_cb_info[NM_OP_NODE_ADD].cb = NULL;
+                    //tiny
+                    //appl_ctx->nm_cb_info[NM_OP_NODE_ADD].cb = NULL;
                 }
                 else
                 {   //Unsolicited add node status
