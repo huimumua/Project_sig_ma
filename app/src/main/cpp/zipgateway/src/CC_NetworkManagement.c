@@ -769,7 +769,12 @@ nm_fsm_post_event(nm_event_t ev, void* event_data)
     if(ev == NM_EV_ADD_LEARN_READY)
     {
       //djnakata
+      memset(&nms.buf, 0, sizeof(nms.buf.ZW_NodeAddStatus1byteFrame));
+      nms.buf.ZW_NodeAddStatus1byteFrame.cmdClass = COMMAND_CLASS_NETWORK_MANAGEMENT_INCLUSION;
+      nms.buf.ZW_NodeAddStatus1byteFrame.cmd = NODE_ADD_STATUS;
+      nms.buf.ZW_NodeAddStatus1byteFrame.seqNo = nms.seq;
       nms.buf.ZW_NodeAddStatus1byteFrame.status = ADD_NODE_STATUS_LEARN_READY;
+      nms.buf_len = sizeof(nms.buf.ZW_NodeAddStatus1byteFrame) - 1;
       nm_send_reply2(&nms.buf, nms.buf_len);
     }
     else if (ev == NM_NODE_ADD_STOP || ev == NM_EV_TIMEOUT)
