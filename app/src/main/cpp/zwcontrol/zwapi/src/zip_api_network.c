@@ -9820,7 +9820,7 @@ int zwnet_abort(zwnet_p net)
 
     if(result == 0)
     {
-        ALOGI("Abort op done, current op is: ",net->curr_op);
+        ALOGI("Abort op done, current op is: %d",net->curr_op);
     }
 
     //Return result
