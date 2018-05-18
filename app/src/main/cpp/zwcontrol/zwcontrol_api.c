@@ -4465,6 +4465,7 @@ int  zwcontrol_stop_op(hl_appl_ctx_t *hl_appl)
     {
         return -1;
     }
+    ALOGI("Abort current op: %d",hl_appl->zwnet->curr_op)
 
     return zwnet_abort(hl_appl->zwnet);
 }
