@@ -9657,6 +9657,7 @@ int zwnet_abort(zwnet_p net)
                 {
                     ALOGE("zw_remove_node_from_network with error:%d", result);
                 }
+                zwnet_notify(net, ZWNET_OP_RM_NODE, OP_FAILED, NULL);
             }
             break;
 
