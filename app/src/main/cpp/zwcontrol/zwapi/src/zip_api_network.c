@@ -10257,6 +10257,7 @@ static void zwnet_add_node_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_sec2_t 
         {
             s2_nif.grnt_keys_valid = 1;
             s2_nif.grnt_keys = add_ni_s2->grnt_keys;
+            ALOGI("granted key callback, key:%x",add_ni_s2->grnt_keys);
 
             s2_nif_p = &s2_nif;
         }
@@ -10268,11 +10269,11 @@ static void zwnet_add_node_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_sec2_t 
             s2_nif_p = &s2_nif;
         }
 
-        if(has_s2_cls && has_s0_cls)
+        if(has_s2_cls && has_s0_cls && (add_ni_s2->grnt_keys != 0x80 && add_ni_s2->grnt_keys != 0))
         {
             security_incl_status = 2; //s2 inclusion
         }
-        else if(!has_s2_cls && has_s0_cls)
+        else if((!has_s2_cls && has_s0_cls) || (add_ni_s2->grnt_keys == 0x80))
         {
             security_incl_status = 1; // s0 inclusion
         }
