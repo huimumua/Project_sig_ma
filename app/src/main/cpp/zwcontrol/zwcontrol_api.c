@@ -11125,7 +11125,7 @@ static void hl_parse_provision_list_info(struct pl_lst_ent *info, cJSON* jsonRoo
                 case PL_INFO_TYPE_BOOT_MODE:
                     if(info->info[i].info.boot_mode == PL_BOOT_MODE_S2)
                     {
-                        cJSON_AddStringToObject(jsonRoot,"Device Boot Mode", "Security S2");
+                        cJSON_AddStringToObject(jsonRoot,"Device Boot Mode", "Security 2");
                     }
                     else if(info->info[i].info.boot_mode == PL_BOOT_MODE_SMART_STRT)
                     {
@@ -11141,7 +11141,7 @@ static void hl_parse_provision_list_info(struct pl_lst_ent *info, cJSON* jsonRoo
                     }
                     else if(info->info[i].info.incl_sts == PL_INCL_STS_PASSIVE)
                     {
-                        cJSON_AddStringToObject(jsonRoot,"Device Inclusion state", "State Parssive");
+                        cJSON_AddStringToObject(jsonRoot,"Device Inclusion state", "State Passive");
                     }
                     else
                     {
