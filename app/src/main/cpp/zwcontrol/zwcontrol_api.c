@@ -11415,4 +11415,6 @@ int  zwcontrol_check_node_isFailed(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
     {
         ALOGE("zwcontrol_check_node_isFailed send with error: %d", result);
     }
+
+    return result;
 }
