@@ -4149,8 +4149,8 @@ static int hl_specify_node_desc_dump(hl_appl_ctx_t *hl_appl, int nodeId, cJSON *
 
                 while (last_intf_cont)
                 {
-                    if(node->nodeid == 1)
-                        break;
+                    /*if(node->nodeid == 1)
+                        break;*/
                     cJSON *InterfaceInfo = cJSON_CreateObject();
 
                     if(InterfaceInfo == NULL)
