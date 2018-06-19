@@ -1829,6 +1829,7 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts, hl_appl_ctx_t * hl_ap
         if(sts == OP_DONE)
         {
             initStatus = 1;
+            //zwcontrol_save_nodeinfo(hl_appl, hl_appl->node_info_file);
             cJSON_AddStringToObject(jsonRoot, "Status", "Success");
         }
         else if(sts == OP_FAILED)
@@ -3006,6 +3007,11 @@ static char* hl_zwaveplus_icon_to_device_type(uint16_t  usr_icon)
             return "unknown device";
         }
             break;
+        case ICON_TYPE_GENERIC_GATEWAY:
+        {
+            return "Gateway";
+        }
+        break;
         default:
             return "unknown device";
     }
