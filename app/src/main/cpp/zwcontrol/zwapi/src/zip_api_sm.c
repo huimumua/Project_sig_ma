@@ -5418,7 +5418,8 @@ static void zwnet_ep0_dedup(zwnode_p node)
                 {
                     if (intf0->cls == intf1->cls)
                     {   //Duplicated, mark it as hidden
-                        intf0->propty |= IF_PROPTY_HIDDEN;
+                        //tiny
+                        //intf0->propty |= IF_PROPTY_HIDDEN;
                         break;
                     }
                     intf1 = (zwif_p)intf1->obj.next;
@@ -5449,7 +5450,8 @@ static void zwnet_hide_fw_upd(zwnode_p node)
 		{
 			if(intf->cls == COMMAND_CLASS_FIRMWARE_UPDATE_MD)
 			{
-				intf->propty |= IF_PROPTY_HIDDEN;
+                //tiny
+				//intf->propty |= IF_PROPTY_HIDDEN;
                 break;	//Not supposed to have 2 firmware update MD cc in the same endpoint, move to next endpoint
 			}
 		}

@@ -496,13 +496,44 @@ static char *hl_class_str_get(uint16_t cls, uint8_t ver)
         {
             return "COMMAND_CLASS_IP_ASSOCIATION";
         }
-            break;
+        break;
 
         case COMMAND_CLASS_SUPERVISION:
         {
             return "COMMAND_CLASS_SUPERVISION";
         }
-            break;
+        break;
+
+        case COMMAND_CLASS_APPLICATION_CAPABILITY:
+        {
+            return "COMMAND_CLASS_APPLICATION_CAPABILITY";
+        }
+        break;
+        case COMMAND_CLASS_ZIP_ND:
+        {
+            return "COMMAND_CLASS_ZIP_ND";
+        }
+        break;
+        case COMMAND_CLASS_INCLUSION_CONTROLLER:
+        {
+            return "COMMAND_CLASS_INCLUSION_CONTROLLER";
+        }
+        break;
+        case COMMAND_CLASS_NETWORK_MANAGEMENT_INSTALLATION_MAINTENANCE:
+        {
+            return "COMMAND_CLASS_NETWORK_MANAGEMENT_INSTALLATION_MAINTENANCE";
+        }
+        break;
+        case COMMAND_CLASS_MAILBOX:
+        {
+            return "COMMAND_CLASS_MAILBOX";
+        }
+        break;
+        case COMMAND_CLASS_NODE_PROVISIONING:
+        {
+            return "COMMAND_CLASS_PROVISIONING_LIST";
+        }
+        break;
 
             /******************skysoft******************/
         default:
@@ -3757,8 +3788,8 @@ static int hl_node_desc_dump(hl_appl_ctx_t *hl_appl, cJSON *jsonRoot)
 
             while (last_intf_cont)
             {
-                if(node->nodeid == 1)
-                    break;
+                /*if(node->nodeid == 1)
+                    break;*/
                 cJSON *InterfaceInfo = cJSON_CreateObject();
 
                 if(InterfaceInfo == NULL)

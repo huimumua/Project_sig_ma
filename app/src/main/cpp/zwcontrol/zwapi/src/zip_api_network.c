@@ -8027,7 +8027,8 @@ static int zwnet_ctlr_intf_create(zwnode_p node, appl_node_info_t *node_info)
 
         if (!found)
         {   //set to hidden
-            intf->propty |= IF_PROPTY_HIDDEN;
+            //tiny
+            //intf->propty |= IF_PROPTY_HIDDEN;
         }
 
         intf = (zwif_p)intf->obj.next;
@@ -8223,7 +8224,8 @@ void zwnet_dev_if_propty_tmout_get(zwep_p ep, uint16_t cmd_cls, uint8_t real_ver
     //For all interfaces
     if ((if_rec->propty & IF_PROPTY_HIDDEN_POLL) != 0)
     {
-        propty  |= IF_PROPTY_HIDDEN_POLL;
+        //tiny
+        //propty  |= IF_PROPTY_HIDDEN_POLL;
     }
 
 l_DEV_PROPTY_IF_DONE:
