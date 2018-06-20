@@ -1,4 +1,4 @@
-package com.askey.firefly.zwave.control.thirdparty.usbserial.usbserial;
+fpackage com.askey.firefly.zwave.control.thirdparty.usbserial.usbserial;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -193,14 +193,15 @@ public class CDCSerialDevice
         conn.releaseInterface(iface);
         conn.close();
 
-        try
+        // task.join will block, nerver return
+        /*try
         {
             task.join(5000);
         }
         catch (InterruptedException e)
         {
             e.printStackTrace();
-        }
+        }*/
 
         task = null;
     }
