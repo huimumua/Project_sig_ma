@@ -1,4 +1,4 @@
-fpackage com.askey.firefly.zwave.control.thirdparty.usbserial.usbserial;
+package com.askey.firefly.zwave.control.thirdparty.usbserial.usbserial;
 
 import android.app.PendingIntent;
 import android.content.Context;
