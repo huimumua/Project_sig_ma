@@ -4082,9 +4082,9 @@ static int hl_specify_node_desc_dump(hl_appl_ctx_t *hl_appl, int nodeId, cJSON *
             sprintf(str, "%u.%02u", node->app_ver >> 8, node->app_ver & 0xFF);
             cJSON_AddStringToObject(NodeInfo, "Application version", str);*/
 
-            /*hl_ext_ver_show(hl_appl, node, NodeInfo);
+            hl_ext_ver_show(hl_appl, node, NodeInfo);
 
-            if (node->dev_id.len > 0)
+            /*if (node->dev_id.len > 0)
             {
                 hl_dev_id_show(hl_appl, &node->dev_id);
             }*/
