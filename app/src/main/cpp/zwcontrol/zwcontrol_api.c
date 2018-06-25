@@ -2855,6 +2855,7 @@ static void hl_ext_ver_show(hl_appl_ctx_t *hl_appl, zwnoded_p node, cJSON *Node)
     ext_ver_t   *ext_ver;
     int         i;
     char str[50] = {0};
+    char fw_str[50] = {0};
 
     ext_ver = zwnode_get_ext_ver(node);
     if (ext_ver)
@@ -2867,9 +2868,9 @@ static void hl_ext_ver_show(hl_appl_ctx_t *hl_appl, zwnoded_p node, cJSON *Node)
             ALOGI("Firmware %d version:%u.%02u", i+1, (unsigned)(ext_ver->fw_ver[i] >> 8),
                   (unsigned)(ext_ver->fw_ver[i] & 0xFF));
 
-            cJSON_AddNumberToObject(Node, "Firmware", i+1);
             sprintf(str, "%u.%02u", ext_ver->fw_ver[i] >> 8, ext_ver->fw_ver[i] & 0xFF);
-            cJSON_AddStringToObject(Node, "Firmware version", str);
+            sprintf(fw_str,"Firmware %d version",i+1);
+            cJSON_AddStringToObject(Node, fw_str, str);
         }
         free(ext_ver);
     }
@@ -4074,13 +4075,13 @@ static int hl_specify_node_desc_dump(hl_appl_ctx_t *hl_appl, int nodeId, cJSON *
 
             /*cJSON_AddStringToObject(NodeInfo, "Category", (node->category <= DEV_WALL_CTLR)?
                                                       dev_category_str[node->category] : "unknown");*/
-            /*cJSON_AddNumberToObject(NodeInfo, "Z-wave library type", node->lib_type);
+            cJSON_AddNumberToObject(NodeInfo, "Z-wave library type", node->lib_type);
 
             sprintf(str, "%u.%02u", node->proto_ver >> 8, node->proto_ver & 0xFF);
             cJSON_AddStringToObject(NodeInfo, "Z-wave protocol version", str);
 
             sprintf(str, "%u.%02u", node->app_ver >> 8, node->app_ver & 0xFF);
-            cJSON_AddStringToObject(NodeInfo, "Application version", str);*/
+            cJSON_AddStringToObject(NodeInfo, "Application version", str);
 
             hl_ext_ver_show(hl_appl, node, NodeInfo);
 
