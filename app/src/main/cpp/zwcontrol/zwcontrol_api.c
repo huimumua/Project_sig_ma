@@ -4051,27 +4051,27 @@ static int hl_specify_node_desc_dump(hl_appl_ctx_t *hl_appl, int nodeId, cJSON *
             }
 
             ALOGI("Node security inclusion status:%s", hl_is_security_inclusion(node->security_incl_status));
-            /*ALOGI("Vendor id:%04X", node->vid);
+            ALOGI("Vendor id:%04X", node->vid);
             ALOGI("Product type id:%04X", node->type);
-            ALOGI("Product id:%04X", node->pid);*/
+            ALOGI("Product id:%04X", node->pid);
             /*plt_msg_show(hl_plt_ctx_get(hl_appl), "Category:%s", (node->category <= DEV_WALL_CTLR)?
                                                                  dev_category_str[node->category] : "unknown");*/
-            /*ALOGI("Z-wave library type:%u", node->lib_type);
+            ALOGI("Z-wave library type:%u", node->lib_type);
             ALOGI("Z-wave protocol version:%u.%02u\n", (unsigned)(node->proto_ver >> 8),
                   (unsigned)(node->proto_ver & 0xFF));
             ALOGI("Application version:%u.%02u\n", (unsigned)(node->app_ver >> 8),
-                  (unsigned)(node->app_ver & 0xFF));*/
+                  (unsigned)(node->app_ver & 0xFF));
 
             cJSON_AddStringToObject(NodeInfo, "Node security inclusion status", hl_is_security_inclusion(node->security_incl_status));
 
-            /*sprintf(str, "%04X", node->vid);
+            sprintf(str, "%04X", node->vid);
             cJSON_AddStringToObject(NodeInfo, "Vendor id", str);
 
             sprintf(str, "%04X", node->type);
             cJSON_AddStringToObject(NodeInfo, "Product type id", str);
 
             sprintf(str, "%04X", node->pid);
-            cJSON_AddStringToObject(NodeInfo, "Product id", str);*/
+            cJSON_AddStringToObject(NodeInfo, "Product id", str);
 
             /*cJSON_AddStringToObject(NodeInfo, "Category", (node->category <= DEV_WALL_CTLR)?
                                                       dev_category_str[node->category] : "unknown");*/
