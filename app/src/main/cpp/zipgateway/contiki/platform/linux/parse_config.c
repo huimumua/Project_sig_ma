@@ -218,7 +218,12 @@ void ConfigInit(const char* resPath)
     cfg.manufacturer_id = strtol(config_get_val("ZipManufacturerID", "0"), NULL, 0);
     cfg.product_id = strtol(config_get_val("ZipProductID", "1"), NULL, 0);
     cfg.product_type = strtol(config_get_val("ZipProductType", "1"), NULL, 0);
+    cfg.no_of_firmware_target= strtol(config_get_val("ZipNoOfFirmwareTargets", "2"), NULL, 0);
     cfg.hardware_version = strtol(config_get_val("ZipHardwareVersion", "1"), NULL, 0);
+    cfg.firmware2_version= strtol(config_get_val("ZipFirmware2Version", "1"), NULL, 0);
+    cfg.firmware2_subversion= strtol(config_get_val("ZipFirmware2SubVersion", "1"), NULL, 0);
+    //cfg.firmware3_version= strtol(config_get_val("ZipFirmware3Version", "0"), NULL, 0);
+    //cfg.firmware3_subversion= strtol(config_get_val("ZipFirmware3SubVersion", "0"), NULL, 0);
 
     cfg.mb_port = uip_htons(atoi(config_get_val("ZipMBPort", "41230")));
     uiplib_ipaddrconv(config_get_val("ZipMBDestinationIp6", "0::0"), &(cfg.mb_destination));

@@ -157,7 +157,14 @@ struct router_config {
   u16_t manufacturer_id;
   u16_t product_type;
   u16_t product_id;
+  u16_t no_of_firmware_target;
   u16_t hardware_version;
+  u16_t firmware1_version;
+  u16_t firmware1_subversion;
+  u16_t firmware2_version;
+  u16_t firmware2_subversion;
+  u16_t firmware3_version;
+  u16_t firmware3_subversion;
 #ifndef __ASIX_C51__
   //certs info
   const char *ca_cert;

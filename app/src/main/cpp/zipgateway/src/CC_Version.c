@@ -135,7 +135,9 @@ VersionHandler(zwave_connection_t *c, uint8_t* frame, uint16_t length)
       f->zWaveProtocolVersion = atoi(buf + 7);
       f->zWaveProtocolSubVersion = atoi(buf + 9);
 
-      Get_SerialAPI_AppVersion(&f->firmware0Version, &f->firmware0SubVersion);
+      //Get_SerialAPI_AppVersion(&f->firmware0Version, &f->firmware0SubVersion);
+      f->firmware0Version = f->zWaveProtocolVersion;
+      f->firmware0SubVersion = f->zWaveProtocolSubVersion;
 
 #ifdef __ASIX_C51__
       f->hardwareVersion = 0x1;
@@ -145,14 +147,14 @@ VersionHandler(zwave_connection_t *c, uint8_t* frame, uint16_t length)
       gconfig_GetCertVersion(&f->firmware2Version, &f->firmware2SubVersion);
       GwDefaultConfigVersion_Get(&f->firmware3Version, &f->firmware3SubVersion);
 #else
-      f->noOfFirmwareTargets = 0x3;
+      f->noOfFirmwareTargets = cfg.no_of_firmware_target;
       f->hardwareVersion = cfg.hardware_version;
       f->firmware1Version = PACKAGE_VERSION_MAJOR;
       f->firmware1SubVersion = PACKAGE_VERSION_MINOR;
-      f->firmware2Version = 1;
-      f->firmware2SubVersion = 0;
-      f->firmware3Version = 1;
-      f->firmware3SubVersion = 0;
+      f->firmware2Version = cfg.firmware2_version;
+      f->firmware2SubVersion = cfg.firmware2_subversion;
+      //f->firmware3Version = cfg.firmware3_version;
+      //f->firmware3SubVersion = cfg.firmware3_subversion;
 #endif
       ZW_SendDataZIP(c, (BYTE*) &txBuf, sizeof(ZW_VERSION_REPORT_2ID_V2_FRAME), NULL);
       break; //VERSION_GET
