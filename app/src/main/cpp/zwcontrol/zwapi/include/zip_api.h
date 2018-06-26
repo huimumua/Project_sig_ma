@@ -344,6 +344,7 @@ control and data in the mesh network.
 #define ZW_CID_SCENE_ACT_CONF_SET        124       /**< zwif_scene_actuator_conf_set */
 #define ZW_CID_MUL_CMD                   125       /**< zwif_multi_cmd_encap */
 #define ZW_CID_NET_RSSI          126       /**< zwif_network_rssi_rep_set */
+#define ZW_CID_S2_CMD_SUP        127
 
 // skysoft modified end
 /****************************************************************************/
@@ -7504,6 +7505,9 @@ int zwif_multi_cmd_encap(zwifd_p ifd);
 typedef void (*zwrep_network_rssi_get_fn)(zwifd_p ifd, uint8_t channel_1, uint8_t channel_2, uint8_t channel_3);
 int zwif_network_rssi_rep_set_get(zwifd_p ifd, zwrep_network_rssi_get_fn cb);
 
+
+typedef void (*hl_sec_rpt_cb_fn)(zwifd_p intf, uint16_t *cls, uint8_t cnt);
+int zwif_set_s2_sup_rep(zwifd_p ifd, hl_sec_rpt_cb_fn cb);
 // skysoft modified end
 /****************************************************************************/
 

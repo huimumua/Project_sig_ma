@@ -389,4 +389,6 @@ int  zwcontrol_get_provision_list_entry(hl_appl_ctx_t* hl_appl, const char* dsk)
 int  zwcontrol_get_all_provision_list_entry(hl_appl_ctx_t* hl_appl);
 int  zwcontrol_rm_all_provision_list_entry(hl_appl_ctx_t* hl_appl);
 
+int  zwcontrol_s2_command_supported_get(hl_appl_ctx_t* hl_appl, int nodeId);
+
 #endif

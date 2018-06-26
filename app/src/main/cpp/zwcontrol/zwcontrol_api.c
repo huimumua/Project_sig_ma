@@ -1829,7 +1829,7 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts, hl_appl_ctx_t * hl_ap
         if(sts == OP_DONE)
         {
             initStatus = 1;
-            //zwcontrol_save_nodeinfo(hl_appl, hl_appl->node_info_file);
+            zwcontrol_save_nodeinfo(hl_appl, hl_appl->node_info_file);
             cJSON_AddStringToObject(jsonRoot, "Status", "Success");
         }
         else if(sts == OP_FAILED)
@@ -11452,6 +11452,62 @@ int  zwcontrol_check_node_isFailed(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
     if(result != 0)
     {
         ALOGE("zwcontrol_check_node_isFailed send with error: %d", result);
+    }
+
+    return result;
+}
+
+
+// Add for Security 2 commands supported get
+static void hl_security_2_cmd_sup_cb(zwifd_p intf, uint16_t *cls, uint8_t cnt)
+{
+    ALOGI("hl_security_2_cmd_sup_cb");
+    zwnet_cmd_cls_show(NULL, cls, cnt);
+}
+
+int hl_s2_cmd_sup_get_setup(hl_appl_ctx_t * hl_appl)
+{
+    int         result;
+    zwifd_p     ifd;
+    uint8_t     cmd_buf[2];
+
+    //Get the interface descriptor
+    plt_mtx_lck(hl_appl->desc_cont_mtx);
+    ifd = hl_intf_desc_get(hl_appl->desc_cont_hd, hl_appl->rep_desc_id);
+    if (!ifd)
+    {
+        plt_mtx_ulck(hl_appl->desc_cont_mtx);
+        return ZW_ERR_INTF_NOT_FOUND;
+    }
+
+    result = zwif_set_s2_sup_rep(ifd, hl_security_2_cmd_sup_cb);
+
+    plt_mtx_ulck(hl_appl->desc_cont_mtx);
+
+    if (result != 0 && result != 1)
+    {
+        ALOGE("hl_s2_cmd_sup_get_setup with error:%d", result);
+    }
+
+    return result;
+}
+
+int  zwcontrol_s2_command_supported_get(hl_appl_ctx_t* hl_appl, int nodeId)
+{
+    if(!hl_appl->init_status)
+    {
+        return -1;
+    }
+
+    if(hl_destid_get(hl_appl, nodeId, COMMAND_CLASS_SECURITY_2, 0))
+    {
+        return -1;
+    }
+
+    int result = hl_s2_cmd_sup_get_setup(hl_appl);
+    if(result == 1)
+    {
+        ALOGI("zwcontrol_indicator_get command queued");
     }
 
     return result;

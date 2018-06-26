@@ -54,6 +54,7 @@ public class ZwaveControlHelper {
             grantKeysMsg = jsonObject.optString("Grant Keys Msg");
             Log.i(LOG_TAG,"  grantKeysMsg:"+grantKeysMsg);
             pinReq = jsonObject.optString("PIN Requested Msg");
+            csaMsg = jsonObject.optString("Client Side Au Msg");
         } catch (JSONException e) {
             android.util.Log.i(LOG_TAG, "JSONException");
             e.printStackTrace();
@@ -76,7 +77,13 @@ public class ZwaveControlHelper {
         if("Enter 5-digit PIN".equals(pinReq))
         {
             android.util.Log.i(LOG_TAG," user input pin code: "+(Integer.toString(30008)));
-            return 30008;
+            return 15334;
+        }
+
+        if("Request CSA".equals(csaMsg))
+        {
+            android.util.Log.i(LOG_TAG," user csa result:"+"yes");
+            return 1;
         }
 
         android.util.Log.w(LOG_TAG," should not go here!!!!");
@@ -431,5 +438,7 @@ public class ZwaveControlHelper {
     public native static int ZwController_rmAllProvisionListEntry();
 
     public native static int ZwController_checkNodeIsFailed(int deviceId);
+
+    public native static int ZwController_getSecurity2CmdSupported(int deviceId);
 
 }

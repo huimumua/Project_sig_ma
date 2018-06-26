@@ -11501,6 +11501,33 @@ int zwif_network_rssi_rep_set_get(zwifd_p ifd, zwrep_network_rssi_get_fn cb)
     return result;
 }
 
+int zwif_set_s2_sup_rep(zwifd_p ifd, hl_sec_rpt_cb_fn cb)
+{
+    int result;
+
+    //Check whether the interface belongs to the right command class
+    if (ifd->cls != COMMAND_CLASS_SECURITY_2)
+    {
+        return ZW_ERR_CLASS_NOT_FOUND;
+    }
+
+    result = zwif_set_report(ifd, cb, SECURITY_2_COMMANDS_SUPPORTED_REPORT);
+    if(result == 0)
+    {
+        result = zwif_cmd_id_set(ifd, ZW_CID_S2_CMD_SUP, 1);
+        if(result != 0)
+        {
+            return result;
+        }
+
+        ifd->propty |= IF_PROPTY_SECURE;
+        result = zwif_get_report(ifd, NULL, 0,
+                                 SECURITY_2_COMMANDS_SUPPORTED_GET, zwif_exec_cb);
+    }
+
+    return result;
+}
+
 // skysoft modified end
 /****************************************************************************/
 

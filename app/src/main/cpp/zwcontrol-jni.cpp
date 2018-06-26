@@ -908,6 +908,11 @@ static int controller_checkNodeIsFailed(JNIEnv *env, jclass object, jint nodeId)
     return zwcontrol_check_node_isFailed(&appl_ctx, (uint32_t)nodeId);
 }
 
+static int controller_getSecurity2CmdSupported(JNIEnv *env, jclass object, jint nodeId)
+{
+    return zwcontrol_s2_command_supported_get(&appl_ctx, (uint32_t)nodeId);
+}
+
 static const JNINativeMethod gMethods[] = {
         {"CreateZwController",     "()I", (void *)create_controller},
         {"OpenZwController",       "(Ljava/lang/String;Ljava/lang/String;[B)I", (void *)open_controller},
@@ -1011,6 +1016,7 @@ static const JNINativeMethod gMethods[] = {
         {"ZwController_getAllProvisionListEntry", "()I", (void*)controller_getAllProvisionListEntry},
         {"ZwController_rmAllProvisionListEntry", "()I", (void*)controller_rmAllProvisionListEntry},
         {"ZwController_checkNodeIsFailed", "(I)I", (void*)controller_checkNodeIsFailed},
+        {"ZwController_getSecurity2CmdSupported", "(I)I", (void*)controller_getSecurity2CmdSupported},
 
 };
 
