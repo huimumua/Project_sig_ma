@@ -474,6 +474,12 @@ ApplicationCommandHandlerZIP(ts_param_t *p, ZW_APPLICATION_TX_BUFFER *pCmd,
       break;
     case COMMAND_CLASS_SECURITY_2:
       security2_CommandHandler(p,pCmd,cmdLength);
+      if(pCmd->ZW_Common.cmd == 0x0E)
+      {
+        // Security 2 commands supported report
+        // Need report to application layer
+        goto END_CASE;
+      }
       return;
       break;
     case COMMAND_CLASS_TRANSPORT_SERVICE:
@@ -505,6 +511,7 @@ ApplicationCommandHandlerZIP(ts_param_t *p, ZW_APPLICATION_TX_BUFFER *pCmd,
    * Note: This check does not allow S2 multicast to virtual nodes. So far, this is not a feature the ZIPGW supports.
    * All S2 multicast will go to the unsolicited destination, regardless of IP associations. */
   /* TODO: Support S2 multicast to ZIP clients via IP Association (filed under ZGW-935). */
+  END_CASE:
   if( !(p->rx_flags & RECEIVE_STATUS_TYPE_BROAD) &&
       (p->dnode != MyNodeID) && bridge_virtual_node_commandhandler(p, (BYTE*) pCmd, cmdLength)
     ) {

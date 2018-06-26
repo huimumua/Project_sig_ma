@@ -11484,10 +11484,41 @@ int  zwcontrol_check_node_isFailed(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
 
 
 // Add for Security 2 commands supported get
-static void hl_security_2_cmd_sup_cb(zwifd_p intf, uint16_t *cls, uint8_t cnt)
+static void hl_security_2_cmd_sup_cb(zwif_p intf, uint16_t *cls, uint8_t cnt)
 {
     ALOGI("hl_security_2_cmd_sup_cb");
-    zwnet_cmd_cls_show(NULL, cls, cnt);
+    //zwnet_cmd_cls_show(NULL, cls,cnt);
+    int secure2_str[50] = {0};
+
+    cJSON *jsonRoot;
+    jsonRoot = cJSON_CreateObject();
+
+    if(jsonRoot == NULL)
+    {
+        return;
+    }
+
+    cJSON_AddStringToObject(jsonRoot, "MessageType", "Supported S2 Cmd Report");
+    cJSON_AddNumberToObject(jsonRoot, "Node id", intf->ep->node->nodeid);
+
+    for(int i = 0; i<cnt; i++){
+        ALOGI("Security 2 commands supported: %X: %s",cls[i],hl_class_str_get(cls[i],3));
+        sprintf(secure2_str, "%X: %s",cls[i], hl_class_str_get(cls[i],3));
+        cJSON_AddStringToObject(jsonRoot, "Cmdclass", secure2_str);
+    }
+
+    if(resCallBack)
+    {
+        char *p = cJSON_Print(jsonRoot);
+
+        if(p)
+        {
+            resCallBack(p);
+            free(p);
+        }
+    }
+
+    cJSON_Delete(jsonRoot);
 }
 
 int hl_s2_cmd_sup_get_setup(hl_appl_ctx_t * hl_appl)
