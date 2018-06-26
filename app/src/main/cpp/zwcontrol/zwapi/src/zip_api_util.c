@@ -1666,10 +1666,8 @@ int zwutl_ni_load(zwnet_p nw, const char *ni_file)
         //Check whether home id is correct
         if (home_id != nw->homeid)
         {
-            //tiny: After join into other network, homeid will be change.
-            //      this case, we still load loadinfo.
-            /*result = ZW_ERR_FILE_HOME_ID;
-            goto l_ZWUTIL_LOAD_ERROR2;*/
+            result = ZW_ERR_FILE_HOME_ID;
+            goto l_ZWUTIL_LOAD_ERROR2;
         }
 
         //Process other network sub-tag

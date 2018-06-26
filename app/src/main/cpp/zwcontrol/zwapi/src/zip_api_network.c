@@ -1631,7 +1631,9 @@ zwnet_zwver_rpt_cb - Z-wave library version report callback
 */
 void zwnet_zwver_rpt_cb(zwif_p intf, uint16_t proto_ver, uint16_t app_ver, uint8_t lib_type, ext_ver_t *ext_ver)
 {
+
     zwnet_p     nw;
+
     uint8_t     data[32];
 
     data[0] = proto_ver >> 8;
@@ -2022,7 +2024,7 @@ static void zwnet_ctlr_node_info_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_t
     zwnet_t *nw = (zwnet_t *)appl_ctx->data;
     int cmd_cls_exist = 0;
 
-    debug_zwapi_msg(&nw->plt_ctx, "zwnet_ctlr_node_info_cb for node id:%u", cached_ni->node_id);
+    ALOGI("zwnet_ctlr_node_info_cb for node id:%u, granted_keys:%x", cached_ni->node_id, cached_ni->resrvd);
     debug_zwapi_msg(&nw->plt_ctx, "listening=%u, optional functions=%u", cached_ni->listen, cached_ni->optional);
     debug_zwapi_msg(&nw->plt_ctx, "status=%u, age=%u minutes old", cached_ni->status, (unsigned)(1 << cached_ni->age));
     debug_zwapi_msg(&nw->plt_ctx, "Device type: basic=%02Xh, generic=%02Xh, specific=%02X", cached_ni->basic, cached_ni->gen, cached_ni->spec);
@@ -7879,11 +7881,11 @@ static void zwnet_ctlr_id_addr_cb(appl_layer_ctx_t *appl_ctx, nd_advt_rpt_t *rpt
     zwnet_p             nw = (zwnet_p)appl_ctx->data;
     zwnet_ctlr_evt_t    evt = EVT_CTLR_ID_ADDR_FAILED;
 
-    debug_zwapi_msg(&nw->plt_ctx, "zwnet_ctlr_id_addr_cb:");
+    ALOGI("zwnet_ctlr_id_addr_cb:");
     switch (rpt->status)
     {
         case ZIP_ND_INFORMATION_OK:
-            debug_zwapi_msg(&nw->plt_ctx, "Home id:%08X,  ctlr node id:%u, local=%u, ip:", rpt->homeid, rpt->node_id, rpt->addr_local);
+            ALOGI("Home id:%08X,  ctlr node id:%u, local=%u, ip:", rpt->homeid, rpt->node_id, rpt->addr_local);
             debug_zwapi_bin_msg(&nw->plt_ctx, rpt->ipv6_addr, IPV6_ADDR_LEN);
             if (rpt->addr_local == 0)
             {   //Global address
@@ -13086,11 +13088,11 @@ static int zwnet_ctlr_info_sm(zwnet_p nw, zwnet_ctlr_evt_t evt, uint8_t *data)
                         if ((nw->ctlr_sm_ctx.initiate_ctx->homeid == rpt->homeid)
                             && (nw->ctlr_sm_ctx.initiate_ctx->ctlr_node == rpt->node_id))
                         {   //replication or controller shift
-                            debug_zwapi_msg(&nw->plt_ctx, "Learn mode resulted in replication or controller shift");
+                            ALOGI("Learn mode resulted in replication or controller shift");
                         }
                         else
                         {
-                            debug_zwapi_msg(&nw->plt_ctx, "Learn mode resulted in leaving network");
+                            ALOGI("Learn mode resulted in leaving network");
 
                             zwnet_clear_all(nw);
                         }
@@ -13253,6 +13255,19 @@ static int zwnet_ctlr_info_sm(zwnet_p nw, zwnet_ctlr_evt_t evt, uint8_t *data)
                         nw->ctl.basic = ni->basic;
                         nw->ctl.ep.specific = ni->spec;
                         nw->ctl.ep.generic = ni->gen;
+                        if(ni->resrvd == 0x80)
+                        {
+                           nw->ctl.security_incl_status = 1; 
+                        }
+                        else if((ni->resrvd != 0x80) && (ni->resrvd != 0))
+                        {
+                            nw->ctl.security_incl_status = 2;
+                        }
+                        else if(ni->resrvd == 0)
+                        {
+                            nw->ctl.security_incl_status = 0;
+                        }
+                        ALOGI("Ctrl security grant keys %x, security status: %d",ni->resrvd, nw->ctl.security_incl_status);
 
                         //Rebuild all interfaces
                         zwep_intf_rm_all(&nw->ctl.ep);
