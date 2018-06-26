@@ -2019,7 +2019,32 @@ static void hl_add_node_s2_cb(void *usr_param, sec2_add_cb_prm_t *cb_param)
             }
             ALOGD("User grant_csa: %x",grant_csa);
 
-            ALOGD("Please enter this 10-digit CSA Pin into the joining device:%s\n", cb_param->cb_prm.req_key.csa_pin);
+            if((grant_csa == 1) && (resCallBack != NULL))
+            {
+                cJSON *jsonRoot;
+                jsonRoot = cJSON_CreateObject();
+
+                if(NULL != jsonRoot)
+                {
+                    ALOGD("Please enter this 10-digit CSA Pin into the joining device:%s\n", cb_param->cb_prm.req_key.csa_pin);
+
+                    cJSON_AddStringToObject(jsonRoot, "MessageType", "CSA Pin");
+                    cJSON_AddStringToObject(jsonRoot, "PinCode", cb_param->cb_prm.req_key.csa_pin);
+
+                    if(resCallBack)
+                    {
+                        char *p = cJSON_Print(jsonRoot);
+
+                        if(p != NULL)
+                        {
+                            resCallBack(p);
+                            free(p);
+                        }
+                    }
+
+                    cJSON_Delete(jsonRoot);
+                }
+            }
 
             //No DSK callback when in CSA mode
             hl_appl->sec2_cb_enter &= ~SEC2_ENTER_DSK;
