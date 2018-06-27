@@ -3038,6 +3038,11 @@ static char* hl_zwaveplus_icon_to_device_type(uint16_t  usr_icon)
             return "Gateway";
         }
         break;
+        case ICON_TYPE_GENERIC_POWER_STRIP:
+        {
+            return "Power Strip";
+        }
+        break;
         default:
             return "unknown device";
     }
