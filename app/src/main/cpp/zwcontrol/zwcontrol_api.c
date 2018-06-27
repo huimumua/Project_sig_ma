@@ -3043,6 +3043,11 @@ static char* hl_zwaveplus_icon_to_device_type(uint16_t  usr_icon)
             return "Power Strip";
         }
         break;
+        case ICON_TYPE_GENERIC_WALL_CONTROLLER:
+        {
+            return "Wall Controller";
+        }
+        break;
         default:
             return "unknown device";
     }
