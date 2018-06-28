@@ -2496,10 +2496,10 @@ int  zwcontrol_init(hl_appl_ctx_t *hl_appl, const char *resPath, const char* inf
         hl_appl->save_ni_file = 1;
         ALOGD("nodeinfo file exists, will load it.");
         //strcpy(hl_appl->save_file,firmPath);
-        strcpy(hl_appl->node_info_file,infopath);
     }else{
         ALOGD("nodeinfo file not exists, first init");
     }
+    strcpy(hl_appl->node_info_file,infopath);
 
     sleep(2);
 
@@ -11569,6 +11569,15 @@ int  zwcontrol_s2_command_supported_get(hl_appl_ctx_t* hl_appl, int nodeId)
     {
         return -1;
     }
+
+    zwnode_p node = zwnode_find(&hl_appl->zwnet->ctl, nodeId);
+    if(node->security_incl_status != 2)
+    {
+        ALOGW("This node is not added in Security level 2, please re-add it securely and try again.");
+        return ZW_ERR_UNSUPPORTED;
+    }
+
+    ALOGI("zwcontrol_s2_command_supported_get started");
 
     int result = hl_s2_cmd_sup_get_setup(hl_appl);
     if(result == 1)
