@@ -1962,42 +1962,6 @@ static void hl_add_node_s2_cb(void *usr_param, sec2_add_cb_prm_t *cb_param)
             return;
         }
 
-        ALOGD("\nDevice requested keys bit-mask: %02Xh\n", cb_param->cb_prm.req_key.req_keys);
-
-        ALOGD("Key (bit-mask in hex) :\n");
-        ALOGD("                   Security 2 key 0    (01)\n");
-        ALOGD("                   Security 2 key 1    (02)\n");
-        ALOGD("                   Security 2 key 2    (04)\n");
-        ALOGD("                   Security 2 key All  (07)\n");
-        ALOGD("                   Security 0 key      (80)\n");
-        ALOGD("                   Security   key All  (87)\n");
-
-        //granted_key = cb_param->cb_prm.req_key.req_keys;
-        if(reqCallBack != NULL)
-        {
-            cJSON *jsonRoot;
-            jsonRoot = cJSON_CreateObject();
-            char str[10] = {0};
-            sprintf(str, "%d", cb_param->cb_prm.req_key.req_keys);
-            cJSON_AddStringToObject(jsonRoot, "Grant Keys Msg", "Request Keys");
-            cJSON_AddStringToObject(jsonRoot, "Keys", str);
-
-            char *p = cJSON_Print(jsonRoot);
-
-            if(p != NULL)
-            {
-                granted_key = reqCallBack(p);
-                free(p);
-            }
-
-            cJSON_Delete(jsonRoot);
-        }
-        else
-        {
-            granted_key = cb_param->cb_prm.req_key.req_keys;
-        }
-        ALOGD("User granted keys: %x",granted_key);
-
         grant_csa = 0;
         if (cb_param->cb_prm.req_key.req_csa)
         {
@@ -2054,6 +2018,41 @@ static void hl_add_node_s2_cb(void *usr_param, sec2_add_cb_prm_t *cb_param)
             //No DSK callback when in CSA mode
             hl_appl->sec2_cb_enter &= ~SEC2_ENTER_DSK;
         }
+
+        ALOGD("\nDevice requested keys bit-mask: %02X\n", cb_param->cb_prm.req_key.req_keys);
+        ALOGD("Key (bit-mask in hex) :\n");
+        ALOGD("                   Security 2 key 0    (01)\n");
+        ALOGD("                   Security 2 key 1    (02)\n");
+        ALOGD("                   Security 2 key 2    (04)\n");
+        ALOGD("                   Security 2 key All  (07)\n");
+        ALOGD("                   Security 0 key      (80)\n");
+        ALOGD("                   Security   key All  (87)\n");
+
+        //granted_key = cb_param->cb_prm.req_key.req_keys;
+        if(reqCallBack != NULL)
+        {
+            cJSON *jsonRoot;
+            jsonRoot = cJSON_CreateObject();
+            char str[10] = {0};
+            sprintf(str, "%d", cb_param->cb_prm.req_key.req_keys);
+            cJSON_AddStringToObject(jsonRoot, "Grant Keys Msg", "Request Keys");
+            cJSON_AddStringToObject(jsonRoot, "Keys", str);
+
+            char *p = cJSON_Print(jsonRoot);
+
+            if(p != NULL)
+            {
+                granted_key = reqCallBack(p);
+                free(p);
+            }
+
+            cJSON_Delete(jsonRoot);
+        }
+        else
+        {
+            granted_key = cb_param->cb_prm.req_key.req_keys;
+        }
+        ALOGD("User granted keys: %x",granted_key);
 
         res = zwnet_add_sec2_grant_key(hl_appl->zwnet, granted_key, grant_csa);
 
