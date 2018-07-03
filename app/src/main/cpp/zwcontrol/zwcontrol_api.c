@@ -1616,6 +1616,11 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts, hl_appl_ctx_t * hl_ap
             if(node && node->isNew)
             {
                 cJSON_AddStringToObject(jsonRoot, "NewAdded", "Yes");
+                // Try to check node securty 2 cmd class
+                if(node->security_incl_status == 2)
+                {
+                    zwcontrol_s2_command_supported_get(hl_appl, node->nodeid);
+                }
             }
             else
             {
@@ -11494,8 +11499,153 @@ int  zwcontrol_check_node_isFailed(hl_appl_ctx_t* hl_appl, uint32_t nodeId)
 
 
 // Add for Security 2 commands supported get
+static int add_S2_cmd_to_node_struct(hl_appl_ctx_t *hl_appl, int nodeId, int S2_CmdClass)
+{
+    int         result;
+    zwnetd_p    net_desc;
+    zwnoded_p   node;
+    zwepd_p     ep;
+    zwifd_p     intf;
+    desc_cont_t *last_node_cont;
+    desc_cont_t *last_ep_cont;
+    desc_cont_t *last_intf_cont;
+
+    plt_mtx_lck(hl_appl->desc_cont_mtx);
+
+    //Check whether the descriptor container linked list is initialized
+    if (!hl_appl->desc_cont_hd)
+    {
+        result = hl_desc_init(&hl_appl->desc_cont_hd, hl_appl->zwnet);
+        if (result != 0)
+        {
+            ALOGI("hl_desc_init with error:%d", result);
+            return result;
+        }
+    }
+
+    //Get the first node (local controller) and home id
+    last_node_cont = hl_appl->desc_cont_hd;
+
+    net_desc = zwnet_get_desc(hl_appl->zwnet);
+
+    while (last_node_cont)
+    {
+        if(((zwnoded_p)last_node_cont->desc)->nodeid == nodeId)
+        {
+            ALOGI("hl_add_S2_cmd_to_struct, node found, id:%d",nodeId);
+
+            if (last_node_cont->type != DESC_TYPE_NODE)
+            {
+                ALOGI("node: wrong desc type:%u", last_node_cont->type);
+            }
+
+            node = (zwnoded_p)last_node_cont->desc;
+
+            //Get endpoint
+            last_ep_cont = last_node_cont->down;
+
+            while (last_ep_cont)
+            {
+                if (last_ep_cont->type != DESC_TYPE_EP)
+                {
+                    ALOGI("ep: wrong desc type:%u", last_ep_cont->type);
+                }
+                //Get interface
+                last_intf_cont = last_ep_cont->down;
+
+                while (last_intf_cont)
+                {
+                    if (last_intf_cont->type != DESC_TYPE_INTF)
+                    {
+                        ALOGI("interface: wrong desc type:%u", last_intf_cont->type);
+                    }
+
+                    intf = (zwifd_p)last_intf_cont->desc;
+                    if (intf->cls == S2_CmdClass)
+                    {
+                        intf->propty |= IF_PROPTY_SECURE_S2;
+                        break;
+                    }
+                    //Get the next interface
+                    last_intf_cont = last_intf_cont->next;
+                }
+                //Get the next endpoint
+                last_ep_cont = last_ep_cont->next;
+            }
+            break;
+        } // end if(last_node_cont->id == nodeId)
+
+        //Get the next node
+        last_node_cont = last_node_cont->next;
+    }
+
+    if(NULL == last_node_cont)
+    {
+        ALOGW("The specify node not found in node list, please try another!");
+    }
+
+    plt_mtx_ulck(hl_appl->desc_cont_mtx);
+
+    return 0;
+}
+
+
+static int add_S2_cmd_to_nodeinfo_struct(zwnet_p nw, int nodeId, int S2_CmdClass)
+{
+    int         result;
+    zwnode_p    curr_node;      //current node
+    zwep_p      curr_ep;        //current endpoint
+    zwif_p      curr_intf;      //current interface
+    uint16_t    tag_id;
+
+    //Write node information
+    curr_node = &nw->ctl;
+
+    plt_mtx_lck(nw->mtx);
+
+    while (curr_node)
+    {
+        if(curr_node->nodeid == nodeId)
+        {
+            //-------------------------------
+            //Find endpoint
+            //-------------------------------
+            curr_ep = &curr_node->ep;
+
+            while (curr_ep)
+            {
+                //-------------------------------
+                //Find interface
+                //-------------------------------
+                curr_intf = curr_ep->intf;
+
+                while (curr_intf)
+                {
+                    if( curr_intf->cls == S2_CmdClass)
+                    {
+                        curr_intf->propty |= IF_PROPTY_SECURE_S2;
+                        break;
+                    }
+                    //Next interface
+                    curr_intf = (zwif_p)curr_intf->obj.next;
+                }
+                //Next endpoint
+                curr_ep = (zwep_p)curr_ep->obj.next;
+            }
+        }
+        //Next node
+        curr_node = (zwnode_p)curr_node->obj.next;
+    }
+
+    plt_mtx_ulck(nw->mtx);
+
+    return 0;
+}
+
 static void hl_security_2_cmd_sup_cb(zwif_p intf, uint16_t *cls, uint8_t cnt)
 {
+    hl_appl_ctx_t * hl_appl = intf->ep->node->net->init.user;
+    zwnet_p nw = intf->ep->node->net;
     ALOGI("hl_security_2_cmd_sup_cb");
     //zwnet_cmd_cls_show(NULL, cls,cnt);
     int secure2_str[50] = {0};
@@ -11512,9 +11662,16 @@ static void hl_security_2_cmd_sup_cb(zwif_p intf, uint16_t *cls, uint8_t cnt)
     cJSON_AddNumberToObject(jsonRoot, "Node id", intf->ep->node->nodeid);
 
     for(int i = 0; i<cnt; i++){
-        ALOGI("Security 2 commands supported: %X: %s",cls[i],hl_class_str_get(cls[i],3));
+        ALOGI("Security 2 commands supported: %X: %s", cls[i], hl_class_str_get(cls[i],3));
         sprintf(secure2_str, "%X: %s",cls[i], hl_class_str_get(cls[i],3));
+        hl_add_S2_cmd_to_struct(hl_appl,intf->ep->node->nodeid, cls[i]);
+        add_S2_cmd_to_nodeinfo_struct(nw, intf->ep->node->nodeid, cls[i]);
         cJSON_AddStringToObject(jsonRoot, "Cmdclass", secure2_str);
+    }
+    if(cnt)
+    {
+        // save struct into nodeinfo
+        zwcontrol_save_nodeinfo(hl_appl, hl_appl->node_info_file);
     }
 
     if(resCallBack)
