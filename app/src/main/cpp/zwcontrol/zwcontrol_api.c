@@ -2123,7 +2123,22 @@ static void hl_add_node_s2_cb(void *usr_param, sec2_add_cb_prm_t *cb_param)
 
             if(pin_code != 0)
             {
-                sprintf(hl_appl->dsk, "%d", pin_code);
+                if(pin_code < 10000)
+                {
+                    sprintf(hl_appl->dsk, "0%d", pin_code);
+                }
+                else if(pin_code < 1000)
+                {
+                    sprintf(hl_appl->dsk, "00%d", pin_code);
+                }
+                else if(pin_code < 100)
+                {
+                    sprintf(hl_appl->dsk, "000%d", pin_code);
+                }
+                else
+                {
+                    sprintf(hl_appl->dsk, "%d", pin_code);
+                }
                 hl_appl->dsk[5] = '\0';
             }
 
