@@ -175,11 +175,11 @@ public static ZwaveControlService getInstance() {
             //new RuntimeException("LinHui").printStackTrace();
             //Process.sendSignal(android.os.Process.myPid(), Process.SIGNAL_QUIT);
             //Trace.beginSection("app:ZwController_RemoveDevice");
-            //long startTime = System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
             int result = ZwaveControlHelper.ZwController_RemoveDevice();
             //Trace.endSection();
-            //long spendTime = System.currentTimeMillis() - startTime;
-            //Log.i(TAG,"took " + spendTime + " ms");
+            long spendTime = System.currentTimeMillis() - startTime;
+            Log.i(TAG,"took " + spendTime + " ms");
             return result;
         }
 
@@ -225,8 +225,7 @@ public static ZwaveControlService getInstance() {
         @Override
         public int getDeviceBattery(IZwaveContrlCallBack callBack, int deviceId) throws RemoteException {
             Logg.i(TAG,"=====getDeviceBattery==deviceId==="+deviceId);
-            //int result = ZwaveControlHelper.ZwController_StopAddDevice();
-            int result = ZwaveControlHelper.ZwController_getSecurity2CmdSupported(deviceId);
+            int result = ZwaveControlHelper.ZwController_getGroupInfo(deviceId, 2, 0);
 
             return result;
         }
@@ -260,19 +259,8 @@ public static ZwaveControlService getInstance() {
             result = ZwaveControlHelper.ZwController_addProvisionListEntry(dsk1, dsk1.length);*/
             //int result = ZwaveControlHelper.ZwController_getSpecifyDeviceInfo(deviceId);
             //int result = ZwaveControlHelper.ZwController_StartLearnMode();
-            /*int[] a = {7,0};
-            int result = ZwaveControlHelper.ZwController_addEndpointsToGroup(deviceId,2, a, 0);*/
-
-            String str = "63051-37515-48950-34995-44120-60331-52032-40158";
-
-            byte[] bstr = str.getBytes();
-            byte[] dsk = new byte[str.length()+1];
-            int i = 0;
-            for(i = 0; i < bstr.length; ++i)
-                dsk[i] = bstr[i];
-            dsk[str.length()] = '\0';
-            int result = ZwaveControlHelper.ZwController_StartLearnMode();
-
+            int[] a = {7,0};
+            int result = ZwaveControlHelper.ZwController_addEndpointsToGroup(deviceId,2, a, 0);
             return result;
         }
 
@@ -328,8 +316,7 @@ public static ZwaveControlService getInstance() {
             plList[5].stProvisionList.pii.app_ver = 0x04;
             plList[5].stProvisionList.pii.app_sub_ver = 0x01;
 
-            //int result = ZwaveControlHelper.ZwController_addProvisionListEntry(dsk, dsk.length, plList, 6);
-            int result = ZwaveControlHelper.ZwController_SetDefault();
+            int result = ZwaveControlHelper.ZwController_addProvisionListEntry(dsk, dsk.length, plList, 6);
             return result;
         }
 

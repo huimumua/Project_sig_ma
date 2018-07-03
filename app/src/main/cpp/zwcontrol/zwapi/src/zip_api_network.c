@@ -175,9 +175,6 @@ static const sup_cmd_cls_t    local_sup_cmd_class[] =
     ,{COMMAND_CLASS_ASSOCIATION, 2, BITMASK_CMD_CLS_INSECURE}
     ,{COMMAND_CLASS_ASSOCIATION_GRP_INFO, 3, BITMASK_CMD_CLS_INSECURE}
     ,{COMMAND_CLASS_DEVICE_RESET_LOCALLY, 1, BITMASK_CMD_CLS_INSECURE}
-    ,{COMMAND_CLASS_NODE_PROVISIONING,1,BITMASK_CMD_CLS_SECURE}
-    ,{COMMAND_CLASS_INCLUSION_CONTROLLER,1,BITMASK_CMD_CLS_SECURE}
-    ,{COMMAND_CLASS_SWITCH_COLOR,1,BITMASK_CMD_CLS_SECURE}
 //  ,{COMMAND_CLASS_CONFIGURATION, 2, BITMASK_CMD_CLS_SECURE}//Testing
 //#ifdef CRC16_ENCAP
 //    ,{COMMAND_CLASS_CRC_16_ENCAP, 1, BITMASK_CMD_CLS_INSECURE}
@@ -1740,7 +1737,7 @@ void zwnet_cmd_cls_show(zwnet_p nw, uint16_t *cmd_cls_buf, uint8_t cnt)
 #endif
         }
 
-        ALOGI("%s", hex_str);
+        debug_zwapi_msg(&nw->plt_ctx, "%s", hex_str);
     }
 }
 
@@ -2034,7 +2031,7 @@ static void zwnet_ctlr_node_info_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_t
 
     if (cached_ni->cmd_cnt > 0)
     {
-        ALOGI("unsecure command classes:");
+        debug_zwapi_msg(&nw->plt_ctx, "unsecure command classes:");
         zwnet_cmd_cls_show(nw, cached_ni->cmd_cls, cached_ni->cmd_cnt);
         cmd_cls_exist = 1;
 
@@ -2042,7 +2039,7 @@ static void zwnet_ctlr_node_info_cb(appl_layer_ctx_t *appl_ctx, appl_node_info_t
 
     if (cached_ni->cmd_cnt_sec > 0)
     {
-        ALOGI("secure command classes:");
+        debug_zwapi_msg(&nw->plt_ctx, "secure command classes:");
         zwnet_cmd_cls_show(nw, cached_ni->cmd_cls_sec, cached_ni->cmd_cnt_sec);
         cmd_cls_exist = 1;
 
@@ -3434,7 +3431,6 @@ static void    application_command_handler_cb(appl_layer_ctx_t *appl_ctx, struct
                                               frm_ep_t *ep_addr, uint8_t *rx_buf, uint16_t rx_len,
                                               uint16_t flag, uint16_t encap_fmt)
 {
-    ALOGI("application_command_handler_cb");
     int             res;
     zwnet_p         nw;
     uint8_t         msg_type; //incoming message type
@@ -8523,28 +8519,22 @@ static void zwnet_app_nif_set(zwnet_p nw, zwifd_p zipgw_ifd)
     {   //Other nodes in the network and Z/IP gateway is secure
         cmd_cls_ppty = BITMASK_CMD_CLS_SECURE;
         intf_ppty = IF_PROPTY_SECURE;
-        ALOGI("==========================> APPL NIF is set to secure");
+        debug_zwapi_msg(&nw->plt_ctx, "APPL NIF is set to secure");
     }
     else
     {
-        ALOGI("===========================> APPL NIF is set to unsecure");
+        debug_zwapi_msg(&nw->plt_ctx, "APPL NIF is set to unsecure");
     }
 
     zwnet_sup_cmd_cls_ppty_set(nw->sup_cmd_cls, nw->sup_cmd_cls_cnt, cmd_cls_ppty);
     zwnet_ctlr_sec_ppty_set(nw->ctl.ep.intf, nw->sup_cmd_cls, nw->sup_cmd_cls_cnt, intf_ppty);
 #endif
-    ALOGI("=============== zwnet_nif_set");
     if ((zwnet_nif_set(nw, cmd + cmd_cnt, &cmd_buf_len) == 0)
         && cmd_buf_len) //Make sure there is at least a command class to set
     {
         cmd_cnt += cmd_buf_len;
 
         //Send the command
-        for(int i = 0; i< cmd_cnt;i++)
-        {
-            ALOGI("cmd=%X",cmd[i]);
-        }
-
         zwif_exec_ex(zipgw_ifd, cmd, cmd_cnt, zwif_tx_sts_cb, NULL, ZWIF_OPT_GW_PORTAL, NULL);
     }
 }
@@ -13569,7 +13559,6 @@ static int zwnet_ctlr_info_sm(zwnet_p nw, zwnet_ctlr_evt_t evt, uint8_t *data)
                             }
 
                             gw_ver = node->ext_ver->fw_ver[0];
-                            ALOGI("gw_ver=================> %d",gw_ver);
                             if (gw_ver >= ZWNET_ZIPGW_VER_SEC_HDR_EXT
                                 || ((gw_ver >= ZWNET_ZIPGW_VER_HDR_EXT_LO) && (gw_ver <= ZWNET_ZIPGW_VER_HDR_EXT_HI)))
                             {
