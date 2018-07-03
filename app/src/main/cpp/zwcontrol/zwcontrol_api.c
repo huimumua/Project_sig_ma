@@ -11664,7 +11664,7 @@ static void hl_security_2_cmd_sup_cb(zwif_p intf, uint16_t *cls, uint8_t cnt)
     for(int i = 0; i<cnt; i++){
         ALOGI("Security 2 commands supported: %X: %s", cls[i], hl_class_str_get(cls[i],3));
         sprintf(secure2_str, "%X: %s",cls[i], hl_class_str_get(cls[i],3));
-        hl_add_S2_cmd_to_struct(hl_appl,intf->ep->node->nodeid, cls[i]);
+        add_S2_cmd_to_node_struct(hl_appl,intf->ep->node->nodeid, cls[i]);
         add_S2_cmd_to_nodeinfo_struct(nw, intf->ep->node->nodeid, cls[i]);
         cJSON_AddStringToObject(jsonRoot, "Cmdclass", secure2_str);
     }
