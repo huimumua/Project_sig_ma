@@ -5493,6 +5493,7 @@ zwnet_sec_rpt_cb - Supported security commands report callback
 */
 static void zwnet_sec_rpt_cb(zwif_p intf, uint16_t *cls, uint8_t cnt)
 {
+    ALOGI("zwnet_sec_rpt_cb , get s2 sup cmd class down");
     zwnet_p     nw;
     uint8_t     data[32];   //Note: for MAC OS X 64-bit, pointer is 8-byte long.
 
@@ -5670,6 +5671,9 @@ static void zwnet_ep_info_rpt_cb(appl_layer_ctx_t *appl_ctx, appl_ep_info_t *ep_
             data[0] = ep_info->cmd_cnt_sec;
             memcpy(data + 2, &ep_info->cmd_cls_sec, sizeof(uint16_t *));
             memcpy(data + 2 + sizeof(uint16_t *), &intf, sizeof(zwif_p));
+            ALOGI("----------ep  cmdclass---->start");
+            zwnet_cmd_cls_show(NULL, ep_info->cmd_cls_sec,ep_info->cmd_cnt_sec);
+            ALOGI("----------ep  cmdclass---->done");
 
             zwnet_ep_info_sm(nw, EVT_EP_SEC_SUP_REPORT, data);
         }
@@ -5687,6 +5691,7 @@ zwnet_ep_sm_sec_get - Get security supported command classes of the endpoint and
 */
 static int zwnet_ep_sm_sec_get(zwnet_p nw, zwep_p ep)
 {
+    ALOGI("zwnet_ep_sm_sec_get===========================>1");
     int         result;
     zwifd_t     ifd;
     zwif_p      intf;
@@ -5695,9 +5700,11 @@ static int zwnet_ep_sm_sec_get(zwnet_p nw, zwep_p ep)
     //Check whether the node is secure
     if ((ep->node->propty & NODE_PROPTY_ADD_SECURE) == 0)
         return ZW_ERR_UNSUPPORTED;
+    ALOGI("zwnet_ep_sm_sec_get===========================>2");
 
     if (nw->ctl_propty & CTLR_PROPTY_EP_NIF)
     {
+        ALOGI("zwnet_ep_sm_sec_get===========================>3");
         result = zip_ep_cap_get(&nw->appl_ctx, zwnet_ep_info_rpt_cb, ep->node->nodeid, ep->epid);
 
         if (result < 0)
@@ -5711,6 +5718,7 @@ static int zwnet_ep_sm_sec_get(zwnet_p nw, zwep_p ep)
         //Restart timer
         plt_tmr_stop(&nw->plt_ctx, nw->sm_tmr_ctx);
         nw->sm_tmr_ctx = plt_tmr_start(&nw->plt_ctx, ZWNET_TMOUT, zwnet_ep_tmout_cb, nw);
+        ALOGI("zwnet_ep_sm_sec_get===========================>4");
 
         return ZW_ERR_NONE;
     }
@@ -5718,6 +5726,7 @@ static int zwnet_ep_sm_sec_get(zwnet_p nw, zwep_p ep)
     //Check whether the endpoint has security command class
     //S2 has higher priority than S0
     intf = zwif_find_cls(ep->intf, COMMAND_CLASS_SECURITY_2);
+    ALOGI("zwnet_ep_sm_sec_get===========================>5");
     if (intf && ep->node->s2_keys_valid && (ep->node->s2_grnt_keys & SEC_KEY_ALL_S2))
     {
         zwif_get_desc(intf, &ifd);
@@ -5731,6 +5740,7 @@ static int zwnet_ep_sm_sec_get(zwnet_p nw, zwep_p ep)
             cmd_buf[1] = SECURITY_2_COMMANDS_SUPPORTED_GET;
 
             //Make sure SECURITY_2_COMMANDS_SUPPORTED_GET is always sent securely
+            ALOGI("get s2 supported cmdclass");
             ifd.propty |= IF_PROPTY_SECURE;
             result = zwif_exec(&ifd, cmd_buf, 2, NULL);
 
@@ -5750,11 +5760,13 @@ static int zwnet_ep_sm_sec_get(zwnet_p nw, zwep_p ep)
         }
         else
         {
+            ALOGI("zwnet_ep_sm_sec_get===========================>6");
             return result;
         }
     }
 
     intf = zwif_find_cls(ep->intf, COMMAND_CLASS_SECURITY);
+    ALOGI("zwnet_ep_sm_sec_get===========================>7");
 
     if (intf)
     {
@@ -5812,6 +5824,7 @@ zwnet_ep_sm_next - Start processing next endpoint
 */
 static int zwnet_ep_sm_next(zwnet_p nw)
 {
+    ALOGI("zwnet_ep_sm_next======================>");
     int         result;
     zwep_p      ep;
     ep_sm_job_t sm_job = {0};
