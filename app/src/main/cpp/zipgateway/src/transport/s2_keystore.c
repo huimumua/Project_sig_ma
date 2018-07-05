@@ -93,11 +93,16 @@ void
 print_hex(uint8_t* buf, int len)
 {
   int i;
+  char hex[len], str[len*3];
+  memset(hex, 0, sizeof(hex));
+  memset(str, 0, sizeof(str));
+
   for (i = 0; i < len; i++)
   {
-    printf("%02X", buf[i]);
+    sprintf(hex, "%02X ", buf[i]);
+    strcat(str, hex);
   }
-  printf("\n");
+  DBG_PRINTF("%s", str);
 }
 
 
