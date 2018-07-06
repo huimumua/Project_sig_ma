@@ -81,7 +81,7 @@ Cloud Service Environment that Company chooses to utilize.
 // External function declarations
 void    zwnet_notify(zwnet_p nw, uint8_t op, uint16_t sts, zwnet_sts_t *info);
 uint16_t *zwnet_cmd_cls_find(const uint16_t *cc_lst, uint16_t cc, unsigned cc_cnt);
-int     zwnet_ni_sec_updt(zwep_p ep, uint16_t *sec_cls, uint8_t len, uint8_t flag);
+int     zwnet_ni_sec_updt(zwep_p ep, uint16_t *sec_cls, uint8_t len);
 void    zwnet_cmd_cls_show(zwnet_p nw, uint16_t *cmd_cls_buf, uint8_t cnt);
 int     zwnet_cmd_cls_add(uint16_t new_cc, const uint16_t *src_cc_lst, uint8_t src_cc_cnt,
                           uint16_t **dst_cc_lst, uint8_t *dst_cc_cnt);
@@ -8786,7 +8786,7 @@ static int zwnet_ep_info_sm(zwnet_p nw, zwnet_ep_evt_t evt, uint8_t *data)
                     }
 
                     //Add the secure command classes to interfaces
-                    zwnet_ni_sec_updt(ep, sec_cls, data[0], 1);
+                    zwnet_ni_sec_updt(ep, sec_cls, data[0]);
 
                 }
                 else if (evt == EVT_EP_NW_TMOUT)

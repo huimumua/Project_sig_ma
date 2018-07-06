@@ -541,22 +541,6 @@ static char *hl_class_str_get(uint16_t cls, uint8_t ver)
     }
 }
 
-static char* hl_cmdclass_security_level_str_get(uint8_t propty)
-{
-    switch(propty)
-    {
-        case 8:
-        case 11:
-           return "S2 Supported";
-           break;
-        case 1:
-        case 3:
-            return "S0 Supported";
-            break;
-        default:
-            return "unsecure";
-    }
-}
 
 /**
 hl_bin2str - convert binary string to hex string
@@ -3867,14 +3851,14 @@ static int hl_node_desc_dump(hl_appl_ctx_t *hl_appl, cJSON *jsonRoot)
 
                 intf = (zwifd_p)last_intf_cont->desc;
 
-                ALOGI("              Interface: %02Xv%u:%s [%u]%c%c%c",
+                ALOGI("              Interface: %02Xv%u:%s [%u]%c%c",
                       (unsigned)intf->cls, intf->real_ver, hl_class_str_get(intf->cls, intf->real_ver),
                       last_intf_cont->id, (intf->propty & IF_PROPTY_SECURE)? '*' : ' ',
-                      (intf->propty & IF_PROPTY_UNSECURE)? '^' : ' ', (intf->propty & IF_PROPTY_SECURE_S2)? '@' : ' ');
+                      (intf->propty & IF_PROPTY_UNSECURE)? '^' : ' ');
 
                 cJSON_AddStringToObject(InterfaceInfo, "Interface Class", hl_class_str_get(intf->cls, intf->ver));
                 cJSON_AddNumberToObject(InterfaceInfo, "Interface Id", last_intf_cont->id);
-                cJSON_AddStringToObject(InterfaceInfo, "Interface security level", hl_cmdclass_security_level_str_get(intf->propty));
+                cJSON_AddStringToObject(InterfaceInfo, "Interface security level", (intf->propty & IF_PROPTY_SECURE)? "Secure":"UnSecure");
 
                 if (intf->cls == COMMAND_CLASS_SENSOR_MULTILEVEL)
                 {
@@ -4228,14 +4212,14 @@ static int hl_specify_node_desc_dump(hl_appl_ctx_t *hl_appl, int nodeId, cJSON *
 
                     intf = (zwifd_p)last_intf_cont->desc;
 
-                    ALOGI("              Interface: %02Xv%u:%s [%u]%c%c%c",
+                    ALOGI("              Interface: %02Xv%u:%s [%u]%c%c",
                           (unsigned)intf->cls, intf->real_ver, hl_class_str_get(intf->cls, intf->real_ver),
                           last_intf_cont->id, (intf->propty & IF_PROPTY_SECURE)? '*' : ' ',
-                          (intf->propty & IF_PROPTY_UNSECURE)? '^' : ' ', (intf->propty & IF_PROPTY_SECURE_S2)? '@' : ' ');
+                          (intf->propty & IF_PROPTY_UNSECURE)? '^' : ' ');
 
                     cJSON_AddStringToObject(InterfaceInfo, "Interface Class", hl_class_str_get(intf->cls, intf->ver));
                     cJSON_AddNumberToObject(InterfaceInfo, "Interface Id", last_intf_cont->id);
-                    cJSON_AddStringToObject(InterfaceInfo, "Interface security level", hl_cmdclass_security_level_str_get(intf->propty));
+                    cJSON_AddStringToObject(InterfaceInfo, "Interface security level", (intf->propty & IF_PROPTY_SECURE)? "Secure":"UnSecure");
 
                     if (intf->cls == COMMAND_CLASS_SENSOR_MULTILEVEL)
                     {
@@ -11577,7 +11561,7 @@ static int add_S2_cmd_to_node_struct(hl_appl_ctx_t *hl_appl, int nodeId, int S2_
                     intf = (zwifd_p)last_intf_cont->desc;
                     if (intf->cls == S2_CmdClass)
                     {
-                        intf->propty |= IF_PROPTY_SECURE_S2;
+                        intf->propty |= IF_PROPTY_SECURE;
                         break;
                     }
                     //Get the next interface
@@ -11637,7 +11621,7 @@ static int add_S2_cmd_to_nodeinfo_struct(zwnet_p nw, int nodeId, int S2_CmdClass
                 {
                     if( curr_intf->cls == S2_CmdClass)
                     {
-                        curr_intf->propty |= IF_PROPTY_SECURE_S2;
+                        curr_intf->propty |= IF_PROPTY_SECURE;
                         break;
                     }
                     //Next interface

@@ -1989,7 +1989,8 @@ Interface with functionalities that correspond to Z-wave command class
 /** interface property bit-mask definitions */
 #define IF_PROPTY_SECURE            0x01    /**< Interface can be access securely bit-mask*/
 #define IF_PROPTY_UNSECURE          0x02    /**< Interface can be access unsecurely bit-mask*/
-#define IF_PROPTY_SECURE_S2         0x08    /**< Interface can be access securely S2 bit-mask*/
+// tiny
+// #define IF_PROPTY_SECURE_S2         0x08    /**< Interface can be access securely S2 bit-mask*/
 #define IF_PROPTY_ALRM_EVT_CLR      0x04    /**< Interface is capable to sent event clear notification. This bit-mask
                                                  is only valid for alarm/notification command class */
 #define IF_PROPTY_BSNSR_EVT_CLR     0x04    /**< Interface is capable to sent event clear. This bit-mask

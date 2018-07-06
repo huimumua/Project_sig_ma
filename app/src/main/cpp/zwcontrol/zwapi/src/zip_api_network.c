@@ -134,7 +134,7 @@ zwthrmo_op_sta_t      *zwif_thrmo_op_sta_cache_find(zwthrmo_op_sta_t *op_sta_cch
 void          zwnet_sm_node_propty_updt(zwnode_p node);
 int           zwnet_sm_ver_rpt_hdlr(zwnet_p nw, zwif_p *ver_intf, void *ver_rpt_cb, uint16_t cmd_cls, uint8_t cmd_cls_ver,
                                     int tx_opt, int skip_xtra_cc_basic);
-int           zwnet_ni_sec_updt(zwep_p ep, uint16_t *sec_cls, uint8_t len, uint8_t flag);
+int           zwnet_ni_sec_updt(zwep_p ep, uint16_t *sec_cls, uint8_t len);
 int           zwnet_1_ep_info_sm(zwnet_p nw, zwnet_1_ep_evt_t evt, uint8_t *data);
 int           nhchk_sm(zwnet_p nw, zwnet_nh_chk_evt_t evt, uint8_t *data);
 int           zwnet_plst_sm(zwnet_p nw, zwnet_plst_evt_t evt, uint8_t *data);
@@ -1303,7 +1303,7 @@ int zwnet_node_info_update(zwnet_p nw, appl_node_info_t *node_info, sec2_node_in
                     node->s2_grnt_keys = s2_node_info->grnt_keys;
                     node->s2_keys_valid = 1;
                 }
-                result = zwnet_ni_sec_updt(&node->ep, node_info->cmd_cls_sec, node_info->cmd_cnt_sec, 0);
+                result = zwnet_ni_sec_updt(&node->ep, node_info->cmd_cls_sec, node_info->cmd_cnt_sec);
             }
             else
             {
@@ -1439,7 +1439,7 @@ int zwnet_node_info_update(zwnet_p nw, appl_node_info_t *node_info, sec2_node_in
 
     if (node->propty & NODE_PROPTY_ADD_SECURE)
     {
-        result = zwnet_ni_sec_updt(&node->ep, node_info->cmd_cls_sec, node_info->cmd_cnt_sec, 0);
+        result = zwnet_ni_sec_updt(&node->ep, node_info->cmd_cls_sec, node_info->cmd_cnt_sec);
     }
     else
     {
@@ -1469,7 +1469,7 @@ zwnet_ni_sec_updt - Update secure command classes to interfaces.
 @return		ZW_ERR_xxx.
 @pre        Caller must lock the nw->mtx before calling this function.
 */
-int zwnet_ni_sec_updt(zwep_p ep, uint16_t *sec_cls, uint8_t cnt, uint8_t flag)
+int zwnet_ni_sec_updt(zwep_p ep, uint16_t *sec_cls, uint8_t cnt)
 {
     unsigned    i;
     int         skip_sec_rm = 0; //Flag to indicate whether to skip remove secure property from interfaces
@@ -1495,12 +1495,6 @@ int zwnet_ni_sec_updt(zwep_p ep, uint16_t *sec_cls, uint8_t cnt, uint8_t flag)
 
         //Copy old secure list to new secure list with added basic command class
         new_sec_cls[0] = COMMAND_CLASS_BASIC;
-        intf = zwif_find_cls(ep->node->ep.intf, COMMAND_CLASS_BASIC);
-        if (intf && flag)
-        {
-            // flag = 1 means s2 cmdclass
-            intf->propty |= IF_PROPTY_SECURE_S2;
-        }
         memcpy(new_sec_cls + 1, sec_cls, cnt * sizeof(uint16_t));
 
         //Adjust the input parameters
@@ -1518,10 +1512,6 @@ int zwnet_ni_sec_updt(zwep_p ep, uint16_t *sec_cls, uint8_t cnt, uint8_t flag)
         if (intf)
         {   //Interface has already existed, update its secure property
             intf->propty |= IF_PROPTY_SECURE;
-            if(flag) // flag = 1 means s2 cmdclass
-            {
-                intf->propty |= IF_PROPTY_SECURE_S2;
-            }
         }
         else
         {   //Create interface for the secure command class
@@ -1536,10 +1526,6 @@ int zwnet_ni_sec_updt(zwep_p ep, uint16_t *sec_cls, uint8_t cnt, uint8_t flag)
                 if (intf)
                 {
                     cls_ver = intf->real_ver;
-                    if(flag) // flag = 1 means s2 cmdclass
-                    {
-                        intf->propty |= IF_PROPTY_SECURE_S2;
-                    }
                 }
             }
 
@@ -1552,11 +1538,6 @@ int zwnet_ni_sec_updt(zwep_p ep, uint16_t *sec_cls, uint8_t cnt, uint8_t flag)
                     free(new_sec_cls);
                 }
                 return ZW_ERR_MEMORY;
-            }
-
-            if(flag) // flag = 1 means s2 cmdclass
-            {
-                intf->propty |= IF_PROPTY_SECURE_S2;
             }
 
             //Save back link to end point
@@ -8010,7 +7991,7 @@ static int zwnet_ctlr_intf_create(zwnode_p node, appl_node_info_t *node_info)
 
     //Update security commands
     //Note: It is possible for Z/IP gateway being included unsecurely but has secure interfaces at the LAN side
-    result = zwnet_ni_sec_updt(&node->ep, node_info->cmd_cls_sec, node_info->cmd_cnt_sec, 0);
+    result = zwnet_ni_sec_updt(&node->ep, node_info->cmd_cls_sec, node_info->cmd_cnt_sec);
 
     //Set all interfaces as hidden except those listed in ctlr_cmd_cls[]
     tot_intf = sizeof(ctlr_cmd_cls)/sizeof(uint16_t);
