@@ -1631,9 +1631,7 @@ zwnet_zwver_rpt_cb - Z-wave library version report callback
 */
 void zwnet_zwver_rpt_cb(zwif_p intf, uint16_t proto_ver, uint16_t app_ver, uint8_t lib_type, ext_ver_t *ext_ver)
 {
-
     zwnet_p     nw;
-
     uint8_t     data[32];
 
     data[0] = proto_ver >> 8;
@@ -6569,8 +6567,9 @@ static void zwnet_cb_thrd(void *data)
                         if (cb_param.cb_prm.req_key.req_csa)
                         {
                             plt_mtx_lck(nw->mtx);
-                            memcpy(cb_param.cb_prm.req_key.csa_pin, nw->gw_dsk, 11);
-                            cb_param.cb_prm.req_key.csa_pin[11] = '\0';
+                            memcpy(cb_param.cb_prm.req_key.csa_pin, nw->gw_dsk, 5);
+			    memcpy(cb_param.cb_prm.req_key.csa_pin+5, nw->gw_dsk+6, 5);
+                            cb_param.cb_prm.req_key.csa_pin[10] = '\0';
                             plt_mtx_ulck(nw->mtx);
                         }
                         else

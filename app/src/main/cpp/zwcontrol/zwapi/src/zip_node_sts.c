@@ -407,7 +407,8 @@ static void nodests_tmr_chk(nodests_ctx_t *nodests_ctx)
             case NODSTS_STA_UP:
                 if (util_tmr_exp_chk32(nodests_ctx->tmr_tick, nodests_ent->state_tmout))
                 {
-                    nodests_probe(nodests_ctx, nodests_ent);
+                    //nodests_probe(nodests_ctx, nodests_ent);
+		    ALOGI("Close nodests_probe (NOP), avoid reset issue after adding battery device. Check here if any issue!!");
                 }
                 break;
 

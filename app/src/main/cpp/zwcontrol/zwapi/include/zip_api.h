@@ -1254,7 +1254,7 @@ typedef struct
 {
     uint8_t     req_keys;   /**< Requested keys (bit mask) by the joining node */
     uint8_t     req_csa;    /**< Flag to indicate joining node is requesting Client-side Authentication (CSA) */
-    char        csa_pin[12];/**< CSA 10-digit pin to be entered into the joining node if req_csa is non-zero.
+    char        csa_pin[11];/**< CSA 10-digit pin to be entered into the joining node if req_csa is non-zero.
                                  Example: 34028-23669  (Note: The hyphen is for display purposes, it is not part of the pin)
                                  */
 } sec2_keys_req_cb_prm_t;
