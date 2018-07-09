@@ -77,7 +77,7 @@ public class ZwaveControlHelper {
         if("Enter 5-digit PIN".equals(pinReq))
         {
             android.util.Log.i(LOG_TAG," user input pin code: "+(Integer.toString(30008)));
-            return 15334;
+            return 16993;
         }
 
         if("Request CSA".equals(csaMsg))
@@ -204,7 +204,7 @@ public class ZwaveControlHelper {
     ** zwave controller jni interface
     ** support CC: COMMAND_CLASS_SENSOR_BINARY
     **/
-    public native static int ZwController_GetSensorBinary(int deviceId, int sensor_type);
+    public native static int ZwController_GetSensorBinary(int deviceId, int sensorType);
     public native static int ZwController_GetSensorBinarySupportedSensor(int deviceId);
 
     /**
@@ -221,7 +221,7 @@ public class ZwaveControlHelper {
     **    {"Cubic meters", "Cubic feet", "US gallons", "Pulse Count", "unknown", "unknown", "unknown"} // water
     **    };
     **/
-    public native static int ZwController_GetMeter(int deviceId, int meter_unit);
+    public native static int ZwController_GetMeter(int deviceId, int meterUnit);
     public native static int ZwController_resetMeter(int deviceId);
     public native static int ZwController_getMeterSupported(int deviceId);
 
@@ -276,7 +276,7 @@ public class ZwaveControlHelper {
     public native static int ZwController_setProtection(int deviceId, int localPortState, int rfPortState);
     public native static int ZwController_getSupportedProtection(int deviceId);
     public native static int ZwController_getProtectionExcControlNode(int deviceId);
-    public native static int ZwController_setProtectionExcControlNode(int deviceId, int control_nodeid);
+    public native static int ZwController_setProtectionExcControlNode(int deviceId, int controlNodeid);
     public native static int ZwController_getProtectionTimeout(int deviceId);
 
     /** 
@@ -321,22 +321,22 @@ public class ZwaveControlHelper {
     public native static int ZwController_getSwitchColor(int deviceId, int compID);
     public native static int ZwController_getSupportedSwitchColor(int deviceId);
     /** 
-    ** @param color_id  0-8 
+    ** @param colorId  0-8
     **        {"Warm Write", "Cold Write", "Red","Green", "Blue",
     **         "Amber", "Cyan", "Purple", "Indexed Color"}
-    ** @param color_value 0x00 means 0%, 0xFF means 100%
+    ** @param colorValue 0x00 means 0%, 0xFF means 100%
     **/
-    public native static int ZwController_setSwitchColor(int deviceId, int color_id, int color_value);
+    public native static int ZwController_setSwitchColor(int deviceId, int colorId, int colorValue);
 
     /** color 渐变
-    ** @param             color_id  0-8 
+    ** @param colorId    0-8
     **                    {"Warm Write", "Cold Write", "Red","Green", "Blue",
     **                     "Amber", "Cyan", "Purple", "Indexed Color"}
     ** @param dir         change direction, 0 for increasing, 1 for decreasing
     ** @param ignore      flag indicate wheather ignore the start_value
-    ** @param start_value the color change start value 0x00 means 0%, 0xFF means 100%
+    ** @param startValue the color change start value 0x00 means 0%, 0xFF means 100%
     **/
-    public native static int ZwController_startStopSwitchColorLevelChange(int deviceId, int dir, int ignore, int color_id, int start_value);
+    public native static int ZwController_startStopSwitchColorLevelChange(int deviceId, int dir, int ignore, int colorId, int startValue);
 
     /**
     ** zwave controller jni interface
@@ -368,10 +368,10 @@ public class ZwaveControlHelper {
     ** zwave controller jni interface
     ** support CC: COMMAND_CLASS_NOTIFICATION
     **/
-    public native static int ZwController_setNotification(int deviceId, int type, int status);
-    public native static int ZwController_getNotification(int deviceId, int alarm_type, int notif_type, int evt);
+    public native static int ZwController_setNotification(int deviceId, int notifyType, int status);
+    public native static int ZwController_getNotification(int deviceId, int alarmType, int notifyType, int evt);
     public native static int ZwController_getSupportedNotification(int deviceId);
-    public native static int ZwController_getSupportedEventNotification(int deviceId, int notif_type);
+    public native static int ZwController_getSupportedEventNotification(int deviceId, int notifyType);
 
     /**
     ** zwave controller jni interface
@@ -383,17 +383,17 @@ public class ZwaveControlHelper {
     ** zwave controller jni interface
     ** support CC: COMMAND_CLASS_SCENE_ACTUATOR_CONF
     **/
-    public native static int ZwController_getSceneActuatorConf(int deviceId, int scene_id);
+    public native static int ZwController_getSceneActuatorConf(int deviceId, int sceneId);
 
     /**
-    ** @param scene_id     The scene id  0-255
-    ** @param dim_duration 变化的时间 1-99 单位秒
+    ** @param sceneId     The scene id  0-255
+    ** @param dimDuration 变化的时间 1-99 单位秒
     ** @param override    
     **        If the Override bit is set to 0, the current settings in the device is associated with the Scene ID. 
     **        If the Override bit is set to 1, the Level value in the Command is associated to the Scene ID.
     ** @param level 0x00-0xFF
     **/
-    public native static int ZwController_setSceneActuatorConf(int deviceId, int scene_id, int dim_duration, int override, int level);
+    public native static int ZwController_setSceneActuatorConf(int deviceId, int sceneId, int dimDuration, int override, int level);
 
     /**
     ** zwave controller jni interface
