@@ -11742,3 +11742,32 @@ int  zwcontrol_s2_command_supported_get(hl_appl_ctx_t* hl_appl, int nodeId)
 
     return result;
 }
+
+// Add for send node information frame
+int  zwcontrol_send_node_information(hl_appl_ctx_t* hl_appl, int nodeId, int broadcast_flag)
+{
+    if(!hl_appl->init_status)
+    {
+        return -1;
+    }
+
+    zwnode_p node = zwnode_find(&hl_appl->zwnet->ctl, nodeId);
+    zwnet_p nw = hl_appl->zwnet;
+
+    if(!broadcast_flag)
+    {
+        if(NULL == node)
+        {
+            ALOGE("Send single cast, node not found, please check!");
+            return ZW_ERR_NODE_NOT_FOUND;
+        }
+    }
+
+    int result = zwnet_send_nif(nw, node, broadcast_flag);
+    if(result != 0)
+    {
+        ALOGE("zwcontrol_send_node_information retur error: %d", result);
+    }
+
+    return result;
+}

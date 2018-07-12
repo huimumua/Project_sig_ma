@@ -12286,11 +12286,11 @@ int zwnet_send_nif(zwnet_p net, zwnoded_p noded, uint8_t broadcast)
         if (net->curr_op == ZWNET_OP_NODE_CACHE_UPT)
         {
             zwnet_abort(net);
-            debug_zwapi_msg(&net->plt_ctx, "Canceled low priority operation");
+            ALOGI("Canceled low priority operation");
         }
         else
         {
-            debug_zwapi_msg(&net->plt_ctx, "Current operation not completed yet, try again later");
+            ALOGI("Current operation not completed yet, try again later, current op:%d",net->curr_op);
             plt_mtx_ulck(net->mtx);
             return ZW_ERR_LAST_OP_NOT_DONE;
         }
