@@ -12274,7 +12274,7 @@ zwnet_send_nif - send node information frame to a node or broadcast it
 @param[in]	broadcast	Broadcast flag. 1= broadcast; 0= single cast
 @return		ZW_ERR_XXX.
 */
-int zwnet_send_nif(zwnet_p net, zwnoded_p noded, uint8_t broadcast)
+int zwnet_send_nif(zwnet_p net, int noded, uint8_t broadcast)
 {
     int             result;
     appl_snd_nif_t  prm;
@@ -12305,7 +12305,7 @@ int zwnet_send_nif(zwnet_p net, zwnoded_p noded, uint8_t broadcast)
     prm.cb = zwnet_send_nif_cb;
     prm.cb_prm = NULL;
     prm.fr_node_id = 0;
-    prm.to_node_id = (broadcast)? 0xFF : noded->nodeid;
+    prm.to_node_id = (broadcast)? 0xFF : noded;
 
     result = zip_node_info_send(&net->appl_ctx, &prm);
 

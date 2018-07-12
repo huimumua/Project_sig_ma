@@ -1411,7 +1411,7 @@ get the home controller API version and subversion
 @return
 */
 
-int zwnet_send_nif(zwnet_p net, zwnoded_p noded, uint8_t broadcast);
+int zwnet_send_nif(zwnet_p net, int noded, uint8_t broadcast);
 /**<
 send node information frame to a node or broadcast it
 @param[in]	net		    Network

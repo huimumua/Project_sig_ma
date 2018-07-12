@@ -11761,9 +11761,10 @@ int  zwcontrol_send_node_information(hl_appl_ctx_t* hl_appl, int nodeId, int bro
             ALOGE("Send single cast, node not found, please check!");
             return ZW_ERR_NODE_NOT_FOUND;
         }
+        ALOGI("send node info to dest nodeid: %d",node->nodeid);
     }
 
-    int result = zwnet_send_nif(nw, node, broadcast_flag);
+    int result = zwnet_send_nif(nw, nodeId, broadcast_flag);
     if(result != 0)
     {
         ALOGE("zwcontrol_send_node_information retur error: %d", result);
