@@ -1818,6 +1818,26 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts, hl_appl_ctx_t * hl_ap
         if(sts == OP_DONE)
         {
             initStatus = 1;
+            if(hl_appl->zwnet->zwave_role & ZW_ROLE_SECONDARY)
+            {
+                ALOGI("Now network role is secondary.");
+                plt_mtx_lck(hl_appl->desc_cont_mtx);
+
+                desc_cont_t *last_node_cont;
+                last_node_cont = hl_appl->desc_cont_hd;
+                while (last_node_cont)
+                {
+                    zwnoded_p node = (zwnoded_p)last_node_cont->desc;
+                    if(node && node->nodeid == 1)
+                    {
+                        hl_desc_cont_del(&hl_appl->desc_cont_hd, hl_desc_id_get(hl_appl->desc_cont_hd, node));
+                        break;
+                    }
+                    last_node_cont = last_node_cont->next;
+                }
+                plt_mtx_ulck(hl_appl->desc_cont_mtx);
+            }
+
             zwcontrol_save_nodeinfo(hl_appl, hl_appl->node_info_file);
             cJSON_AddStringToObject(jsonRoot, "Status", "Success");
         }
