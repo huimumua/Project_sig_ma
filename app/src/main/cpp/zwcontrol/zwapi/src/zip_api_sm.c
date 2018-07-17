@@ -11310,6 +11310,65 @@ static int zwnet_mul_cmd_send(zwnet_p nw)
 
 
 /**
+zwnet_mul_cmd_send_unencap - Send multi-command response un-encapsulated
+@param[in] nw  Network
+@return     Zero on completed, 3 on packet needs another send, 4 on busy, negative number on error
+*/
+static int zwnet_mul_cmd_send_unencap(zwnet_p nw)
+{
+    mcmd_sm_ctx_t   *sm_ctx = &nw->mul_cmd_sm_ctx;
+    int             result;
+    uint8_t         *cmd_buf;
+    uint16_t        len;
+
+    if (sm_ctx->rd_idx >= sm_ctx->wr_idx)
+    {   //Completed
+        return 0;
+    }
+
+    cmd_buf = sm_ctx->mcmd_buf + sm_ctx->rd_idx;
+    len = *cmd_buf++;
+
+    if (len == 0)
+    {
+        return ZW_ERR_VALUE;
+    }
+
+    sm_ctx->req.snd_prm.dat_buf = cmd_buf;
+    sm_ctx->req.snd_prm.dat_len = len;
+
+    result = zw_send_data(&nw->appl_ctx, &sm_ctx->req.snd_prm, zwnet_mul_cmd_tx_sts_cb, sm_ctx);
+
+    if (result == 0)
+    {
+        //Adjustment
+        sm_ctx->rd_idx += (len + 1);
+
+        if (sm_ctx->rd_idx >= sm_ctx->wr_idx)
+        {   //Completed
+        }
+        else
+        {   //Packet needs another send
+            result = 3;
+        }
+    }
+    else
+    {
+        if ((result == SESSION_ERROR_PREVIOUS_COMMAND_UNCOMPLETED) || (result == APPL_ERROR_WAIT_CB))
+        {
+            result = 4;
+        }
+        else
+        {
+            result = ZW_ERR_OP_FAILED;
+        }
+    }
+
+    return result;
+}
+
+
+/**
 zwnet_mul_cmd_resp_create - Create multi-command encapsulated response
 @param[in] nw	Network
 @return     Zero on response was sent (i.e. completed), 1 on waiting a report, 2 on set command was sent,
@@ -11386,7 +11445,16 @@ static int zwnet_mul_cmd_resp_create(zwnet_p nw)
     //Finished processing all the requests, send the multi-command encapsulated response to the node
 //  debug_zwapi_msg(&nw->plt_ctx, "Multi-cmd response:");
 //  debug_zwapi_bin_msg(&nw->plt_ctx, sm_ctx->mcmd_buf, sm_ctx->wr_idx);
-    result = zwnet_mul_cmd_send(nw);
+    if (sm_ctx->req.mcmd_resp)
+    {
+//      debug_zwapi_msg(&nw->plt_ctx, "Multi-cmd response:");
+//      debug_zwapi_bin_msg(&nw->plt_ctx, sm_ctx->mcmd_buf, sm_ctx->wr_idx);
+        result = zwnet_mul_cmd_send(nw);
+    }
+    else
+    {   //Responses are sent without multi-command encapsulation
+        result = zwnet_mul_cmd_send_unencap(nw);
+    }
 
     return result;
 }
@@ -11408,7 +11476,7 @@ static void zwnet_mul_cmd_process_req(zwnet_p nw)
     switch (result)
     {
         //--------------------------------------------------------------
-        case 0:
+        case 0: //response was sent (i.e. completed)
         //--------------------------------------------------------------
             {   //Last multi-command encapsulated packet has been processed.
                 //Set timer to send event EVT_MUL_CMD_START to check and process next multi-command encapsulated packet
@@ -11423,7 +11491,7 @@ static void zwnet_mul_cmd_process_req(zwnet_p nw)
             }
             break;
         //--------------------------------------------------------------
-        case 1:
+        case 1: //waiting a report
         //--------------------------------------------------------------
             {
                 //Wait for next report
@@ -11435,7 +11503,7 @@ static void zwnet_mul_cmd_process_req(zwnet_p nw)
             }
             break;
         //--------------------------------------------------------------
-        case 2:
+        case 2: //set command was sent
         //--------------------------------------------------------------
             {
                 //Wait for 100 ms for the Z/IP gateway to process the set command
@@ -11446,7 +11514,7 @@ static void zwnet_mul_cmd_process_req(zwnet_p nw)
             }
             break;
         //--------------------------------------------------------------
-        case 3:
+        case 3: //packet was split and needed another send
         //--------------------------------------------------------------
             {   //Packet was split and needed another send
                 sm_ctx->sta = MUL_CMD_STA_WAIT_FOR_SEND;
@@ -11459,7 +11527,7 @@ static void zwnet_mul_cmd_process_req(zwnet_p nw)
             break;
 
         //--------------------------------------------------------------
-        case 4:
+        case 4: //busy
         //--------------------------------------------------------------
             if (++sm_ctx->resnd_cnt > 1)
             {   //Has exceeded number of resend

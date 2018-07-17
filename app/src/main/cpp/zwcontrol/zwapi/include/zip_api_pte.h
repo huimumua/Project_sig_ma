@@ -1338,6 +1338,7 @@ typedef struct
 typedef struct
 {
     util_lst_t          *mul_cmd_hd;    /**< Head of linked list for creating reply for multi-command encapsulated requests*/
+    int                 mcmd_resp;      /**< Flag to determine whether to use multi-command encapsulation in response*/
     appl_snd_data_t     snd_prm;        /**< Send parameters */
 } zwnet_mcmd_sm_req_t;
 

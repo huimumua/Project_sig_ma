@@ -3039,7 +3039,7 @@ static int appl_cmd_hdlr(uint16_t cmd_len, uint8_t *cmd_buf, appl_cmd_prm_t *prm
             if (intf)
             {
                 //Check if the incoming message uses the node highest s2 scheme key for encryption.
-                if (msg_type & ZWNET_MSG_TYPE_SECURE)
+                if ((msg_type & ZWNET_MSG_TYPE_SECURE) && !(intf->propty & IF_PROPTY_UNSECURE))
                 {
                     if ((src_node != nw->ctl.nodeid) && !zwnode_msg_s2_scheme_chk(node, prm->encap_fmt, prm->encap_fmt_valid))
                     {
@@ -3137,7 +3137,7 @@ l_CHECK_UNHANDLE_CMD:
         if (intf)
         {   //Interface of Z/IP gateway
 
-            if (msg_type & ZWNET_MSG_TYPE_SECURE)
+            if ((msg_type & ZWNET_MSG_TYPE_SECURE) && !(intf->propty & IF_PROPTY_UNSECURE))
             {
                 //Check if the incoming message uses the Z/IP gateway highest s2 scheme key for encryption
                 if (!zwnode_msg_s2_scheme_chk(&nw->ctl, prm->encap_fmt, prm->encap_fmt_valid))
@@ -3376,6 +3376,17 @@ l_CHECK_MULTI_CMD:
             mul_cmd_req.snd_prm.flag |= ZIP_FLAG_SECURE;
         }
 
+        node = zwnode_find(&nw->ctl, src_node);
+        if (node && zwif_find_cls(node->ep.intf, COMMAND_CLASS_MULTI_CMD))
+        {   //Destination node supports multi-command command class
+            //debug_zwapi_ts_msg(&nw->plt_ctx, "node:%u supports multi-command command class", (unsigned)src_node);
+
+            mul_cmd_req.mcmd_resp = 1;
+        }
+
+        //Uncomment the following to always use multi-command encapsulation to send response
+        //mul_cmd_req.mcmd_resp = 1;
+
         mul_cmd_req.mul_cmd_hd = nw->mul_cmd_hd;
         nw->mul_cmd_hd = NULL;
 
@@ -3555,8 +3566,8 @@ static void    application_command_handler_cb(appl_layer_ctx_t *appl_ctx, struct
         }
 
         if ((msg_type & ZWNET_MSG_TYPE_SECURE)
-            || ((spvsn_if->propty & IF_PROPTY_SECURE) && !(spvsn_if->propty & IF_PROPTY_UNSECURE)))
-        {   //Secure incoming message or secure only interface, check if the S2 scheme use is the highest granted to Z/IP gateway
+            && ((spvsn_if->propty & IF_PROPTY_SECURE) && !(spvsn_if->propty & IF_PROPTY_UNSECURE)))
+        {   //Secure incoming message and secure only interface, check if the S2 scheme use is the highest granted to Z/IP gateway
             if (!zwnode_msg_s2_scheme_chk(&nw->ctl, prm.encap_fmt, prm.encap_fmt_valid))
                 return;
         }
