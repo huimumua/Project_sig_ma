@@ -373,6 +373,8 @@ struct NetworkManagementState nms =
 /* Ctimer used to abort s2 incl asynchronously to avoid a buffer overwrite in libs2. */
 static struct ctimer cancel_timer;
 
+int zgw_reset_mode=0, exclusion_learn_mode=0;	//Add by Daniel....2018/07/17
+
 /**
  * Integer log2
  */
@@ -2074,6 +2076,7 @@ LearnModeStatus(LEARN_INFO* inf)
     if (clean_network || inf->bSource == 0)
     {
       WRN_PRINTF("Z/IP Gateway has been excluded.\n");
+      exclusion_learn_mode = 1;  //Add by Daniel....2018/07/17
 
       /*Stop the DHCP process, since its sensitive for NODEid changes*/
       process_exit(&dhcp_client_process);
@@ -2427,6 +2430,7 @@ NetworkManagementAction(ZW_APPLICATION_TX_BUFFER* pCmd, BYTE bDatalen)
          break;
       }
 
+      zgw_reset_mode = 1;  //Add by Daniel....2018/07/17
       DBG_PRINTF("Setting default\n");
       nms.state = NM_SET_DEFAULT;
       ZW_SetDefault(SetDefaultStatus);

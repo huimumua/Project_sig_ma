@@ -97,6 +97,8 @@
 //#include <printf.h> //djnakata
 #include <stdio.h>
 
+#include "CC_NetworkManagement.h"
+
 #ifdef __C51__
 #define data _data
 #endif
@@ -286,6 +288,8 @@ struct uip_udp_conn uip_udp_conns[UIP_UDP_CONNS];
 /** single possible icmpv6 "connection" */
 struct uip_icmp6_conn uip_icmp6_conns;
 #endif /*UIP_CONF_ICMP6*/
+
+extern int zgw_reset_mode, exclusion_learn_mode;	//Add by Daniel.....2018/07/17
 
 /*---------------------------------------------------------------------------*/
 /* Functions                                                                 */
@@ -525,6 +529,15 @@ uip_udp_new(const uip_ipaddr_t *ripaddr, u16_t rport)
     lastport = 4096;
   }
 
+  /**Add by Daniel....2018/07/17**/
+  if(zgw_reset_mode || ( exclusion_learn_mode && lastport >= UIP_UDP_CONNS)){
+    memset(uip_udp_conns, 0, sizeof(uip_udp_conns));
+    lastport = 1;
+    zgw_reset_mode = 0;
+    exclusion_learn_mode = 0;
+  }
+  /**Daniel End**/
+  
   for(c = 0; c < UIP_UDP_CONNS; ++c) {
     if(uip_udp_conns[c].lport == uip_htons(lastport)) {
       goto again;
