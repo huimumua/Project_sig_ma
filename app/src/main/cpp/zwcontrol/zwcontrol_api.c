@@ -4779,7 +4779,7 @@ static int hl_destid_get(hl_appl_ctx_t *hl_appl, int nodeId, int cmd, uint8_t en
         ALOGW("--------------------------------------------------------------------------------");
         ALOGW("  The request cmd interface not found, make sure this node supported it indeed");
         ALOGW("--------------------------------------------------------------------------------");
-        return -1;
+        return ZW_ERR_CLASS_NOT_FOUND;
     }
 }
 
