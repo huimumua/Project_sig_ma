@@ -8791,6 +8791,7 @@ int  zwcontrol_get_group_info(hl_appl_ctx_t* hl_appl, uint32_t nodeId, uint8_t g
     {
         return -1;
     }
+    ALOGI("zwcontrol_get_group_info start, nodeid:%d, group id:%d, epid:%d",nodeId, group_id, endpoindId);
 
     hl_appl->group_id = group_id;
     int result = hl_grp_rep_get(hl_appl);
