@@ -621,11 +621,12 @@ void ipv46nat_ipv4addr_of_entry(uip_ipv4addr_t* ip,nat_table_entry_t *e) {
 u8_t ipv46nat_all_nodes_has_ip() {
   u8_t i;
 
-  for(i=0; i < nat_table_size;i++) {
+  /** Remove by Daniel....2018/07/24 **/
+  /*for(i=0; i < nat_table_size;i++) {
     if(nat_table[i].ip_suffix == 0) {
       return 0;
     }
-  }
+  }*/
   return 1;
 }
 
