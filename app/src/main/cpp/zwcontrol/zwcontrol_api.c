@@ -1559,7 +1559,7 @@ static void dummy_post_msg(void *msg)
     free(msg);
 }
 
-static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts, hl_appl_ctx_t * hl_appl)
+static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts, hl_appl_ctx_t * hl_appl,  zwnet_sts_t *info)
 {
     cJSON *jsonRoot;
     jsonRoot = cJSON_CreateObject();
@@ -1610,6 +1610,12 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts, hl_appl_ctx_t * hl_ap
             {
                 cJSON_AddStringToObject(jsonRoot, "NewAdded", "No");
             }
+
+            if(info && info->type  == ZWNET_STS_INFO_NODE_ID)
+            {
+                cJSON_AddNumberToObject(jsonRoot, "Nodeid", info->info.node_id);
+            }
+
             cJSON_AddStringToObject(jsonRoot, "Status", "Success");
         }
 
@@ -1647,6 +1653,11 @@ static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts, hl_appl_ctx_t * hl_ap
         }
         else if(sts == OP_DONE)
         {
+            if(info && info->type  == ZWNET_STS_INFO_NODE_ID)
+            {
+                cJSON_AddNumberToObject(jsonRoot, "Nodeid", info->info.node_id);
+            }
+
             cJSON_AddStringToObject(jsonRoot, "Status", "Success");
         }
 
@@ -1887,7 +1898,7 @@ static void hl_nw_notify_cb(void *user, uint8_t op, uint16_t sts, zwnet_sts_t *i
         //PostMessage(ghWnd, MSG_ZWAPI_NOTIFY, 0, (LPARAM )nw_notify);
         dummy_post_msg(nw_notify);
 
-        char *str = hl_nw_create_op_msg(op, sts, nw_notify->hl_appl);
+        char *str = hl_nw_create_op_msg(op, sts, nw_notify->hl_appl, info);
 
         if(str != NULL)
         {
