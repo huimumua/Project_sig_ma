@@ -1350,7 +1350,7 @@ static void hl_nw_notify_hdlr(nw_notify_msg_t *notify_msg)
         case ZWNET_OP_INITIATE:
         case ZWNET_OP_RESET:
 
-            if (notify_msg->op == ZWNET_OP_INITIALIZE && notify_msg->sts == ZW_ERR_NONE)
+            if (notify_msg->op == ZWNET_OP_INITIALIZE && notify_msg->sts == OP_DONE)
             {
                 hl_appl->init_status = 1;
 
@@ -1478,11 +1478,14 @@ static void hl_nw_notify_hdlr(nw_notify_msg_t *notify_msg)
             }
 
             // tiny
-            /*ALOGI("Network initialized!  Setting up unsolicited address, please wait ...\n");
-            if (hl_unsolicited_addr_setup(hl_appl) == 0)
+            if (notify_msg->op == ZWNET_OP_INITIALIZE && notify_msg->sts == OP_DONE)
             {
-                ALOGI("Setting up unsolicited address success");
-            }*/
+                ALOGI("Network initialized!  Setting up unsolicited address, please wait ...\n");
+                if (hl_unsolicited_addr_setup(hl_appl) == 0)
+                {
+                    ALOGI("Setting up unsolicited address success");
+                }
+            }
             break;
 
         case ZWNET_OP_NODE_UPDATE:
