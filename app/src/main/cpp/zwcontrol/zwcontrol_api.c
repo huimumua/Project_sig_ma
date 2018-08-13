@@ -699,6 +699,32 @@ static void hl_nw_tx_cb(void *user, uint8_t tx_sts)
     {
         ALOGE("Higher level appl send data completed with error:%s\n",
               (tx_sts < sizeof(tx_cmplt_sts)/sizeof(char *))? tx_cmplt_sts[tx_sts]  : "unknown");
+
+        cJSON *jsonRoot;
+        jsonRoot = cJSON_CreateObject();
+
+        if(jsonRoot == NULL)
+        {
+            return;
+        }
+
+        cJSON_AddStringToObject(jsonRoot, "MessageType", "Transfer Error Report");
+        //cJSON_AddNumberToObject(jsonRoot, "Node id", ifd->nodeid);
+        cJSON_AddStringToObject(jsonRoot, "Error Msg",
+            (tx_sts < sizeof(tx_cmplt_sts)/sizeof(char *))? tx_cmplt_sts[tx_sts]  : "unknown");
+
+        if(resCallBack)
+        {
+            char *p = cJSON_Print(jsonRoot);
+
+            if(p)
+            {
+                resCallBack(p);
+                free(p);
+            }
+        }
+
+        cJSON_Delete(jsonRoot);
     }
 }
 
