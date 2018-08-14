@@ -1504,14 +1504,14 @@ static void hl_nw_notify_hdlr(nw_notify_msg_t *notify_msg)
             }
 
             // tiny
-            if (notify_msg->op == ZWNET_OP_INITIALIZE && notify_msg->sts == OP_DONE)
+            /*if (notify_msg->op == ZWNET_OP_INITIALIZE && notify_msg->sts == OP_DONE)
             {
                 ALOGI("Network initialized!  Setting up unsolicited address, please wait ...\n");
                 if (hl_unsolicited_addr_setup(hl_appl) == 0)
                 {
                     ALOGI("Setting up unsolicited address success");
                 }
-            }
+            }*/
             break;
 
         case ZWNET_OP_NODE_UPDATE:
