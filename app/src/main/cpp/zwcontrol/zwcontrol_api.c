@@ -1585,7 +1585,6 @@ static void hl_nw_notify_hdlr(nw_notify_msg_t *notify_msg)
 static void dummy_post_msg(void *msg)
 {
     hl_nw_notify_hdlr((nw_notify_msg_t *)msg);
-    free(msg);
 }
 
 static char* hl_nw_create_op_msg(uint8_t op, uint16_t sts, hl_appl_ctx_t * hl_appl,  zwnet_sts_t *info)
@@ -1938,6 +1937,7 @@ static void hl_nw_notify_cb(void *user, uint8_t op, uint16_t sts, zwnet_sts_t *i
             free(str);
         }
     }
+    free(nw_notify);
 }
 
 static char  *prompt_str(hl_appl_ctx_t *hl_appl, const char *disp_str, int out_buf_sz, char *out_str)
