@@ -126,10 +126,11 @@ int tpt_snd_req_create(tpt_layer_ctx_t *tpt_ctx, struct sockaddr *dst, uint8_t *
         //djnakata
         struct sockaddr_in *destaddr = (struct sockaddr_in*)dst;
 
-        if(strcmp(inet_ntoa(destaddr->sin_addr), "127.0.0.1") == 0 ||
-           strcmp(inet_ntoa(destaddr->sin_addr), "0.0.0.3") == 0)
+        ALOGD("djnakata tpt_snd_req_create %s", inet_ntoa(destaddr->sin_addr));
+
+        if(strcmp(inet_ntoa(destaddr->sin_addr), "127.0.0.1") == 0)
         {
-            nodeid = 1;
+            nodeid = 0;
         }
         else
         {

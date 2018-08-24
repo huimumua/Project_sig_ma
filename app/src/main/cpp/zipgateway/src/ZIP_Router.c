@@ -338,10 +338,14 @@ nodeOfIP(uip_ip6addr_t* ip)
   else if (is_4to6_addr((ip6addr_t*) ip))
   {
     //return ipv46_get_nat_addr((uip_ipv4addr_t*) &ip->u8[12]); //djnakata
-    if(ip->u8[15] == 1)
-    {
-      return MyNodeID;
-    }
+    uip_ip6addr_t ip2;
+    struct sockaddr_in addr;
+    addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+    memcpy(&ip2.u8[12], &addr.sin_addr, sizeof(addr.sin_addr));
+
+    if(uip_ipaddr_cmp(ip, (ip6addr_t*)&ip2) == 0)
+        return MyNodeID;
 
     return ip->u8[15];
   }

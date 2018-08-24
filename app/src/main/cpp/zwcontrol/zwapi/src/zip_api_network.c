@@ -2521,7 +2521,7 @@ static int zwnet_rpt_send(zwnet_p nw, uint8_t *cmd_buf, uint8_t len, uint8_t dst
     prm->node_id = dst_node;
     prm->ep_addr = *ep_addr;
     prm->dat_len = len;
-    prm->flag = ZIP_FLAG_HOST_PORT;
+    //prm->flag = ZIP_FLAG_HOST_PORT; //djnakata
 
     if (encap_fmt)
     {

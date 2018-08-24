@@ -607,6 +607,11 @@ PROCESS_THREAD(dtls_server_process, ev, data)
                             BYTE nodeId = read_buf[0];
                             DBG_PRINTF("djnakata nodeId %d\n", nodeId);
 
+                            if(nodeId == 0)
+                            {
+                                nodeId = MyNodeID;
+                            }
+
                             int udp_payload_len = len - 1;
                             memset(&udpconn, 0x00, sizeof(struct uip_udp_conn));
 
@@ -643,7 +648,9 @@ PROCESS_THREAD(dtls_server_process, ev, data)
                             uip_ipaddr_copy(&UIP_IP_BUF->srcipaddr,  &udpconn.ripaddr);
                             uip_ipaddr_copy(&UIP_IP_BUF->destipaddr, &udpconn.sipaddr);
 
-                            if (nodeId == MyNodeID || nodeId == 1)
+                            DBG_PRINTF("djnakata MyNodeID is %d, nodeId is %d", MyNodeID, nodeId);
+
+                            if (nodeId == MyNodeID)
                             {
                                 uip_debug_ipaddr_print(&udpconn.ripaddr);
                                 uip_debug_ipaddr_print(&udpconn.sipaddr);

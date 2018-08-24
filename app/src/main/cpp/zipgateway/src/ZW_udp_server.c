@@ -782,7 +782,7 @@ UDPCommandHandler(struct uip_udp_conn* c,const u8_t* data, u16_t len,u8_t receiv
           for(s = list_head(udp_tx_sessions_list); s; s= list_item_next(s)) {
             if( uip_ipaddr_cmp(&s->dst_ip, &c->ripaddr ) &&
                 uip_ipaddr_cmp(&s->src_ip, &c->sipaddr) &&
-                s->dst_port == c->rport &&
+                /*s->dst_port == c->rport &&*/ //djnakata
                 s->seq == pZipPacket->seqNo &&
                 s->src_ep == pZipPacket->dEndpoint &&
                 s->dst_ep == pZipPacket->sEndpoint
