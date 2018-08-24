@@ -275,7 +275,7 @@ void plt_bin_show(void *pltfm_ctx, void * buf, uint32_t len)
 #endif
         }
 
-        plt_msg_show(pltfm_ctx, "%s", hex_str);
+        ALOGI("zware:%s\n", hex_str);
     }
 }
 

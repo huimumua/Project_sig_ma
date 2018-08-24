@@ -1001,6 +1001,9 @@ static void dtls_rd_ready_hdlr(tpt_layer_ctx_t *tpt_ctx, fd_set *read_fds, int n
                             debug_msg_show(tpt_ctx->plt_ctx, "udp rcx:");
                             debug_bin_show(tpt_ctx->plt_ctx, buf, rcx_size);
         #endif
+                            // ALOGI("************* Read udp rcx:\n");
+                            // debug_bin_show(tpt_ctx->plt_ctx, buf, rcx_size);
+                            // ALOGI("************* Read udp rcx end\n");
                             //djnakata
                             ssl_sock->keep_alive_cnt = ZIPV2_SESS_KEEP_ALIVE_CNT;
 
@@ -1613,6 +1616,9 @@ void dtls_wr_thrd(tpt_layer_ctx_t *tpt_ctx)
 #ifdef SHOW_PACKAT_INFO
                         debug_msg_show(tpt_ctx->plt_ctx, "Send udp len: %d", bytes_sent);
 #endif
+                        // ALOGI("************* Send buffer to zipgateway:\n");
+                        // debug_bin_show(tpt_ctx->plt_ctx, send_pkt->buf, bytes_sent);
+                        // ALOGI("************* Send buffer to zipgateway end\n");
 
                         if (bytes_sent == send_pkt->len)
                         {   //Send O.K.

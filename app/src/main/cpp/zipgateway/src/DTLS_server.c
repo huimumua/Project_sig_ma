@@ -150,6 +150,39 @@ static void dtls_print_session_msg(const char* msg, struct dtls_session*s) {
     DBG_PRINTF("DTLS: %s %s %d %d\n", msg, inet_ntoa(s->connaddr.sin_addr), s->connaddr.sin_port, htons(s->connaddr.sin_port));
 }
 
+#define MAX_BIN_LINE_LEN    15
+void dump_buf_from_zware(void * buf, uint32_t len)
+{
+    uint32_t    line_len;
+    uint8_t     *bin_byte = (uint8_t *)buf;
+    char        tmp[8];
+    char        hex_str[MAX_BIN_LINE_LEN * 4];
+
+    while (len > 0)
+    {
+        if (len >= MAX_BIN_LINE_LEN)
+        {
+            len -= MAX_BIN_LINE_LEN;
+            line_len = MAX_BIN_LINE_LEN;
+        }
+        else
+        {
+            line_len = len;
+            len = 0;
+        }
+
+        hex_str[0] = '\0';
+
+        while (line_len-- > 0)
+        {
+            sprintf(tmp,"%02X ",(unsigned) *bin_byte++);
+            strcat(hex_str, tmp);
+        }
+
+        DBG_PRINTF("zipgateway:%s\n", hex_str);
+    }
+}
+
 static unsigned int
 psk_server_callback(SSL *ssl, const char *identity, unsigned char *psk,
                     unsigned int max_psk_len)
@@ -606,6 +639,10 @@ PROCESS_THREAD(dtls_server_process, ev, data)
 
                             BYTE nodeId = read_buf[0];
                             DBG_PRINTF("djnakata nodeId %d\n", nodeId);
+                            // DBG_PRINTF("*******Dump buffer from zware:\n");
+                            // dump_buf_from_zware(read_buf, len);
+                            // DBG_PRINTF("*******Dump buffer from zware done.\n");
+
 
                             if(nodeId == 0)
                             {
