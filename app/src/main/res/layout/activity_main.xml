@@ -4,121 +4,135 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="40dip"
+    android:padding="20dip"
     android:orientation="vertical">
  <ScrollView
      android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     >
-<LinearLayout
+     android:layout_height="wrap_content">
+<TableLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-   <Button
-       android:id="@+id/btn_open"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="open Controller"
-       android:layout_margin="5dp"
-       />
+   <TableRow>
+       <Button
+           android:id="@+id/btn_open"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Open the Controller"
+           android:layout_margin="5dp"
+           android:layout_weight="1"
+           android:textAllCaps="false"
+        />
+        <Button
+               android:id="@+id/btn_add"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Add Device"
+               android:layout_weight="1"
+               android:textAllCaps="false"
+               android:layout_margin="5dp"/>
+        <Button
+           android:id="@+id/btn_remove"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Remove Device"
+           android:layout_weight="1"
+           android:textAllCaps="false"
+            android:layout_margin="5dp"/>
+        <Button
+           android:id="@+id/btn_get"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Get All Device Info"
+           android:layout_weight="1"
+           android:textAllCaps="false"
+        android:layout_margin="5dp"/>
+    </TableRow>
     <TextView
         android:id="@+id/tx_open_result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="open result"
-        android:layout_margin="5dp"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Open result"
+           android:layout_margin="5dp"
+           android:layout_weight="1"
+            />
+    <TableRow>
+        <Button
+            android:id="@+id/btn_getBarr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get Device Battery"
+            android:layout_weight="1"
+            android:textAllCaps="false"
+            android:layout_margin="5dp"
         />
- <Button
-       android:id="@+id/btn_add"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="添加设备"
-       android:layout_margin="5dp"
-       />
-    <TextView
-        android:id="@+id/tx_add_result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="add result"
-        android:layout_margin="5dp"
-        />
-    <Button
-       android:id="@+id/btn_remove"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="删除设备"
-        android:layout_margin="5dp"
-       />
-    <TextView
-        android:id="@+id/tx_remove_result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="remove result"
-        android:layout_margin="5dp"
-        />
-    <Button
-       android:id="@+id/btn_get"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="获取设备列表"
-        android:layout_margin="5dp"
-       />
-    <TextView
-        android:id="@+id/tx_get_result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="deviceInfo result"
-        android:layout_margin="5dp"
-        />
-    <Button
-        android:id="@+id/btn_getBarr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="获取电量"
-        android:layout_margin="5dp"
-        />
-    <Button
-        android:id="@+id/btn_getSenser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="获取sensor详情"
-        android:layout_margin="5dp"
-        />
-    <Button
-        android:id="@+id/btn_update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="更新"
-        android:layout_margin="5dp"
-        />
+
+        <Button
+            android:id="@+id/btn_getSenser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Learn Mode"
+            android:layout_weight="1"
+            android:textAllCaps="false"
+            android:layout_margin="5dp"/>
+        <Button
+            android:id="@+id/btn_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update Device"
+            android:layout_weight="1"
+            android:textAllCaps="false"
+            android:layout_margin="5dp"/>
+        <Button
+            android:id="@+id/btn_get_power"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get Power Level"
+            android:layout_weight="1"
+            android:textAllCaps="false"
+            android:layout_margin="5dp"/>
+    </TableRow>
+
+    <TableRow>   
+        <Button
+            android:id="@+id/btn_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Turn on the Light"
+            android:textAllCaps="false"
+            android:layout_weight="0.25"
+            android:layout_margin="5dp"/>
+        <Button
+            android:id="@+id/btn_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Turn Off the Light"
+            android:textAllCaps="false"
+            android:layout_weight="0.25"
+            android:layout_margin="5dp"/>
+        <Button
+            android:id="@+id/btn_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reset Gateway"
+            android:textAllCaps="false"
+            android:layout_weight="0.25"
+            android:layout_margin="5dp"/>
+        <TableRow>
+        </TableRow>
+    </TableRow>
     <EditText
         android:id="@+id/et_node_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="请输入nodeId"
-        />
-    <Button
-        android:id="@+id/btn_get_power"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="获取功率"
-        android:layout_margin="5dp"
-        />
-    <Button
-        android:id="@+id/btn_on"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="开灯"
-        android:layout_margin="5dp"
-        />
-    <Button
-        android:id="@+id/btn_off"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="关灯"
-        android:layout_margin="5dp"
-        />
- </LinearLayout>
+        android:numeric="integer"
+        android:singleLine="true"
+        android:inputType="number"
+        android:hint="Input the nodeId you want to control"/>
+
+ </TableLayout>
+
  </ScrollView>
+
 </android.widget.LinearLayout>
