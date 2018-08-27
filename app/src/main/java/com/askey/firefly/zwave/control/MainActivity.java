@@ -12,6 +12,7 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button btnAdd,btnRemove,btnGet,btnOpen,btnBarr,btnSensor,btnUpdate,btnReset;
     private TextView txAddResult,txRemoveResult,txDeviceInfo,txOpenResult;
+    private String deviceResultString = null;
+    private Handler handler=null;
     IZwaveControlInterface zwaveService;
     private EditText etNodeId;
     private Button btnGetPower,btnOn, btnOff;
@@ -72,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        handler=new Handler();
 
         btnAdd = (Button) findViewById(R.id.btn_add);
         btnRemove = (Button) findViewById(R.id.btn_remove);
@@ -114,22 +118,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void addDeviceCallBack(String result) throws RemoteException {
             Log.i("MainActivity", "======addDeviceCallBack=====" + result);
-            String messageType = null;
-            String status = null;
-            String nodeId = null;
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                messageType = jsonObject.optString("MessageType");
-                status = jsonObject.optString("Status");
-                nodeId = jsonObject.optString("Nodeid");
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if ("Success".equals(status)) {
-                txOpenResult.setText(messageType+" :"+status+"  nodeId:"+nodeId);
-            }
+            deviceResultString = result;
+            handler.post(runnableUi);
         }
 
         @Override
@@ -137,41 +127,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.i("MainActivity", "======openControlCallBack=====" + result);
             if(result.equals("openController:0"))
             {
-                //txOpenResult.setTextColor(Color.GREEN);
-                txOpenResult.setText("Open the controller sucessfully.");
+                deviceResultString = "Open the controller sucessfully.";
             }
             else
             {
-                txOpenResult.setText("Open the controller with error:"+result);
+                deviceResultString = "Open the controller failed: "+result;
             }
+            handler.post(runnableUi);
         }
 
         @Override
         public void removeDeviceCallBack(String result) throws RemoteException {
             Log.i("MainActivity", "======removeDeviceCallBack=====" + result);
 
-            String messageType = null;
-            String status = null;
-            String nodeId = null;
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                messageType = jsonObject.optString("MessageType");
-                status = jsonObject.optString("Status");
-                nodeId = jsonObject.optString("Nodeid");
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if ("Success".equals(status)) {
-                txOpenResult.setText(messageType+" :"+status+"  nodeId:"+nodeId);
-            }
+            deviceResultString = result;
+            handler.post(runnableUi);
 
         }
 
         @Override
         public void getDevicesCallBack(String result) throws RemoteException {
-            //Log.i("MainActivity", "======getDevicesCallBack=====" + result);
+            Log.i("MainActivity", "======getDevicesCallBack=====" + result);
+        }
+
+        @Override
+        public void getDevicesInfoCallBack(String result) throws RemoteException {
+            Log.i("MainActivity", "======getDevicesInfoCallBack=====" + result);
+
             Context context = getBaseContext();
             View contentView = LayoutInflater.from(context).inflate(R.layout.window_layout, null);
             WindowManager manger = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
@@ -187,11 +169,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             popupWindow.setBackgroundDrawable(new ColorDrawable());
             popupWindow.showAtLocation(contentView, Gravity.CENTER_VERTICAL, 0, 0);
             popupWindow.showAsDropDown(contentView);
-        }
-
-        @Override
-        public void getDevicesInfoCallBack(String result) throws RemoteException {
-            Log.i("MainActivity", "======getDevicesInfoCallBack=====" + result);
         }
 
         @Override
@@ -216,27 +193,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void getDeviceBatteryCallBack(String result) throws RemoteException {
-
+            deviceResultString = result;
+            handler.post(runnableUi);
         }
 
         @Override
         public void getSensorMultiLevelCallBack(String result) throws RemoteException {
-
+            Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void updateNodeCallBack(String result) throws RemoteException {
-
+            deviceResultString = result;
+            handler.post(runnableUi);
         }
 
         @Override
         public void reNameDeviceCallBack(String result) throws RemoteException {
-
+            deviceResultString = result;
+            handler.post(runnableUi);
         }
 
         @Override
         public void setDefaultCallBack(String result) throws RemoteException {
-
+            deviceResultString = result;
+            handler.post(runnableUi);
         }
 
         @Override
@@ -261,22 +242,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void getPowerLevel(String result) throws RemoteException {
-
+            deviceResultString = result;
+            handler.post(runnableUi);
         }
 
         @Override
         public void setSwitchAllOn(String result) throws RemoteException {
-
+            deviceResultString = result;
+            handler.post(runnableUi);
         }
 
         @Override
         public void setSwitchAllOff(String result) throws RemoteException {
-
+            deviceResultString = result;
+            handler.post(runnableUi);
         }
 
         @Override
         public void getBasic(String result) throws RemoteException {
-            Looper.prepare();
             // 创建构建器
             /*AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             // 设置参数
@@ -292,23 +275,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             });
             builder.create().show();*/
             
-            Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
-            Looper.loop();
+            //Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
+
+            /*Context context = getBaseContext();
+            View contentView = LayoutInflater.from(context).inflate(R.layout.window_layout, null);
+            WindowManager manger = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+
+            final PopupWindow popupWindow = new PopupWindow(contentView,
+                            manger.getDefaultDisplay().getWidth()-100, WindowManager.LayoutParams.WRAP_CONTENT, true);
+
+            popupWindow.setTouchable(true);
+            TextView showText = (TextView) contentView.findViewById(R.id.node_info);
+            showText.setText(result);
+            showText.setBackgroundColor(Color.GRAY);
+
+            popupWindow.setBackgroundDrawable(new ColorDrawable());
+            popupWindow.showAtLocation(contentView, Gravity.CENTER_VERTICAL, 0, 0);
+            popupWindow.showAsDropDown(contentView);*/
+            deviceResultString = result;
+            handler.post(runnableUi);
         }
 
         @Override
         public void setBasic(String result) throws RemoteException {
-
+            deviceResultString = result;
+            handler.post(runnableUi);
         }
 
         @Override
         public void getSwitchMultiLevel(String result) throws RemoteException {
-
+            deviceResultString = result;
+            handler.post(runnableUi);
         }
 
         @Override
         public void setSwitchMultiLevel(String result) throws RemoteException {
-
+            deviceResultString = result;
+            handler.post(runnableUi);
         }
 
     };
@@ -464,5 +467,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+    Runnable runnableUi =new Runnable() {
+        @Override
+        public void run() {
+            //更新界面
+            txOpenResult.setTextColor(Color.GREEN);
+            txOpenResult.setText(deviceResultString);
+        }
+    };
 
 }

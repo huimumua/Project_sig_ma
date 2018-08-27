@@ -53,7 +53,7 @@
         android:id="@+id/tx_open_result"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:text="Open result"
+           android:text="Message from Controller"
            android:layout_margin="5dp"
            android:layout_weight="1"
             />

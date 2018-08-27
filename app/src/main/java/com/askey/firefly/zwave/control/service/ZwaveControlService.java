@@ -908,7 +908,7 @@ public static ZwaveControlService getInstance() {
                 flag = 2;
                 Logg.i(TAG,"=======Node Add Status=Success=");
                 ZwaveControlHelper.ZwController_saveNodeInfo(SAVE_NODEINFO_FILE);
-                ZwaveControlHelper.ZwController_GetDeviceInfo();
+                //ZwaveControlHelper.ZwController_GetDeviceInfo();
              }
          } else if ("Node Remove Status".equals(messageType)) {
             doRemoveDevice(jniResult);
@@ -916,9 +916,9 @@ public static ZwaveControlService getInstance() {
                 Logg.i(TAG,"=======Node Remove Status=Success=");
                 flag = 3;
                 ZwaveControlHelper.ZwController_saveNodeInfo(SAVE_NODEINFO_FILE);
-                ZwaveControlHelper.ZwController_GetDeviceList();
+                //ZwaveControlHelper.ZwController_GetDeviceList();
             }
-        } else if ("Node List Report".equals(messageType)) {
+        } /*else if ("Node List Report".equals(messageType)) {
             if (flag == 1) {
                 flag = 0;
                 doGetDeviceInfo(getDeviceInfo(jniResult));
@@ -932,42 +932,30 @@ public static ZwaveControlService getInstance() {
                 flag = 0;
                 deleteDevice(jniResult);
             }
-        } else if ("Node List Report".equals(messageType)) {/////
-            removeFailCallBack(jniResult);
+        } */else if ("All Node List Report".equals(messageType)) {/////
+            //removeFailCallBack(jniResult);
+            getBasic(jniResult);
             if(jniResult.contains("Success")){
                 ZwaveControlHelper.ZwController_saveNodeInfo(SAVE_NODEINFO_FILE);
             }
-        } else if ("Node List Report".equals(messageType)) {/////
-            replaceFailCallBack(jniResult);
+        } else if ("All Node Info Report".equals(messageType)) {/////
+            //replaceFailCallBack(jniResult);
+            //getBasic(jniResult);
+            doGetDeviceInfo(jniResult);
             if(jniResult.contains("Success")){
                 ZwaveControlHelper.ZwController_saveNodeInfo(SAVE_NODEINFO_FILE);
             }
-        } /*else if ("Node List Report".equals(messageType)) {/////
-            stopAddDeviceCallBack(jniResult);
-        } else if ("Node List Report".equals(messageType)) {/////
-            stopRemoveDeviceCallBack(jniResult);
         } else if ("Node Battery Value".equals(messageType)) {
             getDeviceBatteryCallBack(jniResult);
         } else if ("Sensor Information".equals(messageType)) {
             getSensorMultiLevelCallBack(jniResult);
-        } else if ("Node List Report".equals(messageType)) {/////
-            updateNodeCallBack(jniResult);
-        } else if ("Configuration Get Information".equals(messageType)) {
-            getConfiguration(jniResult);
-        } else if ("  ".equals(messageType)) {////
-            getSupportedSwitchType(jniResult);
-        }else if ("Power Level Get Information".equals(messageType)) {
+        } else if ("Power Level Get Information".equals(messageType)) {
             getPowerLevel(jniResult);
         } else if ("Basic Information".equals(messageType)) {
             getBasic(jniResult);
-        }*/ else if ("  ".equals(messageType)) {////
+        } else if ("  ".equals(messageType)) {////
             getSwitchMultiLevel(jniResult);
-        }
-        else if("All Node Info Report".equals(messageType))
-        {
-            doGetDeviceList(jniResult);
-        }
-        else{
+        } else{
             getBasic(jniResult);
         }
     }
