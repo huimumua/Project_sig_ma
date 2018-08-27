@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dip"
+    android:padding="10dip"
     android:orientation="vertical">
  <ScrollView
      android:layout_width="match_parent"
@@ -41,10 +41,10 @@
            android:textAllCaps="false"
             android:layout_margin="5dp"/>
         <Button
-           android:id="@+id/btn_get"
+           android:id="@+id/btn_stop"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:text="Get All Device Info"
+           android:text="Stop Current OP"
            android:layout_weight="1"
            android:textAllCaps="false"
         android:layout_margin="5dp"/>
@@ -55,9 +55,18 @@
            android:layout_height="wrap_content"
            android:text="Message from Controller"
            android:layout_margin="5dp"
+           android:textStyle="bold"
            android:layout_weight="1"
             />
     <TableRow>
+      <Button
+           android:id="@+id/btn_get"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Get All Device Info"
+           android:layout_weight="1"
+           android:textAllCaps="false"
+        android:layout_margin="5dp"/>
         <Button
             android:id="@+id/btn_getBarr"
             android:layout_width="wrap_content"
@@ -65,8 +74,7 @@
             android:text="Get Device Battery"
             android:layout_weight="1"
             android:textAllCaps="false"
-            android:layout_margin="5dp"
-        />
+            android:layout_margin="5dp" />
 
         <Button
             android:id="@+id/btn_getSenser"
@@ -84,43 +92,43 @@
             android:layout_weight="1"
             android:textAllCaps="false"
             android:layout_margin="5dp"/>
-        <Button
-            android:id="@+id/btn_get_power"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Get Power Level"
-            android:layout_weight="1"
-            android:textAllCaps="false"
-            android:layout_margin="5dp"/>
     </TableRow>
 
-    <TableRow>   
-        <Button
-            android:id="@+id/btn_on"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Turn on the Light"
-            android:textAllCaps="false"
-            android:layout_weight="0.25"
-            android:layout_margin="5dp"/>
-        <Button
-            android:id="@+id/btn_off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Turn Off the Light"
-            android:textAllCaps="false"
-            android:layout_weight="0.25"
-            android:layout_margin="5dp"/>
-        <Button
-            android:id="@+id/btn_reset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Reset Gateway"
-            android:textAllCaps="false"
-            android:layout_weight="0.25"
-            android:layout_margin="5dp"/>
-        <TableRow>
-        </TableRow>
+    <TableRow>
+      <Button
+          android:id="@+id/btn_get_power"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Get Power Level"
+          android:layout_weight="0.25"
+          android:textAllCaps="false"
+          android:layout_margin="5dp"/>
+      <Button
+          android:id="@+id/btn_on"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Turn on the Light"
+          android:textAllCaps="false"
+          android:layout_weight="0.25"
+          android:layout_margin="5dp"/>
+      <Button
+          android:id="@+id/btn_off"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Turn Off the Light"
+          android:textAllCaps="false"
+          android:layout_weight="0.25"
+          android:layout_margin="5dp"/>
+      <Button
+          android:id="@+id/btn_reset"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Reset Gateway"
+          android:textAllCaps="false"
+          android:layout_weight="0.25"
+          android:layout_margin="5dp"/>
+      <TableRow>
+      </TableRow>
     </TableRow>
     <EditText
         android:id="@+id/et_node_id"

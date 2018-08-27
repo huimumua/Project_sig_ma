@@ -61,7 +61,7 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button btnAdd,btnRemove,btnGet,btnOpen,btnBarr,btnSensor,btnUpdate,btnReset;
+    private Button btnAdd,btnRemove,btnGet,btnOpen,btnBarr,btnSensor,btnUpdate,btnReset, btnStop;
     private TextView txAddResult,txRemoveResult,txDeviceInfo,txOpenResult;
     private String deviceResultString = null;
     private Handler handler=null;
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        handler=new Handler();
+        handler = new Handler();
 
         btnAdd = (Button) findViewById(R.id.btn_add);
         btnRemove = (Button) findViewById(R.id.btn_remove);
@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnOn = (Button) findViewById(R.id.btn_on);
         btnOff = (Button) findViewById(R.id.btn_off);
         btnReset = (Button) findViewById(R.id.btn_reset);
+        btnStop = (Button) findViewById(R.id.btn_stop);
 
         btnAdd.setOnClickListener(this);
         btnRemove.setOnClickListener(this);
@@ -101,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnOn.setOnClickListener(this);
         btnOff.setOnClickListener(this);
         btnReset.setOnClickListener(this);
+        btnStop.setOnClickListener(this);
 
         /*txAddResult = (TextView) findViewById(R.id.tx_add_result);
         txRemoveResult = (TextView) findViewById(R.id.tx_remove_result);
@@ -465,6 +467,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     e.printStackTrace();
                 }
                 break;
+            case R.id.btn_stop:
+            try {
+                zwaveService.stopAddDevice(mCallback);
+            } catch (RemoteException e)
+            {
+                e.printStackTrace();
+            }
+            break;
         }
     }
 
@@ -472,7 +482,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void run() {
             //更新界面
-            txOpenResult.setTextColor(Color.GREEN);
+            //txOpenResult.setTextColor(Color.GREEN);
             txOpenResult.setText(deviceResultString);
         }
     };
