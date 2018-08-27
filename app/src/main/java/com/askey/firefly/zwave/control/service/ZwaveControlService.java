@@ -225,7 +225,7 @@ public static ZwaveControlService getInstance() {
         @Override
         public int getDeviceBattery(IZwaveContrlCallBack callBack, int deviceId) throws RemoteException {
             Logg.i(TAG,"=====getDeviceBattery==deviceId==="+deviceId);
-            int result = ZwaveControlHelper.ZwController_getGroupInfo(deviceId, 2, 0);
+            int result = ZwaveControlHelper.ZwController_GetDeviceBattery(deviceId);
 
             return result;
         }
@@ -259,8 +259,9 @@ public static ZwaveControlService getInstance() {
             result = ZwaveControlHelper.ZwController_addProvisionListEntry(dsk1, dsk1.length);*/
             //int result = ZwaveControlHelper.ZwController_getSpecifyDeviceInfo(deviceId);
             //int result = ZwaveControlHelper.ZwController_StartLearnMode();
-            int[] a = {7,0};
-            int result = ZwaveControlHelper.ZwController_addEndpointsToGroup(deviceId,2, a, 0);
+            /*int[] a = {7,0};
+            int result = ZwaveControlHelper.ZwController_addEndpointsToGroup(deviceId,2, a, 0);*/
+            int result  = ZwaveControlHelper.ZwController_StartLearnMode();
             return result;
         }
 
@@ -316,7 +317,8 @@ public static ZwaveControlService getInstance() {
             plList[5].stProvisionList.pii.app_ver = 0x04;
             plList[5].stProvisionList.pii.app_sub_ver = 0x01;
 
-            int result = ZwaveControlHelper.ZwController_addProvisionListEntry(dsk, dsk.length, plList, 6);
+            //int result = ZwaveControlHelper.ZwController_addProvisionListEntry(dsk, dsk.length, plList, 6);
+            int result = 0;//ZwaveControlHelper.ZwController_SetDefault();
             return result;
         }
 
@@ -330,8 +332,9 @@ public static ZwaveControlService getInstance() {
 
         @Override
         public int setDefault(IZwaveContrlCallBack callBack) throws RemoteException {
+            int result = ZwaveControlHelper.ZwController_SetDefault();
             setDefaultCallBack("");
-            return 0;
+            return result;
         }
 
         @Override
@@ -514,7 +517,6 @@ public static ZwaveControlService getInstance() {
            Logg.i(TAG, "=====doGetDeviceList=========");
         final int N = mCallbacks.beginBroadcast();
         try {
-
             //get Device finish
             for (int i = 0;i < N;i++) {
                 mCallbacks.getBroadcastItem(i).getDevicesCallBack(result);
@@ -898,68 +900,76 @@ public static ZwaveControlService getInstance() {
 
         } catch (JSONException e) {
             e.printStackTrace();
-    }
-    if ("Node Add Status".equals(messageType)) {
-        doAddDevice(jniResult);
-        if ("Success".equals(status)) {
-           flag = 2;
-            Logg.i(TAG,"=======Node Add Status=Success=");
-            ZwaveControlHelper.ZwController_saveNodeInfo(SAVE_NODEINFO_FILE);
-            ZwaveControlHelper.ZwController_GetDeviceInfo();
         }
-    } else if ("Node Remove Status".equals(messageType)) {
-        doRemoveDevice(jniResult);
-        if ("Success".equals(status)) {
-            Logg.i(TAG,"=======Node Remove Status=Success=");
-            flag = 3;
-            ZwaveControlHelper.ZwController_saveNodeInfo(SAVE_NODEINFO_FILE);
-            ZwaveControlHelper.ZwController_GetDeviceList();
+
+        if ("Node Add Status".equals(messageType)) {
+            doAddDevice(jniResult);
+            if ("Success".equals(status)) {
+                flag = 2;
+                Logg.i(TAG,"=======Node Add Status=Success=");
+                ZwaveControlHelper.ZwController_saveNodeInfo(SAVE_NODEINFO_FILE);
+                ZwaveControlHelper.ZwController_GetDeviceInfo();
+             }
+         } else if ("Node Remove Status".equals(messageType)) {
+            doRemoveDevice(jniResult);
+            if ("Success".equals(status)) {
+                Logg.i(TAG,"=======Node Remove Status=Success=");
+                flag = 3;
+                ZwaveControlHelper.ZwController_saveNodeInfo(SAVE_NODEINFO_FILE);
+                ZwaveControlHelper.ZwController_GetDeviceList();
+            }
+        } else if ("Node List Report".equals(messageType)) {
+            if (flag == 1) {
+                flag = 0;
+                doGetDeviceInfo(getDeviceInfo(jniResult));
+            } else if (flag == 0) {
+                String jsonResult = getDeviceList(jniResult);//json 添加name
+                doGetDeviceList(jsonResult);
+            } else if (flag == 2) {
+                flag = 0;
+                insertDevice(jniResult);
+            } else if (flag == 3) {
+                flag = 0;
+                deleteDevice(jniResult);
+            }
+        } else if ("Node List Report".equals(messageType)) {/////
+            removeFailCallBack(jniResult);
+            if(jniResult.contains("Success")){
+                ZwaveControlHelper.ZwController_saveNodeInfo(SAVE_NODEINFO_FILE);
+            }
+        } else if ("Node List Report".equals(messageType)) {/////
+            replaceFailCallBack(jniResult);
+            if(jniResult.contains("Success")){
+                ZwaveControlHelper.ZwController_saveNodeInfo(SAVE_NODEINFO_FILE);
+            }
+        } /*else if ("Node List Report".equals(messageType)) {/////
+            stopAddDeviceCallBack(jniResult);
+        } else if ("Node List Report".equals(messageType)) {/////
+            stopRemoveDeviceCallBack(jniResult);
+        } else if ("Node Battery Value".equals(messageType)) {
+            getDeviceBatteryCallBack(jniResult);
+        } else if ("Sensor Information".equals(messageType)) {
+            getSensorMultiLevelCallBack(jniResult);
+        } else if ("Node List Report".equals(messageType)) {/////
+            updateNodeCallBack(jniResult);
+        } else if ("Configuration Get Information".equals(messageType)) {
+            getConfiguration(jniResult);
+        } else if ("  ".equals(messageType)) {////
+            getSupportedSwitchType(jniResult);
+        }else if ("Power Level Get Information".equals(messageType)) {
+            getPowerLevel(jniResult);
+        } else if ("Basic Information".equals(messageType)) {
+            getBasic(jniResult);
+        }*/ else if ("  ".equals(messageType)) {////
+            getSwitchMultiLevel(jniResult);
         }
-    } else if ("Node List Report".equals(messageType)) {
-        if (flag == 1) {
-            flag = 0;
-            doGetDeviceInfo(getDeviceInfo(jniResult));
-        } else if (flag == 0) {
-           String jsonResult = getDeviceList(jniResult);//json 添加name
-            doGetDeviceList(jsonResult);
-        } else if (flag == 2) {
-            flag = 0;
-            insertDevice(jniResult);
-        } else if (flag == 3) {
-            flag = 0;
-            deleteDevice(jniResult);
+        else if("All Node Info Report".equals(messageType))
+        {
+            doGetDeviceList(jniResult);
         }
-    } else if ("Node List Report".equals(messageType)) {/////
-        removeFailCallBack(jniResult);
-        if(jniResult.contains("Success")){
-            ZwaveControlHelper.ZwController_saveNodeInfo(SAVE_NODEINFO_FILE);
+        else{
+            getBasic(jniResult);
         }
-    } else if ("Node List Report".equals(messageType)) {/////
-        replaceFailCallBack(jniResult);
-        if(jniResult.contains("Success")){
-            ZwaveControlHelper.ZwController_saveNodeInfo(SAVE_NODEINFO_FILE);
-        }
-    } else if ("Node List Report".equals(messageType)) {/////
-        stopAddDeviceCallBack(jniResult);
-    } else if ("Node List Report".equals(messageType)) {/////
-        stopRemoveDeviceCallBack(jniResult);
-    } else if ("Node Battery Value".equals(messageType)) {
-        getDeviceBatteryCallBack(jniResult);
-    } else if ("Sensor Information".equals(messageType)) {
-        getSensorMultiLevelCallBack(jniResult);
-    } else if ("Node List Report".equals(messageType)) {/////
-        updateNodeCallBack(jniResult);
-    } else if ("Configuration Get Information".equals(messageType)) {
-        getConfiguration(jniResult);
-    } else if ("  ".equals(messageType)) {////
-        getSupportedSwitchType(jniResult);
-    }else if ("Power Level Get Information".equals(messageType)) {
-        getPowerLevel(jniResult);
-    } else if ("Basic Information".equals(messageType)) {
-        getBasic(jniResult);
-    } else if ("  ".equals(messageType)) {////
-        getSwitchMultiLevel(jniResult);
-    }
     }
 
 
