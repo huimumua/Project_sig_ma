@@ -11828,7 +11828,7 @@ int  zwcontrol_send_node_information(hl_appl_ctx_t* hl_appl, int nodeId, int bro
     int result = zwnet_send_nif(nw, nodeId, broadcast_flag);
     if(result != 0)
     {
-        ALOGE("zwcontrol_send_node_information retur error:    %d", result);
+        ALOGE("zwcontrol_send_node_information return error:    %d", result);
     }
 
     return result;
